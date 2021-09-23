@@ -1,0 +1,38 @@
+{
+  "appTitle": "Litgame",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "settingsTitle": "Settings",
+  "@settingsTitle": {
+    "description": "The title of the Settings screen"
+  },
+  "settingsThemeTitle": "Select theme",
+  "settingsThemeSystem": "System Theme",
+  "settingsThemeDark": "Dark Theme",
+  "settingsThemeLight": "Light Theme",
+  "settingsCollectionTitle": "Select default collection",
+  "settingsCollectionNone": "Not selected",
+  "mainTitle": "Litgame",
+  "mainStart": "Start new game",
+  "mainSettings": "Settings",
+  "mainExit": "Exit",
+  "gameTitle": "Lit Game",
+  "gameOkButton": "Ok",
+  "gameTitleDocAll": "About game",
+  "gameTitleDocAllShow": "Show 'About game' screen?",
+  "gameTitleDocTraining": "About training",
+  "gameTitleDocTrainingShow": "Show 'About training' screen?",
+  "gameTitleTraining": "Training",
+  "gameTitleTrainingFinish": "Finish training",
+  "gameTitleDocGame": "About game stage",
+  "gameTitleDocGameShow": "Show 'About game' last screen? ",
+  "gameTitleGame": "Game",
+  "gameFinish": "Finish the game",
+  "gameNextTurn": "Next turn",
+  "pageNotFoundTitle": "Page not found!",
+  "cardTypeGeneric": "Generic",
+  "cardTypePerson": "Person",
+  "cardTypePlace": "Place"
+
+}
