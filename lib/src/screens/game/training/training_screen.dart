@@ -8,7 +8,7 @@ import 'package:swipeable_card_stack/swipeable_card_stack.dart';
 
 import '../../../tools.dart';
 
-class TrainingScreen extends StatelessWidget {
+class TrainingScreen extends StatelessWidget with LayoutOrientation {
   TrainingScreen({Key? key}) : super(key: key) {
     training.cardSectionController = SwipeableCardSectionController();
   }
@@ -23,87 +23,101 @@ class TrainingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final trainingStartFuture = training.startTraining();
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(context.loc().gameTitleTraining),
-          actions: [
-            AppBarButton(
-                onPressed: () => RouteBuilder.gotoGameProcess(context),
-                text: context.loc().gameTitleTrainingFinish)
-          ],
-        ),
-        body: FutureBuilder(
-          future: trainingStartFuture,
-          builder:
-              (BuildContext context, AsyncSnapshot<LitCard.Card> snapshot) {
-            if (snapshot.hasData) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SwipeableCardsSection(
-                    cardController: training.cardSectionController,
-                    context: context,
-                    //add the first 3 cards (widgets)
-                    items: [
-                      CardItem(
-                        onFlipDone: onFlipDone,
-                        key: training.cardKeys[0],
-                        imgUrl: snapshot.data!.imgUrl,
-                        title: snapshot.data!.name,
-                      ),
-                      CardItem(
-                        key: training.cardKeys[1],
-                        onFlipDone: onFlipDone,
-                      ),
-                      CardItem(
-                        key: training.cardKeys[2],
-                        onFlipDone: onFlipDone,
-                      )
-                    ],
-                    onCardSwiped: (dir, index, Widget widget) {
-                      training.cardSectionController.enableSwipe(false);
-                      training.cardSectionController.appendItem(CardItem(
-                        key: widget.key,
-                        empty: true,
-                        onFlipDone: onFlipDone,
-                      ));
-                      training.nextCard();
-                    },
-                    //
-                    enableSwipeUp: true,
-                    enableSwipeDown: true,
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        init(constraints);
+        final text = isTiny ? null : context.loc().gameTitleTrainingFinish;
+        return Scaffold(
+            appBar: AppBar(
+              title: Text(context.loc().gameTitleTraining),
+              actions: [
+                AppBarButton(
+                  onPressed: () =>
+                      RouteBuilder.gotoTestFinishGameStart(context),
+                  text: text,
+                  icon: Icon(
+                    Icons.arrow_forward,
+                    color: Colors.white,
+                    size: 24.0,
+                    semanticLabel: context.loc().gameTitleTrainingFinish,
                   ),
-                ],
-              );
-            } else {
-              return Column(
-                key: GlobalKey(),
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SwipeableCardsSection(
-                    cardController: training.cardSectionController,
-                    context: context,
-                    items: [
-                      CardItem(
-                        onFlipDone: onFlipDone,
-                        key: training.cardKeys[0],
+                )
+              ],
+            ),
+            body: FutureBuilder(
+              future: trainingStartFuture,
+              builder:
+                  (BuildContext context, AsyncSnapshot<LitCard.Card> snapshot) {
+                if (snapshot.hasData) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SwipeableCardsSection(
+                        cardController: training.cardSectionController,
+                        context: context,
+                        //add the first 3 cards (widgets)
+                        items: [
+                          CardItem(
+                            onFlipDone: onFlipDone,
+                            key: training.cardKeys[0],
+                            imgUrl: snapshot.data!.imgUrl,
+                            title: snapshot.data!.name,
+                          ),
+                          CardItem(
+                            key: training.cardKeys[1],
+                            onFlipDone: onFlipDone,
+                          ),
+                          CardItem(
+                            key: training.cardKeys[2],
+                            onFlipDone: onFlipDone,
+                          )
+                        ],
+                        onCardSwiped: (dir, index, Widget widget) {
+                          training.cardSectionController.enableSwipe(false);
+                          training.cardSectionController.appendItem(CardItem(
+                            key: widget.key,
+                            empty: true,
+                            onFlipDone: onFlipDone,
+                          ));
+                          training.nextCard();
+                        },
+                        //
+                        enableSwipeUp: true,
+                        enableSwipeDown: true,
                       ),
-                      CardItem(
-                        onFlipDone: onFlipDone,
-                        key: training.cardKeys[1],
-                      ),
-                      CardItem(
-                        onFlipDone: onFlipDone,
-                        key: training.cardKeys[2],
-                      )
                     ],
-                    enableSwipeUp: false,
-                    enableSwipeDown: false,
-                  ),
-                ],
-              );
-            }
-          },
-        ));
+                  );
+                } else {
+                  return Column(
+                    key: GlobalKey(),
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SwipeableCardsSection(
+                        cardController: training.cardSectionController,
+                        context: context,
+                        items: [
+                          CardItem(
+                            onFlipDone: onFlipDone,
+                            key: training.cardKeys[0],
+                          ),
+                          CardItem(
+                            onFlipDone: onFlipDone,
+                            key: training.cardKeys[1],
+                          ),
+                          CardItem(
+                            onFlipDone: onFlipDone,
+                            key: training.cardKeys[2],
+                          )
+                        ],
+                        enableSwipeUp: false,
+                        enableSwipeDown: false,
+                      ),
+                    ],
+                  );
+                }
+              },
+            ));
+      },
+    );
   }
 }

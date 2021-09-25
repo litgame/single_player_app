@@ -10,19 +10,23 @@ extension Translate on BuildContext {
 }
 
 mixin LayoutOrientation {
-  var isTiny = true;
-  var orientation = Orientation.portrait;
+  final data = _LayoutData();
+
+  bool get isTiny => data.isTiny;
+
+  Orientation get orientation => data.orientation;
 
   void init(BoxConstraints constraints) {
-    isTiny = constraints.maxWidth < 600;
-    orientation = constraints.maxWidth > constraints.maxHeight
+    data.isTiny = constraints.maxWidth < 600;
+    data.orientation = constraints.maxWidth > constraints.maxHeight
         ? Orientation.landscape
         : Orientation.portrait;
   }
+}
 
-  Widget buildLayout(BuildContext context, Widget child) => LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-        init(constraints);
-        return child;
-      });
+class _LayoutData {
+  _LayoutData();
+
+  var isTiny = true;
+  var orientation = Orientation.portrait;
 }

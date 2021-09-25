@@ -31,9 +31,9 @@ class SettingsView extends StatelessWidget {
         // SettingsController is updated, which rebuilds the MaterialApp.
         child: AnimatedBuilder(
           animation: controller,
-          builder: (BuildContext context, Widget? child) => Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.start,
+          builder: (BuildContext context, Widget? child) => ListView(
+            // crossAxisAlignment: CrossAxisAlignment.stretch,
+            // mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(context.loc().settingsThemeTitle, textAlign: TextAlign.left),
               DropdownButton<ThemeMode>(

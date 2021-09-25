@@ -147,7 +147,7 @@ class _GameScreenState extends State<GameScreen>
             onPressed: nextUIState,
             icon: Icon(
               Icons.arrow_forward,
-              color: Colors.green,
+              color: Colors.white,
               size: 24.0,
               semanticLabel: context.loc().gameNextTurn,
             ),
