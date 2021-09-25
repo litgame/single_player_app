@@ -1,4 +1,4 @@
-package com.example.single_player_app
+package org.litgame.single_player_app
 
 import io.flutter.embedding.android.FlutterActivity
 
