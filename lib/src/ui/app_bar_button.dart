@@ -35,6 +35,8 @@ class AppBarButton extends StatelessWidget {
       child = Row(mainAxisSize: MainAxisSize.min, children: children);
     }
     return ElevatedButton(
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(Colors.green)),
       onPressed: onPressed,
       clipBehavior: Clip.none,
       child: child,
