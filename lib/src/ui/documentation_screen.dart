@@ -23,7 +23,11 @@ class DocumentationScreen extends StatelessWidget {
           child: Markdown(
               styleSheet: MarkdownStyleSheet(textScaleFactor: 1.5), data: data),
         ),
-        MenuButton(onPressed: onOk, text: context.loc().gameOkButton)
+        MenuButton(
+          onPressed: onOk,
+          text: context.loc().gameOkButton,
+          stylePreset: MenuButtonStyle.tiny,
+        )
       ],
     );
   }
