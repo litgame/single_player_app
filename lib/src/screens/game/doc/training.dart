@@ -10,7 +10,9 @@ class DocTrainingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.loc().gameTitleDocTraining)),
+      appBar: AppBar(
+          backgroundColor: Colors.purple,
+          title: Text(context.loc().gameTitleDocTraining)),
       body: DocumentationScreen(
           data: 'Небольшая разминка!\r\n'
               'Сейчас каждому из игроков будет выдаваться случайная карта из колоды,'

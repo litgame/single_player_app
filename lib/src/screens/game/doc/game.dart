@@ -10,7 +10,9 @@ class DocGameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.loc().gameTitleDocGame)),
+      appBar: AppBar(
+          backgroundColor: Colors.purple,
+          title: Text(context.loc().gameTitleDocGame)),
       body: DocumentationScreen(
           data: 'Начинаем сам игровой процесс!\r\n'
               'Теперь каждому игроку нужно будет в свой ход выбрать карту из'

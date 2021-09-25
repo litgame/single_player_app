@@ -155,6 +155,7 @@ class _GameScreenState extends State<GameScreen>
         }
         return Scaffold(
             appBar: AppBar(
+                backgroundColor: Colors.purple,
                 leading: IconButton(
                   color: Colors.redAccent,
                   onPressed: () {

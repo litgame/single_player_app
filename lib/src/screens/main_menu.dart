@@ -12,6 +12,7 @@ class MainMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.purple,
         title: Text(context.loc().mainTitle),
       ),
       body: Center(

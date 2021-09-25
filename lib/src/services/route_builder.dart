@@ -37,7 +37,9 @@ class RouteBuilder {
   }
 
   static Widget notFoundRoute(BuildContext context) => Scaffold(
-        appBar: AppBar(title: Text(context.loc().pageNotFoundTitle)),
+        appBar: AppBar(
+            backgroundColor: Colors.purple,
+            title: Text(context.loc().pageNotFoundTitle)),
         body: DocumentationScreen(
             data: 'Ой!!\r\n'
                 'Где это мы??! \r\n'

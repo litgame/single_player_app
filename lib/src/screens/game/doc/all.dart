@@ -11,7 +11,9 @@ class DocAllScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.loc().gameTitleDocAll)),
+      appBar: AppBar(
+          backgroundColor: Colors.purple,
+          title: Text(context.loc().gameTitleDocAll)),
       body: DocumentationScreen(
           data:
               '__Суть и задача игры__ - составить вместе с друзьями произвольную историю '

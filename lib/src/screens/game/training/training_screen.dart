@@ -29,6 +29,7 @@ class TrainingScreen extends StatelessWidget with LayoutOrientation {
         final text = isTiny ? null : context.loc().gameTitleTrainingFinish;
         return Scaffold(
             appBar: AppBar(
+              backgroundColor: Colors.purple,
               title: Text(context.loc().gameTitleTraining),
               actions: [
                 AppBarButton(

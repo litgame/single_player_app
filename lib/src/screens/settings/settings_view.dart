@@ -21,6 +21,7 @@ class SettingsView extends StatelessWidget {
         .then((value) => value.fromJson());
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.purple,
         title: Text(context.loc().settingsTitle),
       ),
       body: Padding(
