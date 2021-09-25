@@ -16,9 +16,9 @@ class MainMenu extends StatelessWidget {
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          padding: const EdgeInsets.all(40),
+          child: ListView(
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               MenuButton(
                   onPressed: () => RouteBuilder.gotoGameVeryStart(context),

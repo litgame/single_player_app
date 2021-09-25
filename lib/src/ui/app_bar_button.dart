@@ -1,39 +1,43 @@
+import 'dart:math' as math;
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class AppBarButton extends StatelessWidget {
-  const AppBarButton(
-      {required this.onPressed, required this.text, this.color, Key? key})
-      : super(key: key);
+  const AppBarButton({required this.onPressed, this.text, this.icon, Key? key})
+      : assert(
+            text != null || icon != null, 'Either text or icon must be set!'),
+        super(key: key);
 
   final VoidCallback? onPressed;
-  final String text;
-  final Color? color;
+  final String? text;
+  final Widget? icon;
 
   @override
   Widget build(BuildContext context) {
-    final background = color ?? Colors.green;
-    final borderColor =
-        Theme.of(context).colorScheme.brightness == Brightness.dark
-            ? Colors.white
-            : Colors.black;
+    final double scale = MediaQuery.maybeOf(context)?.textScaleFactor ?? 1;
+    final double gap =
+        scale <= 1 ? 8 : lerpDouble(8, 4, math.min(scale - 1, 1))!;
+
+    Widget? child;
+    if (icon == null) {
+      child = Text(text!);
+    } else {
+      final children = <Widget>[];
+      if (text != null) {
+        children.add(Flexible(child: Text(text!)));
+        children.add(SizedBox(width: gap));
+        children.add(icon!);
+      } else {
+        children.add(icon!);
+      }
+
+      child = Row(mainAxisSize: MainAxisSize.min, children: children);
+    }
     return ElevatedButton(
       onPressed: onPressed,
-      style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(background),
-          side: MaterialStateProperty.all<BorderSide>(BorderSide(
-              width: 2, style: BorderStyle.solid, color: borderColor)),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)))),
-          padding:
-              MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(5))),
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Text(
-          text,
-          textScaleFactor: 1.2,
-        ),
-      ),
+      clipBehavior: Clip.none,
+      child: child,
     );
   }
 }

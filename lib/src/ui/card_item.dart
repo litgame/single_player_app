@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:file/file.dart';
 import 'package:flip_card/flip_card.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -30,6 +31,8 @@ class CardItemState extends State<CardItem> {
   CardItemState([this.imgUrl = '', this.title = '']) {
     imageLoadingFinishedStream.stream.listen(_onImageLoaded);
   }
+
+  static const bgCardImage = 'assets/images/bg_pattern.png';
 
   final flipCardKey = GlobalKey<FlipCardState>();
 
@@ -64,7 +67,7 @@ class CardItemState extends State<CardItem> {
     super.didUpdateWidget(oldWidget);
   }
 
-  Widget _buildCardWithImage(BuildContext context) {
+  Widget _buildImage(BuildContext context) {
     if (_showImageLoader) {
       final cache = DefaultCacheManager();
       return FutureBuilder(
@@ -93,12 +96,57 @@ class CardItemState extends State<CardItem> {
         },
       );
     } else {
-      return Image.asset(
-        'assets/images/card_back.png',
-        repeat: ImageRepeat.repeat,
-      );
+      if (title.isNotEmpty) {
+        return Stack(
+          children: [
+            Image.asset(
+              bgCardImage,
+              repeat: ImageRepeat.repeat,
+              height: MediaQuery.of(context).size.height,
+            ),
+            Center(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                    color: const Color.fromARGB(200, 255, 255, 255),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    shape: BoxShape.rectangle,
+                    border: Border.all(
+                        color: Colors.black,
+                        style: BorderStyle.solid,
+                        width: 1.0)),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                    textScaleFactor: 1.2,
+                  ),
+                ),
+              ),
+            )
+          ],
+        );
+      } else {
+        return Image.asset(
+          bgCardImage,
+          repeat: ImageRepeat.repeat,
+        );
+      }
     }
   }
+
+  Widget _buildCard(BuildContext context, Widget child) => Card(
+      color: Colors.white,
+      elevation: 10,
+      shadowColor: const Color.fromARGB(255, 0, 0, 0),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      shape: const RoundedRectangleBorder(
+          side: BorderSide(
+              color: Colors.black, width: 1, style: BorderStyle.solid),
+          borderRadius: BorderRadius.all(Radius.circular(16))),
+      child: child);
 
   @override
   Widget build(BuildContext context) {
@@ -110,12 +158,7 @@ class CardItemState extends State<CardItem> {
         alignment: Alignment.topCenter,
         child: AspectRatio(
           aspectRatio: 0.67,
-          child: Card(
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(16))),
-              child:
-                  Builder(builder: (context) => _buildCardWithImage(context))),
+          child: _buildCard(context, _buildImage(context)),
         ),
       );
     } else {
@@ -124,50 +167,35 @@ class CardItemState extends State<CardItem> {
         child: AspectRatio(
           aspectRatio: 0.67,
           child: FlipCard(
-            key: flipCardKey,
-            flipOnTouch: false,
-            onFlipDone: widget.onFlipDone,
-            direction: FlipDirection.HORIZONTAL,
-            back: Card(
-              elevation: 1.2,
-              shadowColor: Colors.black,
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(16))),
-              child:
-                  Builder(builder: (context) => _buildCardWithImage(context)),
-            ),
-            front: Card(
-                elevation: 1.2,
-                shadowColor: Colors.black,
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(16))),
-                child: Builder(builder: (context) {
-                  if (_showImageLoader) {
-                    return Center(
-                      child: Stack(
-                          alignment: Alignment.center,
-                          fit: StackFit.expand,
-                          children: [
-                            Image.asset(
-                              'assets/images/card_back.png',
-                              repeat: ImageRepeat.repeat,
-                            ),
-                            const SpinKitWave(
-                              color: Colors.green,
-                              size: 55.0,
-                            ),
-                          ]),
-                    );
-                  } else {
-                    return Image.asset(
-                      'assets/images/card_back.png',
-                      repeat: ImageRepeat.repeat,
-                    );
-                  }
-                })),
-          ),
+              key: flipCardKey,
+              flipOnTouch: false,
+              onFlipDone: widget.onFlipDone,
+              direction: FlipDirection.HORIZONTAL,
+              back: _buildCard(context, _buildImage(context)),
+              front: _buildCard(context, Builder(builder: (context) {
+                if (_showImageLoader) {
+                  return Center(
+                    child: Stack(
+                        alignment: Alignment.center,
+                        fit: StackFit.expand,
+                        children: [
+                          Image.asset(
+                            bgCardImage,
+                            repeat: ImageRepeat.repeat,
+                          ),
+                          const SpinKitWave(
+                            color: Colors.green,
+                            size: 55.0,
+                          ),
+                        ]),
+                  );
+                } else {
+                  return Image.asset(
+                    bgCardImage,
+                    repeat: ImageRepeat.repeat,
+                  );
+                }
+              }))),
         ),
       );
     }

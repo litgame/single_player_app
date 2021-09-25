@@ -640,9 +640,11 @@ packages:
   swipeable_card_stack:
     dependency: "direct main"
     description:
-      path: "../../cta-flutter-tinder-card-animation"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "6e2eb90eea9253ae856d2c4e23e19ac96a8d1c9d"
+      url: "https://github.com/ASGAlex/cta-flutter-tinder-card-animation.git"
+    source: git
     version: "0.0.3"
   synchronized:
     dependency: transitive

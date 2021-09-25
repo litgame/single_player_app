@@ -23,8 +23,8 @@ dependencies:
   catcher: ^0.6.8
   flip_card: ^0.5.0
   swipeable_card_stack:
-    # path: ../../cta-flutter-tinder-card-animation
-    git: https://github.com/codetoart/cta-flutter-tinder-card-animation.git
+    #path: ../../cta-flutter-tinder-card-animation
+    git: https://github.com/ASGAlex/cta-flutter-tinder-card-animation.git
   litgame_server:
     git: https://github.com/litgame/rest-server.git
   cached_network_image: ^3.1.0
