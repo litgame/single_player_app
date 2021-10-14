@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:single_player_app/src/services/route_builder.dart';
@@ -30,7 +32,13 @@ class MainMenu extends StatelessWidget {
                   text: context.loc().mainSettings),
               MenuButton(
                   color: Colors.red,
-                  onPressed: () => SystemNavigator.pop(),
+                  onPressed: () {
+                    if (Platform.isAndroid || Platform.isIOS) {
+                      SystemNavigator.pop();
+                    } else {
+                      exit(0);
+                    }
+                  },
                   text: context.loc().mainExit),
             ],
           ),
