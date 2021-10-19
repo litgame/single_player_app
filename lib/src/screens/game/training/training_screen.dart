@@ -22,7 +22,10 @@ class TrainingScreen extends StatelessWidget with LayoutOrientation {
 
   @override
   Widget build(BuildContext context) {
-    final trainingStartFuture = training.startTraining();
+    training.startTraining().then((LitCard.Card card) {
+      final firstCard = training.cardKeys[0];
+      firstCard.currentState?.setImage(card.imgUrl, card.name);
+    });
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         init(constraints);
@@ -45,78 +48,42 @@ class TrainingScreen extends StatelessWidget with LayoutOrientation {
                 )
               ],
             ),
-            body: FutureBuilder(
-              future: trainingStartFuture,
-              builder:
-                  (BuildContext context, AsyncSnapshot<LitCard.Card> snapshot) {
-                if (snapshot.hasData) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SwipeableCardsSection(
-                        cardController: training.cardSectionController,
-                        context: context,
-                        //add the first 3 cards (widgets)
-                        items: [
-                          CardItem(
-                            onFlipDone: onFlipDone,
-                            key: training.cardKeys[0],
-                            imgUrl: snapshot.data!.imgUrl,
-                            title: snapshot.data!.name,
-                          ),
-                          CardItem(
-                            key: training.cardKeys[1],
-                            onFlipDone: onFlipDone,
-                          ),
-                          CardItem(
-                            key: training.cardKeys[2],
-                            onFlipDone: onFlipDone,
-                          )
-                        ],
-                        onCardSwiped: (dir, index, Widget widget) {
-                          training.cardSectionController.enableSwipe(false);
-                          training.cardSectionController.appendItem(CardItem(
-                            key: widget.key,
-                            empty: true,
-                            onFlipDone: onFlipDone,
-                          ));
-                          training.nextCard();
-                        },
-                        //
-                        enableSwipeUp: true,
-                        enableSwipeDown: true,
-                      ),
-                    ],
-                  );
-                } else {
-                  return Column(
-                    key: GlobalKey(),
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SwipeableCardsSection(
-                        cardController: training.cardSectionController,
-                        context: context,
-                        items: [
-                          CardItem(
-                            onFlipDone: onFlipDone,
-                            key: training.cardKeys[0],
-                          ),
-                          CardItem(
-                            onFlipDone: onFlipDone,
-                            key: training.cardKeys[1],
-                          ),
-                          CardItem(
-                            onFlipDone: onFlipDone,
-                            key: training.cardKeys[2],
-                          )
-                        ],
-                        enableSwipeUp: false,
-                        enableSwipeDown: false,
-                      ),
-                    ],
-                  );
-                }
-              },
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SwipeableCardsSection(
+                  cardController: training.cardSectionController,
+                  context: context,
+                  //add the first 3 cards (widgets)
+                  items: [
+                    CardItem(
+                      onFlipDone: onFlipDone,
+                      key: training.cardKeys[0],
+                    ),
+                    CardItem(
+                      key: training.cardKeys[1],
+                      onFlipDone: onFlipDone,
+                    ),
+                    CardItem(
+                      key: training.cardKeys[2],
+                      onFlipDone: onFlipDone,
+                    )
+                  ],
+                  onCardSwiped: (dir, index, Widget widget) {
+                    training.cardSectionController.enableSwipe(false);
+                    training.cardSectionController.appendItem(CardItem(
+                      key: widget.key,
+                      empty: true,
+                      onFlipDone: onFlipDone,
+                    ));
+                    training.nextCard();
+                  },
+                  //
+                  enableSwipe: false,
+                  enableSwipeUp: true,
+                  enableSwipeDown: true,
+                ),
+              ],
             ));
       },
     );

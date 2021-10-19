@@ -39,7 +39,8 @@ class TrainingController with GameService {
     _state = cardOnTopKey.currentState;
     return trainingNextStep().then((card) {
       if (_state != null) {
-        _state.setImage(card.imgUrl, card.name);
+        _state.imgUrl = card.imgUrl;
+        _state.title = card.name;
       }
       return card;
     });

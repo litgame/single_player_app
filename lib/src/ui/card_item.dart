@@ -42,8 +42,10 @@ class CardItemState extends State<CardItem> {
   bool _showImageLoader = false;
 
   void setImage(String imgUrl, String? title) {
-    this.imgUrl = imgUrl;
-    this.title = title ?? '';
+    setState(() {
+      this.imgUrl = imgUrl;
+      this.title = title ?? '';
+    });
   }
 
   void _onImageLoaded(event) {
