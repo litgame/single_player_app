@@ -30,6 +30,7 @@ class _ImageDownloader {
   ReceivePort port;
   StreamSubscription<dynamic>? _portSubscription;
   late _DownloadTask task;
+  double progress = 0.0;
 
   Isolate? _isolate;
 
@@ -57,6 +58,7 @@ class _ImageDownloader {
           onDownloadStart(task.collectionName);
           break;
         case _DownloadStatus.run:
+          progress = message.progress;
           onDownloadProgress(task.collectionName, message.progress);
           break;
         case _DownloadStatus.finish:

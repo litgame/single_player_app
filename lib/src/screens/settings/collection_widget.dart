@@ -23,8 +23,7 @@ class _CollectionWidgetState extends State<CollectionWidget> {
   String currentCollectionName = "default";
   _DownloadState buttonState = _DownloadState.idle;
   bool notSelectedCollection = true;
-
-  Map<String, double> savedProgress = {};
+  bool disposed = false;
 
   @override
   void initState() {
@@ -34,6 +33,18 @@ class _CollectionWidgetState extends State<CollectionWidget> {
         : _DownloadState.idle;
     currentCollectionName = widget.settings.collectionName;
     notSelectedCollection = currentCollectionName.isEmpty;
+
+    if (!notSelectedCollection) {
+      final runningProcess =
+          ImageService().activeDownloaders[currentCollectionName];
+      if (runningProcess != null) {
+        currentProgress = runningProcess.progress;
+        buttonState = _DownloadState.inProgress;
+        runningProcess.onDownloadProgress = onDownloadProgress;
+        runningProcess.onDownloadStart = onDownloadStart;
+        runningProcess.onDownloadFinish = onDownloadFinish;
+      }
+    }
   }
 
   void updateDefaultCollection(String? newCollection) {
@@ -48,10 +59,13 @@ class _CollectionWidgetState extends State<CollectionWidget> {
             ? _DownloadState.finished
             : _DownloadState.idle;
         currentCollectionName = widget.settings.collectionName;
-        if (savedProgress[widget.settings.collectionName] == null) {
+        var downloader =
+            ImageService().activeDownloaders[currentCollectionName];
+
+        if (downloader == null) {
           currentProgress = 0;
         } else {
-          currentProgress = savedProgress[widget.settings.collectionName]!;
+          currentProgress = downloader.progress;
           if (currentProgress < 100) {
             buttonState = _DownloadState.inProgress;
           }
@@ -69,6 +83,7 @@ class _CollectionWidgetState extends State<CollectionWidget> {
 
   void onDeleteButton() {
     ImageService().removeCollection(currentCollectionName).then((_) {
+      if (disposed) return;
       setState(() {
         buttonState = widget.settings.isCurrentCollectionOffline
             ? _DownloadState.finished
@@ -79,7 +94,7 @@ class _CollectionWidgetState extends State<CollectionWidget> {
 
   void onDownloadStart(String collectionName) {
     if (collectionName != currentCollectionName) return;
-
+    if (disposed) return;
     setState(() {
       currentProgress = 0;
       buttonState = _DownloadState.inProgress;
@@ -88,20 +103,20 @@ class _CollectionWidgetState extends State<CollectionWidget> {
 
   void onDownloadProgress(String collectionName, double progress) {
     if (collectionName != currentCollectionName) return;
+    if (disposed) return;
     setState(() {
       currentProgress = progress;
       buttonState = _DownloadState.inProgress;
-      savedProgress[collectionName] = progress;
     });
   }
 
   void onDownloadFinish(String collectionName) {
     widget.settings.setCollectionOffline(collectionName).then((value) {
       if (collectionName != currentCollectionName) return;
+      if (disposed) return;
       setState(() {
         currentProgress = 100;
         buttonState = _DownloadState.finished;
-        savedProgress[collectionName] = currentProgress;
       });
     });
   }
@@ -208,5 +223,11 @@ class _CollectionWidgetState extends State<CollectionWidget> {
             }),
           ),
         ]);
+  }
+
+  @override
+  void dispose() {
+    disposed = true;
+    super.dispose();
   }
 }

@@ -29,6 +29,8 @@ class ImageService {
 
   static ImageService? _instance;
 
+  final Map<String, _ImageDownloader> activeDownloaders = {};
+
   SettingsController get settings => SettingsController();
 
   Future<Image> getImage(String url) async {
@@ -56,8 +58,13 @@ class ImageService {
       required Function onDownloadProgress,
       required Function onDownloadFinish}) async {
     final path = await localCollectionPath;
-    final downloader = _ImageDownloader(collectionName, path, onDownloadStart,
-        onDownloadProgress, onDownloadFinish);
+    final downloader = _ImageDownloader(
+        collectionName, path, onDownloadStart, onDownloadProgress,
+        (String collectionName) {
+      activeDownloaders.remove(collectionName);
+      onDownloadFinish(collectionName);
+    });
+    activeDownloaders[collectionName] = downloader;
     downloader.run();
   }
 
