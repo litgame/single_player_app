@@ -123,106 +123,129 @@ class _CollectionWidgetState extends State<CollectionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          DropdownButton<String>(
-              value: widget.settings.collectionName,
-              onChanged: updateDefaultCollection,
-              items: widget.menuItems),
-          Padding(
-            padding: const EdgeInsets.only(left: 40),
-            child: Builder(builder: (context) {
-              if (notSelectedCollection) {
-                return Container();
-              }
-              switch (buttonState) {
-                case _DownloadState.idle:
-                  return TextButton.icon(
-                      onPressed: onDownloadButton,
-                      icon: const Icon(
-                        Icons.cloud_download_outlined,
-                        color: Colors.green,
-                      ),
-                      label: Text(context.loc().scDownload));
+    return LayoutBuilder(builder: (context, constraints) {
+      return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            DropdownButton<String>(
+                value: widget.settings.collectionName,
+                onChanged: updateDefaultCollection,
+                items: widget.menuItems),
+            Padding(
+              padding: const EdgeInsets.only(left: 40),
+              child: Builder(builder: (context) {
+                if (notSelectedCollection) {
+                  return Container();
+                }
+                switch (buttonState) {
+                  case _DownloadState.idle:
+                    return TextButton.icon(
+                        onPressed: onDownloadButton,
+                        icon: const Icon(
+                          Icons.cloud_download_outlined,
+                          color: Colors.green,
+                        ),
+                        label: Text(context.loc().scDownload));
 
-                case _DownloadState.inProgress:
-                  return Row(
-                    children: [
-                      SizedBox(
-                        width: 30.0,
-                        height: 30.0,
-                        child: Stack(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.only(left: 3, top: 4),
-                              child: Icon(
-                                Icons.download_rounded,
+                  case _DownloadState.inProgress:
+                    return Row(
+                      children: [
+                        SizedBox(
+                          width: 30.0,
+                          height: 30.0,
+                          child: Stack(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(left: 3, top: 4),
+                                child: Icon(
+                                  Icons.download_rounded,
+                                  color: Colors.green,
+                                ),
+                              ),
+                              CircularProgressIndicator(
+                                strokeWidth: 1.5,
+                                value: currentProgress / 100,
                                 color: Colors.green,
                               ),
-                            ),
-                            CircularProgressIndicator(
-                              strokeWidth: 1.5,
-                              value: currentProgress / 100,
-                              color: Colors.green,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Text(context.loc().scDownloadProgress),
-                      )
-                    ],
-                  );
-                case _DownloadState.finished:
-                  return Row(
-                    children: [
-                      SizedBox(
-                        width: 30.0,
-                        height: 30.0,
-                        child: Stack(
-                          children: const [
-                            Padding(
-                              padding: EdgeInsets.only(left: 3, top: 4),
-                              child: Icon(
-                                Icons.download_done_rounded,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(context.loc().scDownloadProgress),
+                        )
+                      ],
+                    );
+                  case _DownloadState.finished:
+                    return Row(
+                      children: [
+                        SizedBox(
+                          width: 30.0,
+                          height: 30.0,
+                          child: Stack(
+                            children: const [
+                              Padding(
+                                padding: EdgeInsets.only(left: 3, top: 4),
+                                child: Icon(
+                                  Icons.download_done_rounded,
+                                  color: Colors.green,
+                                ),
+                              ),
+                              CircularProgressIndicator(
+                                strokeWidth: 1.5,
+                                value: 1,
                                 color: Colors.green,
                               ),
-                            ),
-                            CircularProgressIndicator(
-                              strokeWidth: 1.5,
-                              value: 1,
-                              color: Colors.green,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Text(context.loc().scDownloadFinished),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: TextButton.icon(
-                            style: ButtonStyle(
-                                foregroundColor:
-                                    MaterialStateProperty.resolveWith(
-                                        (states) => Colors.red)),
-                            onPressed: onDeleteButton,
-                            icon: const Icon(
-                              Icons.delete_forever,
-                              color: Colors.red,
-                            ),
-                            label: Text(context.loc().scDelete)),
-                      )
-                    ],
-                  );
-              }
-            }),
-          ),
-        ]);
+                        Builder(builder: (context) {
+                          if (constraints.maxWidth > 320) {
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Text(context.loc().scDownloadFinished),
+                            );
+                          }
+                          return Container();
+                        }),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Builder(builder: (context) {
+                            if (constraints.maxWidth > 365) {
+                              return TextButton.icon(
+                                  style: ButtonStyle(
+                                      foregroundColor:
+                                          MaterialStateProperty.resolveWith(
+                                              (states) => Colors.red)),
+                                  onPressed: onDeleteButton,
+                                  icon: const Icon(
+                                    Icons.delete_forever,
+                                    color: Colors.red,
+                                  ),
+                                  label: Text(context.loc().scDelete));
+                            } else {
+                              return TextButton.icon(
+                                  style: ButtonStyle(
+                                      foregroundColor:
+                                          MaterialStateProperty.resolveWith(
+                                              (states) => Colors.red)),
+                                  onPressed: onDeleteButton,
+                                  icon: const Icon(
+                                    Icons.delete_forever,
+                                    color: Colors.red,
+                                  ),
+                                  label: Text(''));
+                            }
+                          }),
+                        )
+                      ],
+                    );
+                }
+              }),
+            ),
+          ]);
+    });
   }
 
   @override
