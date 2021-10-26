@@ -25,8 +25,14 @@ class SettingsController with ChangeNotifier {
   bool _showDocAllScreen = true;
   bool _showDocGameScreen = true;
   bool _showDocTrainingScreen = true;
+  List<String> _offlineCollections = [];
 
   String get collectionName => _collectionName ?? 'default';
+
+  List<String> get offlineCollections => _offlineCollections;
+
+  bool get isCurrentCollectionOffline =>
+      offlineCollections.contains(collectionName);
 
   ThemeMode get themeMode => _themeMode;
 
@@ -39,6 +45,7 @@ class SettingsController with ChangeNotifier {
   Future<void> loadSettings() async {
     _themeMode = await _settingsService.themeMode();
     _collectionName = await _settingsService.collection();
+    _offlineCollections = await _settingsService.collectionsOffline();
     _showDocAllScreen = await _settingsService.showDocAllScreen();
     _showDocGameScreen = await _settingsService.showDocGameScreen();
     _showDocTrainingScreen = await _settingsService.showDocTrainingScreen();
@@ -64,6 +71,41 @@ class SettingsController with ChangeNotifier {
     notifyListeners();
 
     await _settingsService.updateCollection(newCollection);
+  }
+
+  Future<void> _updateOfflineCollections(
+      List<String>? newCollectionsList) async {
+    if (newCollectionsList == null) return;
+
+    if (newCollectionsList == _offlineCollections) return;
+
+    _offlineCollections = newCollectionsList;
+
+    notifyListeners();
+
+    await _settingsService.updateCollectionsOffline(newCollectionsList);
+  }
+
+  Future<void> setCollectionOffline(String collectionName) {
+    final newList = offlineCollections;
+    if (!newList.contains(collectionName)) {
+      newList.add(collectionName);
+      return _updateOfflineCollections(newList);
+    } else {
+      throw ArgumentError.value(collectionName, 'setCurrentCollectionOffline',
+          'collection already in the list!');
+    }
+  }
+
+  Future<void> setCollectionOnline(String collectionName) {
+    final newList = offlineCollections;
+    if (newList.contains(collectionName)) {
+      newList.remove(collectionName);
+      return _updateOfflineCollections(newList);
+    } else {
+      throw ArgumentError.value(collectionName, 'setCurrentCollectionOnline',
+          'collection missing in the list!');
+    }
   }
 
   Future<void> updateShowDocAllScreen(bool? newValue) async {

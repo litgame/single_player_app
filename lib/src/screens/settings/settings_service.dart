@@ -24,6 +24,13 @@ class SettingsService {
   Future<void> updateCollection(String collection) async =>
       _prefs().then((value) => value.setString('collection', collection));
 
+  Future<void> updateCollectionsOffline(List<String> collection) async =>
+      _prefs().then((value) =>
+          value.setString('collectionsOffline', collection.join(';')));
+
+  Future<List<String>> collectionsOffline() async => _prefs()
+      .then((value) => (value.getString('collection') ?? '').split(';'));
+
   Future<bool> showDocAllScreen() =>
       _prefs().then((value) => value.getBool('showDocAllScreen') ?? true);
 

@@ -40,7 +40,7 @@ void main() async {
       ]);
 
       Catcher(
-          rootWidget: MyApp(),
+          rootWidget: const MyApp(),
           debugConfig: releaseOptions,
           releaseConfig: releaseOptions);
     },

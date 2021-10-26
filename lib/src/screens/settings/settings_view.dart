@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:single_player_app/src/screens/settings/collection_widget.dart';
 import 'package:single_player_app/src/services/game_rest.dart';
 
 import '../../tools.dart';
@@ -12,10 +13,12 @@ import 'settings_controller.dart';
 class SettingsView extends StatelessWidget {
   const SettingsView({Key? key}) : super(key: key);
 
+  GameRest get gameService => GameRest();
+
+  SettingsController get controller => SettingsController();
+
   @override
   Widget build(BuildContext context) {
-    final gameService = GameRest();
-    final controller = SettingsController();
     final futureResponse = gameService
         .request('GET', '/api/collection/list')
         .then((value) => value.fromJson());
@@ -82,10 +85,8 @@ class SettingsView extends StatelessWidget {
                           ));
                         }
                       }
-                      return DropdownButton<String>(
-                          value: controller.collectionName,
-                          onChanged: controller.updateDefaultCollection,
-                          items: items);
+                      return CollectionWidget(
+                          settings: controller, menuItems: items);
                     } else {
                       return Padding(
                         padding: const EdgeInsets.all(5.0),
