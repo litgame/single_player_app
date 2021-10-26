@@ -57,7 +57,6 @@ class _ImageDownloader {
           onDownloadStart(task.collectionName);
           break;
         case _DownloadStatus.run:
-          print('${task.collectionName}: ${message.progress}');
           onDownloadProgress(task.collectionName, message.progress);
           break;
         case _DownloadStatus.finish:

@@ -35,7 +35,7 @@ class ImageService {
     if (settings.isCurrentCollectionOffline) {
       final fileName = url.split('/').last;
       final collectionDir = await localCollectionPath;
-      final file = File(collectionDir + fileName);
+      final file = File(collectionDir + '/' + fileName);
       final fileExists = await file.exists();
       if (fileExists) {
         return Image.file(
@@ -63,7 +63,7 @@ class ImageService {
 
   Future<String> get localCollectionPath async {
     final dir = await getApplicationDocumentsDirectory();
-    return dir.path + '/' + settings.collectionName;
+    return dir.path + '/LitGame/' + settings.collectionName;
   }
 
   void _removeCurrentOfflineCollection() async {

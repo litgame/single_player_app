@@ -22,6 +22,7 @@ class _CollectionWidgetState extends State<CollectionWidget> {
   double currentProgress = 0;
   String currentCollectionName = "default";
   _DownloadState buttonState = _DownloadState.idle;
+  bool notSelectedCollection = true;
 
   Map<String, double> savedProgress = {};
 
@@ -32,9 +33,15 @@ class _CollectionWidgetState extends State<CollectionWidget> {
         ? _DownloadState.finished
         : _DownloadState.idle;
     currentCollectionName = widget.settings.collectionName;
+    notSelectedCollection = currentCollectionName.isEmpty;
   }
 
   void updateDefaultCollection(String? newCollection) {
+    if (newCollection != null && newCollection.isEmpty) {
+      notSelectedCollection = true;
+    } else {
+      notSelectedCollection = false;
+    }
     widget.settings.updateDefaultCollection(newCollection).then((_) {
       setState(() {
         buttonState = widget.settings.isCurrentCollectionOffline
@@ -70,7 +77,6 @@ class _CollectionWidgetState extends State<CollectionWidget> {
   }
 
   void onDownloadProgress(String collectionName, double progress) {
-    print('$collectionName != $currentCollectionName');
     if (collectionName != currentCollectionName) return;
     setState(() {
       currentProgress = progress;
@@ -80,7 +86,7 @@ class _CollectionWidgetState extends State<CollectionWidget> {
   }
 
   void onDownloadFinish(String collectionName) {
-    widget.settings.setCollectionOnline(collectionName).then((value) {
+    widget.settings.setCollectionOffline(collectionName).then((value) {
       if (collectionName != currentCollectionName) return;
       setState(() {
         currentProgress = 100;
@@ -103,6 +109,9 @@ class _CollectionWidgetState extends State<CollectionWidget> {
           Padding(
             padding: const EdgeInsets.only(left: 40),
             child: Builder(builder: (context) {
+              if (notSelectedCollection) {
+                return Container();
+              }
               switch (buttonState) {
                 case _DownloadState.idle:
                   return TextButton.icon(
@@ -143,11 +152,34 @@ class _CollectionWidgetState extends State<CollectionWidget> {
                     ],
                   );
                 case _DownloadState.finished:
-                  return Row(children: [
-                    Icon(Icons.check_circle_outline,
-                        color: Colors.green.shade700),
-                    Text(context.loc().scDownloadFinished)
-                  ]);
+                  return Row(
+                    children: [
+                      SizedBox(
+                        width: 30.0,
+                        height: 30.0,
+                        child: Stack(
+                          children: const [
+                            Padding(
+                              padding: EdgeInsets.only(left: 3, top: 4),
+                              child: Icon(
+                                Icons.download_done_rounded,
+                                color: Colors.green,
+                              ),
+                            ),
+                            CircularProgressIndicator(
+                              strokeWidth: 1.5,
+                              value: 1,
+                              color: Colors.green,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Text(context.loc().scDownloadFinished),
+                      )
+                    ],
+                  );
               }
             }),
           ),

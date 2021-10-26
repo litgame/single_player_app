@@ -87,25 +87,21 @@ class SettingsController with ChangeNotifier {
   }
 
   Future<void> setCollectionOffline(String collectionName) {
-    final newList = offlineCollections;
+    final newList = offlineCollections.toList();
     if (!newList.contains(collectionName)) {
       newList.add(collectionName);
       return _updateOfflineCollections(newList);
-    } else {
-      throw ArgumentError.value(collectionName, 'setCurrentCollectionOffline',
-          'collection already in the list!');
     }
+    return Future.value(null);
   }
 
   Future<void> setCollectionOnline(String collectionName) {
-    final newList = offlineCollections;
+    final newList = offlineCollections.toList();
     if (newList.contains(collectionName)) {
       newList.remove(collectionName);
       return _updateOfflineCollections(newList);
-    } else {
-      throw ArgumentError.value(collectionName, 'setCurrentCollectionOnline',
-          'collection missing in the list!');
     }
+    return Future.value(null);
   }
 
   Future<void> updateShowDocAllScreen(bool? newValue) async {

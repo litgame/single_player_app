@@ -1,11 +1,10 @@
 import 'dart:async';
 
-import 'package:file/file.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:single_player_app/src/services/image_service/image_service.dart';
 
 class CardItem extends StatefulWidget {
   const CardItem(
@@ -71,10 +70,10 @@ class CardItemState extends State<CardItem> {
 
   Widget _buildImage(BuildContext context) {
     if (_showImageLoader) {
-      final cache = DefaultCacheManager();
+      final imgService = ImageService();
       return FutureBuilder(
-        future: cache.getSingleFile(imgUrl),
-        builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
+        future: imgService.getImage(imgUrl),
+        builder: (BuildContext context, AsyncSnapshot<Image> snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.active:
@@ -90,10 +89,7 @@ class CardItemState extends State<CardItem> {
                 return const Icon(Icons.error);
               }
               imageLoadingFinishedStream.add(true);
-              return Image.memory(
-                snapshot.data!.readAsBytesSync(),
-                fit: BoxFit.fill,
-              );
+              return snapshot.data!;
           }
         },
       );
