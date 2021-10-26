@@ -16,6 +16,7 @@
   "scDownload": "Download",
   "scDownloadProgress": "Downloading...",
   "scDownloadFinished": "Stored offline!",
+  "scDelete": "Delete",
   "mainTitle": "Litgame",
   "mainStart": "Start new game",
   "mainSettings": "Settings",

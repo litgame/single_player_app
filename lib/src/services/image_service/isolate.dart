@@ -21,7 +21,7 @@ class _IsolatedProcess {
     double totalProgress = 0;
     final progressFileStep = 100 / filesToDownload.length;
     for (var imgUrl in filesToDownload) {
-      Response response = await Dio().get(
+      Dio().get(
         imgUrl,
         onReceiveProgress: (int count, int total) {
           final perFileProgress = count * progressFileStep / total;
@@ -35,17 +35,18 @@ class _IsolatedProcess {
               if (status == null) return false;
               return status < 500;
             }),
-      );
-      final fileName = imgUrl.split('/').last;
-      if (response.data == null) {
-        _sendError("File $imgUrl inaccessible, abort collection saving");
-        return;
-      }
-      final file = File(task.savePath + '/' + fileName);
-      var raf = file.openSync(mode: FileMode.write);
-      raf.writeFrom(response.data).then((value) {
-        raf.close();
-        totalProgress += progressFileStep;
+      ).then((response) {
+        final fileName = imgUrl.split('/').last;
+        if (response.data == null) {
+          _sendError("File $imgUrl inaccessible, abort collection saving");
+          return;
+        }
+        final file = File(task.savePath + '/' + fileName);
+        var raf = file.openSync(mode: FileMode.write);
+        raf.writeFrom(response.data).then((value) {
+          raf.close();
+          totalProgress += progressFileStep;
+        });
       });
     }
     var retry = 5;

@@ -60,11 +60,21 @@ class _CollectionWidgetState extends State<CollectionWidget> {
     });
   }
 
-  void onDownloadCollection() {
+  void onDownloadButton() {
     ImageService().downloadCollection(widget.settings.collectionName,
         onDownloadStart: onDownloadStart,
         onDownloadProgress: onDownloadProgress,
         onDownloadFinish: onDownloadFinish);
+  }
+
+  void onDeleteButton() {
+    ImageService().removeCollection(currentCollectionName).then((_) {
+      setState(() {
+        buttonState = widget.settings.isCurrentCollectionOffline
+            ? _DownloadState.finished
+            : _DownloadState.idle;
+      });
+    });
   }
 
   void onDownloadStart(String collectionName) {
@@ -115,7 +125,7 @@ class _CollectionWidgetState extends State<CollectionWidget> {
               switch (buttonState) {
                 case _DownloadState.idle:
                   return TextButton.icon(
-                      onPressed: onDownloadCollection,
+                      onPressed: onDownloadButton,
                       icon: const Icon(
                         Icons.cloud_download_outlined,
                         color: Colors.green,
@@ -177,6 +187,20 @@ class _CollectionWidgetState extends State<CollectionWidget> {
                       Padding(
                         padding: const EdgeInsets.only(left: 10),
                         child: Text(context.loc().scDownloadFinished),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: TextButton.icon(
+                            style: ButtonStyle(
+                                foregroundColor:
+                                    MaterialStateProperty.resolveWith(
+                                        (states) => Colors.red)),
+                            onPressed: onDeleteButton,
+                            icon: const Icon(
+                              Icons.delete_forever,
+                              color: Colors.red,
+                            ),
+                            label: Text(context.loc().scDelete)),
                       )
                     ],
                   );

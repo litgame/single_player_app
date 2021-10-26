@@ -61,6 +61,14 @@ class ImageService {
     downloader.run();
   }
 
+  Future<void> removeCollection(String collectionName) async {
+    final dir = await getApplicationDocumentsDirectory();
+    final path = dir.path + '/LitGame/' + collectionName;
+    final collectionDir = Directory(path);
+    collectionDir.delete(recursive: true);
+    return settings.setCollectionOnline(settings.collectionName);
+  }
+
   Future<String> get localCollectionPath async {
     final dir = await getApplicationDocumentsDirectory();
     return dir.path + '/LitGame/' + settings.collectionName;
