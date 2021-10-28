@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:single_player_app/src/screens/settings/settings_controller.dart';
 import 'package:single_player_app/src/services/route_builder.dart';
 import 'package:single_player_app/src/ui/menu_button.dart';
 
@@ -24,7 +25,25 @@ class MainMenu extends StatelessWidget {
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               MenuButton(
-                  onPressed: () => RouteBuilder.gotoGameVeryStart(context),
+                  onPressed: () {
+                    if (SettingsController().playIsImpossible) {
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: Text(context.loc().scNoNetwork),
+                          content: Text(context.loc().scNoNetworkNewGame),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'OK'),
+                              child: Text(context.loc().gameOkButton),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      RouteBuilder.gotoGameVeryStart(context);
+                    }
+                  },
                   text: context.loc().mainStart),
               MenuButton(
                   color: Colors.blue,

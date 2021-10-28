@@ -12,6 +12,7 @@
   "scDownloadFinished": "Скачано!",
   "scDelete": "Удалить",
   "scNoNetwork": "Нет сети!",
+  "scNoNetworkNewGame": "Чтобы играть, нужен либо интернет, либо скачанные локально карты (см. настройки)",
   "mainTitle": "Литигра",
   "mainStart": "Начать новую игру",
   "mainSettings": "Настройки",

@@ -161,7 +161,7 @@ class _CollectionWidgetState extends State<CollectionWidget> {
     return _buildCollectionDropdownLine(_prepareItems());
   }
 
-  bool get isOnline => widget.settings.networkState != ConnectivityResult.none;
+  bool get isOnline => widget.settings.isNetworkOnline;
 
   Widget _buildPreloader() {
     return Padding(

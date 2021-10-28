@@ -17,6 +17,7 @@
   "scDownloadProgress": "Downloading...",
   "scDownloadFinished": "Stored offline!",
   "scNoNetwork": "No network",
+  "scNoNetworkNewGame": "To play game you need to enable network or download cards offline",
   "scDelete": "Delete",
   "mainTitle": "Litgame",
   "mainStart": "Start new game",

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart' hide Card;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:litgame_server/models/cards/card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:single_player_app/src/services/game_rest.dart';
 
 import '../../services/image_service/settings_service.dart';
 
@@ -31,12 +32,26 @@ class SettingsController with ChangeNotifier {
 
   void _onConnectionStateChanged(ConnectivityResult result) {
     _networkState = result;
+    if (!isNetworkOnline) {
+      if (!isCurrentCollectionOffline) {
+        if (offlineCollections.isEmpty) {
+          _playIsImpossible = true;
+        } else {
+          updateDefaultCollection(offlineCollections.first, rebuild: false);
+          _playIsImpossible = false;
+        }
+      }
+    } else {
+      _playIsImpossible = false;
+    }
     notifyListeners();
   }
 
   var _networkState = ConnectivityResult.none;
 
   get networkState => _networkState;
+
+  bool get isNetworkOnline => networkState != ConnectivityResult.none;
 
   static SettingsController? _instance;
 
@@ -48,6 +63,10 @@ class SettingsController with ChangeNotifier {
   bool _showDocGameScreen = true;
   bool _showDocTrainingScreen = true;
   List<String> _offlineCollections = [];
+
+  bool _playIsImpossible = false;
+
+  bool get playIsImpossible => _playIsImpossible;
 
   String get collectionName => _collectionName ?? 'default';
 
@@ -78,6 +97,7 @@ class SettingsController with ChangeNotifier {
     _showDocGameScreen = await _settingsService.showDocGameScreen();
     _showDocTrainingScreen = await _settingsService.showDocTrainingScreen();
     await dotenv.load(fileName: ".env");
+    GameRest();
     notifyListeners();
   }
 
