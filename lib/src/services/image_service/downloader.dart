@@ -66,7 +66,15 @@ class _ImageDownloader {
           _portSubscription?.cancel().then((_) {
             _portSubscription = null;
           });
-          onDownloadFinish(task.collectionName);
+          final convertedCollection = <String, List<Card>>{};
+          message.cards?.forEach((proxyCard) {
+            final cardType = proxyCard.cardType.value();
+            if (convertedCollection[cardType] == null) {
+              convertedCollection[cardType] = <Card>[];
+            }
+            convertedCollection[cardType]?.add(proxyCard.card);
+          });
+          onDownloadFinish(task.collectionName, convertedCollection);
           break;
       }
     }
@@ -109,4 +117,20 @@ class _DownloadMessage {
   _DownloadStatus status;
   String? errorDescription;
   double progress;
+  List<ProxyCard>? cards;
+}
+
+class ProxyCard {
+  ProxyCard(Card card)
+      : name = card.name,
+        collectionName = card.collectionName,
+        cardType = card.cardType,
+        imgUrl = card.imgUrl;
+
+  String name;
+  String imgUrl;
+  CardType cardType;
+  String collectionName;
+
+  Card get card => Card(name, imgUrl, cardType, collectionName);
 }

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:litgame_server/models/cards/card.dart' as LitCard;
+import 'package:flutter/material.dart' hide Card;
+import 'package:litgame_server/models/cards/card.dart';
 import 'package:litgame_server/models/game/game.dart';
 import 'package:single_player_app/src/screens/game/training/training_screen.dart';
 import 'package:single_player_app/src/screens/settings/settings_controller.dart';
@@ -27,7 +27,7 @@ class TrainingController with GameService {
 
   GlobalKey<CardItemState> get cardOnTopKey => _cardKeys[_cardOnTopIndex];
 
-  Future<LitCard.Card> nextCard() {
+  Future<Card> nextCard() {
     var _state = cardOnTopKey.currentState;
     final flipState = _state?.flipCardKey.currentState;
     flipState?.toggleCard();
@@ -46,7 +46,8 @@ class TrainingController with GameService {
     });
   }
 
-  Future<LitCard.Card> startTraining() async {
+  Future<Card> startTraining(String collectionName,
+      [Map<String, List<Card>>? offlineCards]) async {
     var response = await gameService.request('PUT', '/api/game/start',
         body: {'gameId': gameId, 'adminId': playerId}.toJson());
     if (response.statusCode != 200) {
@@ -90,11 +91,12 @@ class TrainingController with GameService {
       throw "Game server error: can't sort player";
     }
 
+    gameService.cards = offlineCards;
     response = await gameService.request('PUT', '/api/game/training/start',
         body: {
           'gameId': gameId,
           'triggeredBy': playerId,
-          'collectionName': SettingsController().collectionName
+          'collectionName': collectionName
         }.toJson());
 
     if (response.statusCode != 200) {
@@ -112,11 +114,11 @@ class TrainingController with GameService {
 
     currentCard = await response
         .fromJson()
-        .then((value) => LitCard.Card.clone()..fromJson(value['card']));
+        .then((value) => Card.clone()..fromJson(value['card']));
     return currentCard!;
   }
 
-  Future<LitCard.Card> trainingNextStep() async {
+  Future<Card> trainingNextStep() async {
     final response = await gameService.request('PUT', '/api/game/training/next',
         body: {
           'gameId': gameId,
@@ -128,12 +130,12 @@ class TrainingController with GameService {
 
     currentCard = await response
         .fromJson()
-        .then((value) => LitCard.Card.clone()..fromJson(value['card']));
+        .then((value) => Card.clone()..fromJson(value['card']));
 
     return currentCard!;
   }
 
-  LitCard.Card? currentCard;
+  Card? currentCard;
 
   static Widget buildRoute(BuildContext context, SettingsController settings) {
     if (settings.showDocAllScreen) {

@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Card;
 import 'package:flutter/widgets.dart';
+import 'package:litgame_server/models/cards/card.dart';
 import 'package:single_player_app/src/screens/settings/settings_controller.dart';
 import 'package:single_player_app/src/services/image_service/image_service.dart';
 import 'package:single_player_app/src/tools.dart';
@@ -110,8 +111,9 @@ class _CollectionWidgetState extends State<CollectionWidget> {
     });
   }
 
-  void onDownloadFinish(String collectionName) {
-    widget.settings.setCollectionOffline(collectionName).then((value) {
+  void onDownloadFinish(
+      String collectionName, Map<String, List<Card>> collection) {
+    widget.settings.saveCollection(collectionName, collection).then((value) {
       if (collectionName != currentCollectionName) return;
       if (disposed) return;
       setState(() {

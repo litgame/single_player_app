@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:litgame_server/models/cards/card.dart' as LitCard;
 import 'package:single_player_app/src/screens/game/training/training_controller.dart';
+import 'package:single_player_app/src/screens/settings/settings_controller.dart';
 import 'package:single_player_app/src/services/route_builder.dart';
 import 'package:single_player_app/src/ui/app_bar_button.dart';
 import 'package:single_player_app/src/ui/card_item.dart';
@@ -20,12 +21,24 @@ class TrainingScreen extends StatelessWidget with LayoutOrientation {
     training.cardSectionController.enableSwipe(true);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    training.startTraining().then((LitCard.Card card) {
+  void _startTraining(String collectionName,
+      [Map<String, List<LitCard.Card>>? offlineCards]) {
+    training
+        .startTraining(collectionName, offlineCards)
+        .then((LitCard.Card card) {
       final firstCard = training.cardKeys[0];
       firstCard.currentState?.setImage(card.imgUrl, card.name);
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = SettingsController();
+    if (settings.isCurrentCollectionOffline) {
+      settings.getCurrentOfflineCollectionCards().then((offlineCards) =>
+          _startTraining(settings.collectionName, offlineCards));
+    }
+
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         init(constraints);

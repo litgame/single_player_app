@@ -10,6 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:litgame_server/models/cards/card.dart' show Card;
+import 'package:litgame_server/models/cards/card.dart';
 import 'package:litgame_server/service/service.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 import 'package:path_provider/path_provider.dart';
@@ -60,9 +61,9 @@ class ImageService {
     final path = await localCollectionPath;
     final downloader = _ImageDownloader(
         collectionName, path, onDownloadStart, onDownloadProgress,
-        (String collectionName) {
+        (String collectionName, Map<String, List<Card>> collection) {
       activeDownloaders.remove(collectionName);
-      onDownloadFinish(collectionName);
+      onDownloadFinish(collectionName, collection);
     });
     activeDownloaders[collectionName] = downloader;
     downloader.run();
@@ -73,7 +74,7 @@ class ImageService {
     final path = dir.path + '/LitGame/' + collectionName;
     final collectionDir = Directory(path);
     collectionDir.delete(recursive: true);
-    return settings.setCollectionOnline(settings.collectionName);
+    return settings.removeSavedCollection(settings.collectionName);
   }
 
   Future<String> get localCollectionPath async {
@@ -86,7 +87,7 @@ class ImageService {
       final collectionDir = Directory(collectionPath);
       collectionDir.delete(recursive: true);
     });
-    settings.setCollectionOnline(settings.collectionName);
+    settings.removeSavedCollection(settings.collectionName);
   }
 
   Future<Image> _getCachedWebImage(String url) async {

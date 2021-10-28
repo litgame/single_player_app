@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Card;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:litgame_server/models/cards/card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'settings_service.dart';
 
@@ -45,7 +47,13 @@ class SettingsController with ChangeNotifier {
   Future<void> loadSettings() async {
     _themeMode = await _settingsService.themeMode();
     _collectionName = await _settingsService.collection();
-    _offlineCollections = await _settingsService.collectionsOffline();
+    _offlineCollections = await _settingsService
+        .getSavedCollectionsNames()
+        .onError((error, stackTrace) {
+      SharedPreferences.getInstance()
+          .then((value) => value.remove('collectionsOffline'));
+      return [];
+    });
     _showDocAllScreen = await _settingsService.showDocAllScreen();
     _showDocGameScreen = await _settingsService.showDocGameScreen();
     _showDocTrainingScreen = await _settingsService.showDocTrainingScreen();
@@ -73,35 +81,26 @@ class SettingsController with ChangeNotifier {
     await _settingsService.updateCollection(newCollection);
   }
 
-  Future<void> _updateOfflineCollections(
-      List<String>? newCollectionsList) async {
-    if (newCollectionsList == null) return;
-
-    if (newCollectionsList == _offlineCollections) return;
-
-    _offlineCollections = newCollectionsList;
-
-    notifyListeners();
-
-    await _settingsService.updateCollectionsOffline(newCollectionsList);
+  Future<void> saveCollection(
+      String collectionName, Map<String, List<Card>> collection) {
+    return _settingsService
+        .saveCollection(collectionName, collection)
+        .then((value) {
+      _offlineCollections.add(collectionName);
+      notifyListeners();
+    });
   }
 
-  Future<void> setCollectionOffline(String collectionName) {
-    final newList = offlineCollections.toList();
-    if (!newList.contains(collectionName)) {
-      newList.add(collectionName);
-      return _updateOfflineCollections(newList);
-    }
-    return Future.value(null);
-  }
+  Future<void> removeSavedCollection(String collectionName) =>
+      _settingsService.removeSavedCollection(collectionName).then((value) {
+        _offlineCollections.remove(collectionName);
+        notifyListeners();
+      });
 
-  Future<void> setCollectionOnline(String collectionName) {
-    final newList = offlineCollections.toList();
-    if (newList.contains(collectionName)) {
-      newList.remove(collectionName);
-      return _updateOfflineCollections(newList);
-    }
-    return Future.value(null);
+  Future<Map<String, List<Card>>?> getCurrentOfflineCollectionCards() {
+    if (!isCurrentCollectionOffline) return Future.value(null);
+
+    return _settingsService.getSavedCollection(collectionName);
   }
 
   Future<void> updateShowDocAllScreen(bool? newValue) async {

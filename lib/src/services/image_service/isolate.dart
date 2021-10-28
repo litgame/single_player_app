@@ -13,7 +13,9 @@ class _IsolatedProcess {
     if (!createdDir.existsSync()) return;
     task.port.send(_DownloadMessage(_DownloadStatus.start));
     await init;
-    final filesToDownload = await _getCollectionFiles(task.collectionName);
+    final collection = await _getCollectionCards(task.collectionName);
+    final filesToDownload =
+        collection?.map<String>((e) => e.imgUrl).toList(growable: false);
     if (filesToDownload == null) {
       _sendError('Cards of collection ${task.collectionName} did not found');
       return;
@@ -59,6 +61,7 @@ class _IsolatedProcess {
     }
     _sendProgress(totalProgress);
     final finishMessage = _DownloadMessage(_DownloadStatus.finish);
+    finishMessage.cards = collection;
     task.port.send(finishMessage);
   }
 
@@ -68,16 +71,19 @@ class _IsolatedProcess {
     return service.init;
   }
 
-  Future<List<String>?> _getCollectionFiles(String collectionName) async {
+  Future<List<ProxyCard>?> _getCollectionCards(String collectionName) async {
     final builder = QueryBuilder<Card>(Card.clone())
       ..whereEqualTo('collection', collectionName);
     final response = await builder.query<Card>();
     if (response.results == null) {
       return null;
     }
-    return response.results
-        ?.map<String>((var card) => card.imgUrl)
-        .toList(growable: false);
+    List<ProxyCard> collection = [];
+    response.results?.forEach((card) {
+      card as Card;
+      collection.add(ProxyCard(card));
+    });
+    return collection;
   }
 
   void _sendError(String description) {
