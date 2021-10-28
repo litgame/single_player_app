@@ -37,6 +37,8 @@ class TrainingScreen extends StatelessWidget with LayoutOrientation {
     if (settings.isCurrentCollectionOffline) {
       settings.getCurrentOfflineCollectionCards().then((offlineCards) =>
           _startTraining(settings.collectionName, offlineCards));
+    } else {
+      _startTraining(settings.collectionName);
     }
 
     return LayoutBuilder(
