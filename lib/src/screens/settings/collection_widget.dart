@@ -1,16 +1,16 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart' hide Card;
 import 'package:flutter/widgets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:litgame_server/models/cards/card.dart';
 import 'package:single_player_app/src/screens/settings/settings_controller.dart';
+import 'package:single_player_app/src/services/game_rest.dart';
 import 'package:single_player_app/src/services/image_service/image_service.dart';
 import 'package:single_player_app/src/tools.dart';
 
 class CollectionWidget extends StatefulWidget {
-  const CollectionWidget(
-      {Key? key, required this.menuItems, required this.settings})
-      : super(key: key);
+  const CollectionWidget({Key? key, required this.settings}) : super(key: key);
 
-  final List<DropdownMenuItem<String>> menuItems;
   final SettingsController settings;
 
   @override
@@ -25,10 +25,15 @@ class _CollectionWidgetState extends State<CollectionWidget> {
   _DownloadState buttonState = _DownloadState.idle;
   bool notSelectedCollection = true;
   bool disposed = false;
+  List<String> collectionsList = [];
+  bool loadingCollection = true;
+
+  GameRest get gameService => GameRest();
 
   @override
   void initState() {
     super.initState();
+    loadingCollection = true;
     buttonState = widget.settings.isCurrentCollectionOffline
         ? _DownloadState.finished
         : _DownloadState.idle;
@@ -47,6 +52,18 @@ class _CollectionWidgetState extends State<CollectionWidget> {
       }
     }
   }
+
+  Future _getCollectionsList() => gameService
+      .request('GET', '/api/collection/list')
+      .then((value) => value.fromJson().then((value) {
+            setState(() {
+              collectionsList = ((value['collections'] ?? []) as List)
+                  .map((e) => e['name'] as String)
+                  .toList(growable: false);
+
+              loadingCollection = false;
+            });
+          }));
 
   void updateDefaultCollection(String? newCollection) {
     if (newCollection != null && newCollection.isEmpty) {
@@ -125,7 +142,94 @@ class _CollectionWidgetState extends State<CollectionWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (isOnline) {
+      if (collectionsList.isEmpty) {
+        return FutureBuilder(
+            future: _getCollectionsList(),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                return _buildCollectionDropdownLine(_prepareItems());
+              } else {
+                return _buildPreloader();
+              }
+            });
+      } else {
+        return _buildCollectionDropdownLine(_prepareItems());
+      }
+    }
+
+    return _buildCollectionDropdownLine(_prepareItems());
+  }
+
+  bool get isOnline => widget.settings.networkState != ConnectivityResult.none;
+
+  Widget _buildPreloader() {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: const [
+          SpinKitWave(
+            color: Colors.green,
+            size: 35.0,
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<DropdownMenuItem<String>> _prepareItems() {
+    final items = <DropdownMenuItem<String>>[];
+    if (isOnline) {
+      items.add(DropdownMenuItem<String>(
+        value: '',
+        child: Text(context.loc().settingsCollectionNone),
+      ));
+      for (var collection in collectionsList) {
+        items.add(DropdownMenuItem<String>(
+          value: collection,
+          child: Text(collection),
+        ));
+      }
+    } else {
+      collectionsList = [];
+      for (var element in widget.settings.offlineCollections) {
+        items.add(DropdownMenuItem<String>(
+          value: element,
+          child: Text(element),
+        ));
+      }
+      if (items.isNotEmpty &&
+          items
+              .where(
+                  (element) => element.value == widget.settings.collectionName)
+              .isEmpty) {
+        widget.settings
+            .updateDefaultCollection(items.first.value, rebuild: false);
+        notSelectedCollection = false;
+      }
+    }
+    return items;
+  }
+
+  Widget _buildCollectionDropdownLine(
+      List<DropdownMenuItem<String>> menuItems) {
     return LayoutBuilder(builder: (context, constraints) {
+      if (menuItems.isEmpty) {
+        return Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.wifi_off,
+                color: Colors.orange,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(context.loc().scNoNetwork),
+              )
+            ]);
+      }
       return Row(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -133,12 +237,18 @@ class _CollectionWidgetState extends State<CollectionWidget> {
             DropdownButton<String>(
                 value: widget.settings.collectionName,
                 onChanged: updateDefaultCollection,
-                items: widget.menuItems),
+                items: menuItems),
             Padding(
               padding: const EdgeInsets.only(left: 40),
               child: Builder(builder: (context) {
                 if (notSelectedCollection) {
                   return Container();
+                }
+                if (widget.settings.networkState == ConnectivityResult.none) {
+                  return const Icon(
+                    Icons.wifi_off,
+                    color: Colors.orange,
+                  );
                 }
                 switch (buttonState) {
                   case _DownloadState.idle:
@@ -237,7 +347,7 @@ class _CollectionWidgetState extends State<CollectionWidget> {
                                     Icons.delete_forever,
                                     color: Colors.red,
                                   ),
-                                  label: Text(''));
+                                  label: const Text(''));
                             }
                           }),
                         )

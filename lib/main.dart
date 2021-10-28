@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 
 import 'src/app.dart';
 import 'src/screens/settings/settings_controller.dart';
-import 'src/screens/settings/settings_service.dart';
+import 'src/services/image_service/settings_service.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override

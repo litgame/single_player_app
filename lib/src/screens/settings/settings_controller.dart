@@ -1,13 +1,22 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide Card;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:litgame_server/models/cards/card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'settings_service.dart';
+import '../../services/image_service/settings_service.dart';
 
 class SettingsController with ChangeNotifier {
-  SettingsController._(this._settingsService);
+  SettingsController._(this._settingsService) {
+    Connectivity().checkConnectivity().then((value) {
+      _networkState = value;
+    });
+    _connectivitySubscr =
+        Connectivity().onConnectivityChanged.listen(_onConnectionStateChanged);
+  }
 
   factory SettingsController([SettingsService? settingsService]) {
     if (settingsService != null) {
@@ -17,6 +26,17 @@ class SettingsController with ChangeNotifier {
     }
     return _instance as SettingsController;
   }
+
+  late StreamSubscription<ConnectivityResult> _connectivitySubscr;
+
+  void _onConnectionStateChanged(ConnectivityResult result) {
+    _networkState = result;
+    notifyListeners();
+  }
+
+  var _networkState = ConnectivityResult.none;
+
+  get networkState => _networkState;
 
   static SettingsController? _instance;
 
@@ -69,14 +89,17 @@ class SettingsController with ChangeNotifier {
     await _settingsService.updateThemeMode(newThemeMode);
   }
 
-  Future<void> updateDefaultCollection(String? newCollection) async {
+  Future<void> updateDefaultCollection(String? newCollection,
+      {bool rebuild = true}) async {
     if (newCollection == null) return;
 
     if (newCollection == _collectionName) return;
 
     _collectionName = newCollection;
 
-    notifyListeners();
+    if (rebuild) {
+      notifyListeners();
+    }
 
     await _settingsService.updateCollection(newCollection);
   }
@@ -134,5 +157,11 @@ class SettingsController with ChangeNotifier {
     notifyListeners();
 
     await _settingsService.updateShowDocTrainingScreen(newValue);
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+    _connectivitySubscr.cancel();
   }
 }

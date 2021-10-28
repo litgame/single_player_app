@@ -31,6 +31,7 @@ dependencies:
   carousel_slider: ^4.0.0
   flutter_swiper_null_safety: ^1.0.2
   path_provider: ^2.0.5
+  connectivity_plus: ^2.0.2
 
 
 dev_dependencies:

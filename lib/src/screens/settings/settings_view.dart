@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:single_player_app/src/screens/settings/collection_widget.dart';
 import 'package:single_player_app/src/services/game_rest.dart';
 
@@ -19,9 +18,6 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final futureResponse = gameService
-        .request('GET', '/api/collection/list')
-        .then((value) => value.fromJson());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple,
@@ -62,57 +58,7 @@ class SettingsView extends StatelessWidget {
               ),
               Text(context.loc().settingsCollectionTitle,
                   textAlign: TextAlign.left),
-              FutureBuilder(
-                  future: futureResponse,
-                  initialData: null,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<Map<String, dynamic>?> snapshot) {
-                    if (snapshot.hasData) {
-                      final items = <DropdownMenuItem<String>>[
-                        DropdownMenuItem<String>(
-                          value: '',
-                          child: Text(context.loc().settingsCollectionNone),
-                        )
-                      ];
-                      final collectionsList = snapshot.data?['collections'];
-                      if (collectionsList != null &&
-                          collectionsList is List &&
-                          collectionsList.isNotEmpty) {
-                        for (var collection in collectionsList) {
-                          items.add(DropdownMenuItem<String>(
-                            value: collection['name'] as String,
-                            child: Text(collection['name'] as String),
-                          ));
-                        }
-                      }
-
-                      if (collectionsList == null ||
-                          (collectionsList is List &&
-                              collectionsList.isEmpty)) {
-                        controller.offlineCollections.forEach((element) {
-                          items.add(DropdownMenuItem<String>(
-                            value: element,
-                            child: Text(element),
-                          ));
-                        });
-                      }
-                      return CollectionWidget(
-                          settings: controller, menuItems: items);
-                    } else {
-                      return Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: const [
-                            SpinKitWave(
-                              color: Colors.green,
-                              size: 35.0,
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  }),
+              CollectionWidget(settings: controller),
               CheckboxListTile(
                   title: Text(context.loc().gameTitleDocAllShow),
                   value: controller.showDocAllScreen,

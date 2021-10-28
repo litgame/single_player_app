@@ -11,6 +11,7 @@
   "scDownloadProgress": "Скачиваем...",
   "scDownloadFinished": "Скачано!",
   "scDelete": "Удалить",
+  "scNoNetwork": "Нет сети!",
   "mainTitle": "Литигра",
   "mainStart": "Начать новую игру",
   "mainSettings": "Настройки",
