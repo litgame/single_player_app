@@ -8,7 +8,7 @@ import 'package:single_player_app/src/ui/menu_button.dart';
 
 import '../tools.dart';
 
-class MainMenu extends StatelessWidget {
+class MainMenu extends StatelessWidget with NoNetworkModal {
   const MainMenu({Key? key}) : super(key: key);
 
   @override
@@ -27,19 +27,7 @@ class MainMenu extends StatelessWidget {
               MenuButton(
                   onPressed: () {
                     if (SettingsController().playIsImpossible) {
-                      showDialog<String>(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          title: Text(context.loc().scNoNetwork),
-                          content: Text(context.loc().scNoNetworkNewGame),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'OK'),
-                              child: Text(context.loc().gameOkButton),
-                            ),
-                          ],
-                        ),
-                      );
+                      dlgNoNetwork(context);
                     } else {
                       RouteBuilder.gotoGameVeryStart(context);
                     }

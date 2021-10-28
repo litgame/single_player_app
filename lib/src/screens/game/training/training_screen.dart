@@ -9,7 +9,8 @@ import 'package:swipeable_card_stack/swipeable_card_stack.dart';
 
 import '../../../tools.dart';
 
-class TrainingScreen extends StatelessWidget with LayoutOrientation {
+class TrainingScreen extends StatelessWidget
+    with LayoutOrientation, NoNetworkModal {
   TrainingScreen({Key? key}) : super(key: key) {
     training.cardSectionController = SwipeableCardSectionController();
   }
@@ -29,6 +30,14 @@ class TrainingScreen extends StatelessWidget with LayoutOrientation {
       final firstCard = training.cardKeys[0];
       firstCard.currentState?.setImage(card.imgUrl, card.name);
     });
+  }
+
+  void _onGameStart(BuildContext context) {
+    if (training.isCurrentCollectionPlayableOffline) {
+      RouteBuilder.gotoTestFinishGameStart(context);
+    } else {
+      dlgNoNetwork(context);
+    }
   }
 
   @override
@@ -51,8 +60,7 @@ class TrainingScreen extends StatelessWidget with LayoutOrientation {
               title: Text(context.loc().gameTitleTraining),
               actions: [
                 AppBarButton(
-                  onPressed: () =>
-                      RouteBuilder.gotoTestFinishGameStart(context),
+                  onPressed: () => _onGameStart(context),
                   text: text,
                   icon: Icon(
                     Icons.arrow_forward,

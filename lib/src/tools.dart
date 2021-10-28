@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -29,4 +30,22 @@ class _LayoutData {
 
   var isTiny = true;
   var orientation = Orientation.portrait;
+}
+
+mixin NoNetworkModal {
+  void dlgNoNetwork(BuildContext context) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(context.loc().scNoNetwork),
+        content: Text(context.loc().scNoNetworkNewGame),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: Text(context.loc().gameOkButton),
+          ),
+        ],
+      ),
+    );
+  }
 }

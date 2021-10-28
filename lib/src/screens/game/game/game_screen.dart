@@ -21,7 +21,7 @@ class GameScreen extends StatefulWidget {
 enum GameUIStage { masterInit, playerCardSelect, playerCardDisplay }
 
 class _GameScreenState extends State<GameScreen>
-    with GameService, LayoutOrientation {
+    with GameService, LayoutOrientation, NoNetworkModal {
   GameUIStage _currentState = GameUIStage.masterInit;
   LitCard.CardType? _selectedCartType;
   final carouselController = CarouselController();
@@ -71,22 +71,26 @@ class _GameScreenState extends State<GameScreen>
   }
 
   void nextUIState() {
-    GameUIStage next;
-    switch (_currentState) {
-      case GameUIStage.masterInit:
-        next = GameUIStage.playerCardSelect;
-        break;
-      case GameUIStage.playerCardSelect:
-        next = GameUIStage.playerCardDisplay;
-        break;
-      case GameUIStage.playerCardDisplay:
-        next = GameUIStage.playerCardSelect;
-        break;
-    }
+    if (isCurrentCollectionPlayableOffline) {
+      GameUIStage next;
+      switch (_currentState) {
+        case GameUIStage.masterInit:
+          next = GameUIStage.playerCardSelect;
+          break;
+        case GameUIStage.playerCardSelect:
+          next = GameUIStage.playerCardDisplay;
+          break;
+        case GameUIStage.playerCardDisplay:
+          next = GameUIStage.playerCardSelect;
+          break;
+      }
 
-    setState(() {
-      _currentState = next;
-    });
+      setState(() {
+        _currentState = next;
+      });
+    } else {
+      dlgNoNetwork(context);
+    }
   }
 
   void _onGeneric() {
