@@ -85,6 +85,17 @@ class SettingsView extends StatelessWidget {
                           ));
                         }
                       }
+
+                      if (collectionsList == null ||
+                          (collectionsList is List &&
+                              collectionsList.isEmpty)) {
+                        controller.offlineCollections.forEach((element) {
+                          items.add(DropdownMenuItem<String>(
+                            value: element,
+                            child: Text(element),
+                          ));
+                        });
+                      }
                       return CollectionWidget(
                           settings: controller, menuItems: items);
                     } else {
