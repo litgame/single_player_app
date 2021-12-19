@@ -9,7 +9,6 @@ import 'package:flutter/material.dart' hide Card;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:litgame_server/models/cards/card.dart' show Card;
 import 'package:litgame_server/models/cards/card.dart';
 import 'package:litgame_server/service/service.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';

@@ -40,6 +40,10 @@
   "pageNotFoundTitle": "Page not found!",
   "cardTypeGeneric": "Generic",
   "cardTypePerson": "Person",
-  "cardTypePlace": "Place"
-
+  "cardTypePlace": "Place",
+  "magicSettingsTitle": "Magic!",
+  "magicSettingsPlayersCount": "How many players (approximately) will play the game?",
+  "magicStartFromCycle": "Start magic from cycle:",
+  "magicProbability": "Magic probability",
+  "magicPlayButton": "Play!"
 }

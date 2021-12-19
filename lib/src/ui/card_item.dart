@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flip_card/flip_card.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:single_player_app/src/services/image_service/image_service.dart';

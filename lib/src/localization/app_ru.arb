@@ -34,5 +34,10 @@
   "pageNotFoundTitle": "Нет такой страницы!",
   "cardTypeGeneric": "Общая",
   "cardTypePerson": "Персонаж",
-  "cardTypePlace": "Место"
+  "cardTypePlace": "Место",
+  "magicSettingsTitle": "Магия!",
+  "magicSettingsPlayersCount": "Сколько игроков (примерно) будет играть в игру?",
+  "magicStartFromCycle": "Выдавать карты магии с круга игры:",
+  "magicProbability": "Вероятность появления карты магии",
+  "magicPlayButton": "Играть!"
 }

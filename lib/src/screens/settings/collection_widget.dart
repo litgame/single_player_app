@@ -1,6 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart' hide Card;
-import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:litgame_server/models/cards/card.dart';
 import 'package:single_player_app/src/screens/settings/settings_controller.dart';

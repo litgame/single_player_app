@@ -32,6 +32,7 @@ dependencies:
   flutter_swiper_null_safety: ^1.0.2
   path_provider: ^2.0.5
   connectivity_plus: ^2.0.2
+  flutter_spinbox: ^0.7.0
 
 
 dev_dependencies:

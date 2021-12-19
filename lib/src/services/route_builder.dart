@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:single_player_app/src/screens/game/doc/all.dart';
 import 'package:single_player_app/src/screens/game/doc/game.dart';
 import 'package:single_player_app/src/screens/game/doc/training.dart';
 import 'package:single_player_app/src/screens/game/game/game_screen.dart';
+import 'package:single_player_app/src/screens/game/magic_settings.dart';
 import 'package:single_player_app/src/screens/game/training/training_screen.dart';
 import 'package:single_player_app/src/screens/main_menu.dart';
 import 'package:single_player_app/src/screens/settings/settings_controller.dart';
@@ -22,6 +22,7 @@ class RouteBuilder {
     '/doc': (ctx) => const DocAllScreen(),
     '/game/training/doc': (ctx) => const DocTrainingScreen(),
     '/game/training/process': (ctx) => TrainingScreen(),
+    '/game/training/magic-settings': (ctx) => const MagicSettings(),
     '/game/game/': (ctx) => _gameRoute(),
     '/game/game/doc': (ctx) => const DocGameScreen(),
     '/game/game/process': (ctx) => const GameScreen(),
@@ -79,6 +80,9 @@ class RouteBuilder {
       Navigator.of(context).restorablePushNamed('/doc');
     } else if (SettingsController().showDocTrainingScreen) {
       Navigator.of(context).restorablePushNamed('/game/training/doc');
+    } else if (SettingsController().withMagic) {
+      Navigator.of(context)
+          .restorablePushNamed('/game/training/magic-settings');
     } else {
       Navigator.of(context).restorablePushNamed('/game/training/process');
     }
@@ -89,7 +93,12 @@ class RouteBuilder {
   }
 
   static gotoTraining(BuildContext context) {
-    Navigator.of(context).restorablePushNamed('/game/training/process');
+    if (SettingsController().withMagic) {
+      Navigator.of(context)
+          .restorablePushNamed('/game/training/magic-settings');
+    } else {
+      Navigator.of(context).restorablePushNamed('/game/training/process');
+    }
   }
 
   static gotoTestFinishGameStart(BuildContext context) {

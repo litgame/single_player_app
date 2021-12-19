@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide Card;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:litgame_server/models/cards/card.dart';
@@ -63,6 +62,11 @@ class SettingsController with ChangeNotifier {
   bool _showDocGameScreen = true;
   bool _showDocTrainingScreen = true;
   bool _withMagic = false;
+
+  int magicPlayersCount = 2;
+  int magicStartFromCycle = 5;
+  double magicProbability = 0.5;
+
   List<String> _offlineCollections = [];
 
   bool _playIsImpossible = false;
