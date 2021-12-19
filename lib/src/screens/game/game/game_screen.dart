@@ -123,6 +123,7 @@ class _GameScreenState extends State<GameScreen>
         builder: (BuildContext context, AsyncSnapshot<LitCard.Card> snapshot) {
           if (snapshot.hasData) {
             final card = snapshot.data as LitCard.Card;
+            //display floating magic box here!
             return CardItem(flip: false, imgUrl: card.imgUrl, title: card.name);
           } else {
             return const Center(
