@@ -8,7 +8,7 @@ import 'package:litgame_server/models/cards/card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:single_player_app/src/services/game_rest.dart';
 
-import '../../services/image_service/settings_service.dart';
+import '../../services/settings_service.dart';
 
 class SettingsController with ChangeNotifier {
   SettingsController._(this._settingsService) {
