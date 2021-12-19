@@ -62,6 +62,7 @@ class SettingsController with ChangeNotifier {
   bool _showDocAllScreen = true;
   bool _showDocGameScreen = true;
   bool _showDocTrainingScreen = true;
+  bool _withMagic = false;
   List<String> _offlineCollections = [];
 
   bool _playIsImpossible = false;
@@ -83,6 +84,8 @@ class SettingsController with ChangeNotifier {
 
   bool get showDocTrainingScreen => _showDocTrainingScreen;
 
+  bool get withMagic => _withMagic;
+
   Future<void> loadSettings() async {
     _themeMode = await _settingsService.themeMode();
     _collectionName = await _settingsService.collection();
@@ -96,6 +99,7 @@ class SettingsController with ChangeNotifier {
     _showDocAllScreen = await _settingsService.showDocAllScreen();
     _showDocGameScreen = await _settingsService.showDocGameScreen();
     _showDocTrainingScreen = await _settingsService.showDocTrainingScreen();
+    _withMagic = await _settingsService.withMagic();
     await dotenv.load(fileName: ".env");
     GameRest();
     notifyListeners();
@@ -107,6 +111,14 @@ class SettingsController with ChangeNotifier {
     _themeMode = newThemeMode;
     notifyListeners();
     await _settingsService.updateThemeMode(newThemeMode);
+  }
+
+  Future<void> updateWithMagic(bool? withMagic) async {
+    if (withMagic == null) return;
+    if (withMagic == _withMagic) return;
+    _withMagic = withMagic;
+    notifyListeners();
+    await _settingsService.updateWithMagic(_withMagic);
   }
 
   Future<void> updateDefaultCollection(String? newCollection,

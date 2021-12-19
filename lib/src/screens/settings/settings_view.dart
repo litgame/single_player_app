@@ -60,6 +60,10 @@ class SettingsView extends StatelessWidget {
                   textAlign: TextAlign.left),
               CollectionWidget(settings: controller),
               CheckboxListTile(
+                  title: Text(context.loc().settingsWithMagic),
+                  value: controller.withMagic,
+                  onChanged: controller.updateWithMagic),
+              CheckboxListTile(
                   title: Text(context.loc().gameTitleDocAllShow),
                   value: controller.showDocAllScreen,
                   onChanged: controller.updateShowDocAllScreen),

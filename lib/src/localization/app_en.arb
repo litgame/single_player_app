@@ -13,6 +13,7 @@
   "settingsThemeLight": "Light Theme",
   "settingsCollectionTitle": "Select default collection",
   "settingsCollectionNone": "Not selected",
+  "settingsWithMagic": "Game with magic",
   "scDownload": "Download",
   "scDownloadProgress": "Downloading...",
   "scDownloadFinished": "Stored offline!",
