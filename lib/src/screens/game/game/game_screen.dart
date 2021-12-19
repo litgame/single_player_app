@@ -4,7 +4,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:litgame_server/models/cards/card.dart' as LitCard;
 import 'package:litgame_server/models/game/game.dart';
 import 'package:single_player_app/src/screens/game/game/select_card_screen.dart';
+import 'package:single_player_app/src/screens/settings/settings_controller.dart';
 import 'package:single_player_app/src/services/game_rest.dart';
+import 'package:single_player_app/src/services/magic_service/magic_item.dart';
+import 'package:single_player_app/src/services/magic_service/magic_service.dart';
 import 'package:single_player_app/src/services/route_builder.dart';
 import 'package:single_player_app/src/ui/app_bar_button.dart';
 import 'package:single_player_app/src/ui/card_item.dart';
@@ -25,6 +28,8 @@ class _GameScreenState extends State<GameScreen>
   GameUIStage _currentState = GameUIStage.masterInit;
   LitCard.CardType? _selectedCartType;
   final carouselController = CarouselController();
+  final _magicService = MagicService(SettingsController());
+  MagicType? _currentPlayerChooseMagic;
 
   List<LitCard.Card>? _lastStartGameData;
 
@@ -64,6 +69,8 @@ class _GameScreenState extends State<GameScreen>
     if (response.statusCode != 200) {
       throw "Game server error: can't get new card!";
     }
+
+    _currentPlayerChooseMagic = _magicService.hasMagicAtTurn();
 
     return response
         .fromJson()

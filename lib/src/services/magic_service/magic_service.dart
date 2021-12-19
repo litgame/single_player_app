@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:single_player_app/src/screens/settings/settings_controller.dart';
+import 'package:single_player_app/src/services/magic_service/magic_item.dart';
 
 class MagicService {
   MagicService(SettingsController settingsController)
@@ -6,13 +9,34 @@ class MagicService {
         _magicPlayersCount = settingsController.magicPlayersCount,
         _magicProbability = settingsController.magicProbability,
         _magicStartFromCycle = settingsController.magicStartFromCycle,
-        _currentCycle = 1;
+        _currentCycle = 1,
+        _currentTurn = 0;
 
-  bool _useMagic;
-  int _magicPlayersCount;
-  int _magicStartFromCycle;
-  double _magicProbability;
+  final bool _useMagic;
+  final int _magicPlayersCount;
+  final int _magicStartFromCycle;
+  final double _magicProbability;
   int _currentCycle;
+  int _currentTurn;
 
-  int nextCycle() => _currentCycle++;
+  List<MagicItem> allMagic = [];
+
+  MagicType? hasMagicAtTurn() {
+    if (!_useMagic) return null;
+    _currentTurn++;
+    if (_currentTurn > _magicPlayersCount) {
+      _currentCycle++;
+      _currentTurn = 0;
+    }
+    if (_currentCycle < _magicStartFromCycle) return null;
+    final rand = Random();
+    if (rand.nextDouble() > _magicProbability) return null;
+    return _getRandom();
+  }
+
+  MagicType _getRandom() {
+    final rand = Random();
+    final typeIndex = rand.nextInt(MagicType.values.length);
+    return MagicType.values[typeIndex];
+  }
 }
