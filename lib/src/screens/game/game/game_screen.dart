@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:litgame_server/models/cards/card.dart' as LitCard;
 import 'package:litgame_server/models/game/game.dart';
+import 'package:single_player_app/src/screens/game/game/magic_widget.dart';
 import 'package:single_player_app/src/screens/game/game/select_card_screen.dart';
 import 'package:single_player_app/src/screens/settings/settings_controller.dart';
 import 'package:single_player_app/src/services/game_rest.dart';
@@ -32,6 +33,7 @@ class _GameScreenState extends State<GameScreen>
   MagicType? _currentPlayerChooseMagic;
 
   List<LitCard.Card>? _lastStartGameData;
+  Future<LitCard.Card>? _selectedCardFuture;
 
   Future<List<LitCard.Card>> _restStartGame() async {
     final response = await gameService.request('PUT', '/api/game/game/start',
@@ -86,6 +88,7 @@ class _GameScreenState extends State<GameScreen>
           break;
         case GameUIStage.playerCardSelect:
           next = GameUIStage.playerCardDisplay;
+          _selectedCardFuture = _restSelectCard();
           break;
         case GameUIStage.playerCardDisplay:
           next = GameUIStage.playerCardSelect;
@@ -126,12 +129,27 @@ class _GameScreenState extends State<GameScreen>
           onPlace: _onPlace);
     } else if (nextState == GameUIStage.playerCardDisplay) {
       return FutureBuilder(
-        future: _restSelectCard(),
+        future: _selectedCardFuture,
         builder: (BuildContext context, AsyncSnapshot<LitCard.Card> snapshot) {
           if (snapshot.hasData) {
             final card = snapshot.data as LitCard.Card;
+            final cardWidget =
+                CardItem(flip: false, imgUrl: card.imgUrl, title: card.name);
+            // _currentPlayerChooseMagic = MagicType.cancelMagic;
             //display floating magic box here!
-            return CardItem(flip: false, imgUrl: card.imgUrl, title: card.name);
+            if (_currentPlayerChooseMagic == null) {
+              return cardWidget;
+            } else {
+              return Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                  cardWidget,
+                  Align(
+                      alignment: const Alignment(1, -0.8),
+                      child: MagicWidget(onTap: () {}))
+                ],
+              );
+            }
           } else {
             return const Center(
               child: SpinKitWave(
