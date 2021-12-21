@@ -19,7 +19,7 @@ class MagicSettings extends StatelessWidget {
           Text(context.loc().magicSettingsPlayersCount),
           SpinBox(
             min: 2,
-            value: 2,
+            value: 4,
             onChanged: (value) {
               SettingsController().magicPlayersCount = value.toInt();
             },
@@ -36,7 +36,7 @@ class MagicSettings extends StatelessWidget {
           SpinBox(
             min: 0,
             max: 100,
-            value: 50,
+            value: 30,
             onChanged: (value) {
               SettingsController().magicProbability = value / 100;
             },
