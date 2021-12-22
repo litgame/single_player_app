@@ -4,8 +4,8 @@ import 'package:single_player_app/src/screens/settings/settings_controller.dart'
 import 'package:single_player_app/src/tools.dart';
 import 'package:single_player_app/src/ui/menu_button.dart';
 
-class MagicSettings extends StatelessWidget {
-  const MagicSettings({Key? key}) : super(key: key);
+class MagicPreGameSettings extends StatelessWidget {
+  const MagicPreGameSettings({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -3,7 +3,7 @@ import 'package:single_player_app/src/screens/game/doc/all.dart';
 import 'package:single_player_app/src/screens/game/doc/game.dart';
 import 'package:single_player_app/src/screens/game/doc/training.dart';
 import 'package:single_player_app/src/screens/game/game/game_screen.dart';
-import 'package:single_player_app/src/screens/game/magic_settings.dart';
+import 'package:single_player_app/src/screens/game/magic/magic_pre_game_settings.dart';
 import 'package:single_player_app/src/screens/game/training/training_screen.dart';
 import 'package:single_player_app/src/screens/main_menu.dart';
 import 'package:single_player_app/src/screens/settings/settings_controller.dart';
@@ -22,7 +22,7 @@ class RouteBuilder {
     '/doc': (ctx) => const DocAllScreen(),
     '/game/training/doc': (ctx) => const DocTrainingScreen(),
     '/game/training/process': (ctx) => TrainingScreen(),
-    '/game/training/magic-settings': (ctx) => const MagicSettings(),
+    '/game/training/magic-settings': (ctx) => const MagicPreGameSettings(),
     '/game/game/': (ctx) => _gameRoute(),
     '/game/game/doc': (ctx) => const DocGameScreen(),
     '/game/game/process': (ctx) => const GameScreen(),
