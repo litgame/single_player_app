@@ -84,10 +84,14 @@ class MagicNewScreen extends StatelessWidget with LayoutOrientation {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text(context.loc().gameOkButton),
+                    child: Text(context.loc().gameOkButton,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.green)),
                   )
                 ],
-                title: Text(context.loc().magicAlertTitle),
+                title: Text(
+                  context.loc().magicAlertTitle,
+                ),
                 content: Text(errorTranslation),
               ));
     }

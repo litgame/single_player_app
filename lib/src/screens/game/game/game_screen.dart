@@ -193,11 +193,7 @@ class _GameScreenState extends State<GameScreen>
                 backgroundColor: Colors.purple,
                 leading: IconButton(
                   color: Colors.redAccent,
-                  onPressed: () {
-                    _restStopGame();
-                    //TODO: переделать, чтобы было модальное окно с подтверждением завершения
-                    RouteBuilder.gotoMainMenu(context, reset: true);
-                  },
+                  onPressed: _onGameEndButton,
                   icon: Icon(
                     Icons.close,
                     color: Colors.red,
@@ -221,6 +217,38 @@ class _GameScreenState extends State<GameScreen>
                     ? _buildMasterGameInit(context, orientation, isTiny)
                     : _buildGameScreen(_currentState)));
       });
+
+  void _onGameEndButton() {
+    showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              title: Text(context.loc().gameFinishConfirmTitle),
+              content: Text(context.loc().gameFinishConfirmDescription),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: Text(
+                      context.loc().gameFinishConfirmNo,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.green),
+                    )),
+                TextButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: Text(
+                      context.loc().gameFinishConfirmYes,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.red),
+                    )),
+              ],
+            )).then((finish) {
+      if (finish) {
+        _restStopGame();
+        RouteBuilder.gotoMainMenu(context, reset: true);
+      }
+    });
+  }
 
   Widget _buildMasterGameInit(
       BuildContext context, Orientation orientation, bool isTiny) {

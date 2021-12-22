@@ -38,10 +38,13 @@ mixin NoNetworkModal {
       builder: (BuildContext context) => AlertDialog(
         title: Text(context.loc().scNoNetwork),
         content: Text(context.loc().scNoNetworkNewGame),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
-            child: Text(context.loc().gameOkButton),
+            child: Text(context.loc().gameOkButton,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.green)),
           ),
         ],
       ),
