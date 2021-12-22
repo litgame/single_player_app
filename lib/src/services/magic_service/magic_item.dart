@@ -82,13 +82,13 @@ class MagicItem {
 
   void _checkTurnsPositive() {
     if (fireAfterTurns < 1) {
-      throw ArgumentError('fireAfterTurns should be greater then 1');
+      throw ArgumentError(type, 'fireAfterTurns');
     }
   }
 
   void _checkDescriptionFilled() {
     if (description.isEmpty) {
-      throw ArgumentError('description should not be empty');
+      throw ArgumentError(type, 'description');
     }
   }
 }

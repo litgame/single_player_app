@@ -36,6 +36,51 @@ class MagicNewScreen extends StatelessWidget {
     try {
       final magicItem = uiGenerator.getMagicItem();
       Navigator.of(context).pop(magicItem);
-    } on ArgumentError catch (error) {}
+    } on ArgumentError catch (error) {
+      var errorTranslation = context.loc().magicAlertUnknown;
+      switch (error.name) {
+        case 'description':
+          final magicType = error.message;
+          if (magicType is MagicType) {
+            switch (magicType) {
+              case MagicType.marionette:
+                errorTranslation =
+                    context.loc().magicAlertDescriptionMarionette;
+                break;
+              case MagicType.eurythmics:
+                errorTranslation =
+                    context.loc().magicAlertDescriptionEurythmics;
+                break;
+              case MagicType.keyword:
+                errorTranslation = context.loc().magicAlertDescriptionKeyword;
+                break;
+              case MagicType.additionalEvent:
+                break;
+              case MagicType.cancelMagic:
+                break;
+            }
+          }
+          break;
+        case 'fireAfterTurns':
+          errorTranslation = context.loc().magicAlertTurn;
+          break;
+      }
+      showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(context.loc().gameOkButton),
+                  )
+                ],
+                title: Text(context.loc().magicAlertTitle),
+                content: Text(errorTranslation),
+              ));
+    }
   }
 }

@@ -11,7 +11,7 @@ class UITypeMarionette extends UITypeBase {
 
   @override
   List<Widget> build(BuildContext context) => [
-        Text(context.loc().magicModalSave),
+        Text(context.loc().magicModalTurns),
         SpinBox(
           min: 1,
           value: fireAfterTurns.toDouble(),

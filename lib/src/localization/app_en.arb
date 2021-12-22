@@ -49,5 +49,12 @@
   "magicModalTitle": "Apply magic",
   "magicModalSave": "Save",
   "magicModalTurns": "Apply magic after N turns:",
-  "magicMarionetteText": "What should to happen at that turn?"
+  "magicMarionetteText": "What should to happen at that turn?",
+  "magicAlertTitle": "Magic failed",
+  "magicAlertUnknown": "Unknown error, report a bug, please",
+  "magicAlertDescriptionMarionette": "Description should be filled. In description you should explain, what event should happen at specified turn",
+  "magicAlertDescriptionEurythmics": "Eurythmics phrase (one or multiple words) should be specified",
+  "magicAlertDescriptionKeyword": "Keyword should be specified",
+  "magicAlertTurn": "Turn number should be greater than 0. Report a bug, please"
+
 }
