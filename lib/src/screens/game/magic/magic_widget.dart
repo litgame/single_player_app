@@ -2,13 +2,20 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:single_player_app/src/screens/game/magic/magic_new_screen.dart';
+import 'package:single_player_app/src/services/magic_service/magic_item.dart';
+
+typedef MagicCallback = void Function(MagicItem item);
 
 class MagicWidget extends StatefulWidget {
-  const MagicWidget({Key? key, required this.onTap}) : super(key: key);
+  const MagicWidget(
+      {Key? key, required this.chosenMagic, required this.onMagicCreated})
+      : super(key: key);
 
-  final Function onTap;
+  final MagicType chosenMagic;
   final int basicSize = 64;
   static const swapDurationMS = Duration(milliseconds: 300);
+  final MagicCallback onMagicCreated;
 
   @override
   _MagicWidgetState createState() => _MagicWidgetState();
@@ -63,7 +70,6 @@ class _MagicWidgetState extends State<MagicWidget>
         child: AnimatedBuilder(
             animation: _controller,
             builder: (BuildContext context, Widget? child) {
-              final size = widget.basicSize * _scaleAnimation.value;
               return Container(
                 decoration: const BoxDecoration(
                     gradient: RadialGradient(radius: 0.5, colors: [
@@ -73,12 +79,16 @@ class _MagicWidgetState extends State<MagicWidget>
                   Color.fromRGBO(0, 0, 0, 0.05),
                   Color.fromRGBO(0, 0, 0, 0.0)
                 ])),
-                child: Padding(
-                  padding: EdgeInsets.all((widget.basicSize / 2).toDouble()),
-                  child: Image.asset(
-                    'assets/images/magic/magic_box.png',
-                    width: size,
-                    height: size,
+                child: Transform.scale(
+                  scale: _scaleAnimation.value,
+                  child: Padding(
+                    padding:
+                        EdgeInsets.all((widget.basicSize * 0.5).toDouble()),
+                    child: Image.asset(
+                      'assets/images/magic/magic_box.png',
+                      width: widget.basicSize.toDouble(),
+                      height: widget.basicSize.toDouble(),
+                    ),
                   ),
                 ),
               );
@@ -93,8 +103,7 @@ class _MagicWidgetState extends State<MagicWidget>
       decoration: const BoxDecoration(
           gradient: RadialGradient(radius: 0.5, colors: [
         Color.fromRGBO(238, 108, 9, 0.9),
-        Color.fromRGBO(238, 108, 9, 0.8),
-        Color.fromRGBO(238, 108, 9, 0.4),
+        Color.fromRGBO(238, 108, 9, 0.1),
         Color.fromRGBO(238, 108, 9, 0.05),
         Color.fromRGBO(0, 0, 0, 0.0)
       ])),
@@ -102,8 +111,8 @@ class _MagicWidgetState extends State<MagicWidget>
         padding: EdgeInsets.all((widget.basicSize / 2).toDouble()),
         child: Image.asset(
           'assets/images/magic/explosion_$imageNumber.png',
-          width: 128,
-          height: 128,
+          width: widget.basicSize.toDouble(),
+          height: widget.basicSize.toDouble(),
         ),
       ),
     );
@@ -114,7 +123,24 @@ class _MagicWidgetState extends State<MagicWidget>
       _magicWidget = _buildOpenedBox(context);
     });
     Future.delayed(MagicWidget.swapDurationMS).then((_) {
-      _onTap();
+      Navigator.of(context)
+          .push(MaterialPageRoute<MagicItem?>(
+              fullscreenDialog: true,
+              builder: (ctx) => MagicNewScreen(
+                    chosenMagic: widget.chosenMagic,
+                  )))
+          .then((magicItem) {
+        if (magicItem != null) {
+          widget.onMagicCreated(magicItem);
+          setState(() {
+            _magicWidget = Container();
+          });
+        } else {
+          setState(() {
+            _magicWidget = _buildAnimatedBox(context);
+          });
+        }
+      });
     });
   }
 }

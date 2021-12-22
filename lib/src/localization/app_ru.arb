@@ -35,9 +35,13 @@
   "cardTypeGeneric": "Общая",
   "cardTypePerson": "Персонаж",
   "cardTypePlace": "Место",
-  "magicSettingsTitle": "Магия!",
+  "magicSettingsTitle": "Настройки карт магии",
   "magicSettingsPlayersCount": "Сколько игроков (примерно) будет играть в игру?",
   "magicStartFromCycle": "Выдавать карты магии с круга игры:",
   "magicProbability": "Вероятность появления карты магии",
-  "magicPlayButton": "Играть!"
+  "magicPlayButton": "Играть!",
+  "magicModalTitle": "Применить магию",
+  "magicModalSave": "Сохранить",
+  "magicModalTurns": "Через сколько ходов применить магию?",
+  "magicMarionetteText": "Что должно произойти в этот ход?"
 }

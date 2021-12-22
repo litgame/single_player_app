@@ -41,9 +41,13 @@
   "cardTypeGeneric": "Generic",
   "cardTypePerson": "Person",
   "cardTypePlace": "Place",
-  "magicSettingsTitle": "Magic!",
+  "magicSettingsTitle": "Magic settings",
   "magicSettingsPlayersCount": "How many players (approximately) will play the game?",
   "magicStartFromCycle": "Start magic from cycle:",
   "magicProbability": "Magic probability",
-  "magicPlayButton": "Play!"
+  "magicPlayButton": "Play!",
+  "magicModalTitle": "Apply magic",
+  "magicModalSave": "Save",
+  "magicModalTurns": "Apply magic after N turns:",
+  "magicMarionetteText": "What should to happen at that turn?"
 }

@@ -19,7 +19,7 @@ class MagicService {
   int _currentCycle;
   int _currentTurn;
 
-  List<MagicItem> allMagic = [];
+  Set<MagicItem> allMagic = {};
 
   MagicType? hasMagicAtTurn() {
     if (!_useMagic) return null;
