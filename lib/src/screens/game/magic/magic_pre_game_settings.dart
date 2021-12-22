@@ -17,29 +17,50 @@ class MagicPreGameSettings extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         children: [
           Text(context.loc().magicSettingsPlayersCount),
-          SpinBox(
-            min: 2,
-            value: 4,
-            onChanged: (value) {
-              SettingsController().magicPlayersCount = value.toInt();
-            },
+          Row(
+            children: [
+              SizedBox(
+                width: 200,
+                child: SpinBox(
+                  min: 2,
+                  value: 4,
+                  onChanged: (value) {
+                    SettingsController().magicPlayersCount = value.toInt();
+                  },
+                ),
+              ),
+            ],
           ),
           Text(context.loc().magicStartFromCycle),
-          SpinBox(
-            min: 1,
-            value: 5,
-            onChanged: (value) {
-              SettingsController().magicStartFromCycle = value.toInt();
-            },
+          Row(
+            children: [
+              SizedBox(
+                width: 200,
+                child: SpinBox(
+                  min: 1,
+                  value: 5,
+                  onChanged: (value) {
+                    SettingsController().magicStartFromCycle = value.toInt();
+                  },
+                ),
+              ),
+            ],
           ),
           Text(context.loc().magicProbability),
-          SpinBox(
-            min: 0,
-            max: 100,
-            value: 30,
-            onChanged: (value) {
-              SettingsController().magicProbability = value / 100;
-            },
+          Row(
+            children: [
+              SizedBox(
+                width: 200,
+                child: SpinBox(
+                  min: 0,
+                  max: 100,
+                  value: 30,
+                  onChanged: (value) {
+                    SettingsController().magicProbability = value / 100;
+                  },
+                ),
+              ),
+            ],
           ),
           MenuButton(
             onPressed: () {

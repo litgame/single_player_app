@@ -49,6 +49,7 @@
   "magicModalTitle": "Apply magic",
   "magicModalSave": "Save",
   "magicModalTurns": "Apply magic after N turns:",
+  "magicMarionetteDescription": "Now you can specify, what events should happen after specified number of turns.",
   "magicMarionetteText": "What should to happen at that turn?",
   "magicAlertTitle": "Magic failed",
   "magicAlertUnknown": "Unknown error, report a bug, please",
