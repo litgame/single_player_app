@@ -4,7 +4,7 @@ import 'package:single_player_app/src/services/magic_service/magic_item.dart';
 import 'package:single_player_app/src/tools.dart';
 import 'package:single_player_app/src/ui/app_bar_button.dart';
 
-class MagicNewScreen extends StatelessWidget {
+class MagicNewScreen extends StatelessWidget with LayoutOrientation {
   MagicNewScreen({Key? key, required MagicType chosenMagic})
       : uiGenerator = uiTypeFactory(chosenMagic),
         super(key: key);
@@ -13,25 +13,32 @@ class MagicNewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          actions: [
-            AppBarButton(
-              onPressed: () {
-                _onSave(context);
-              },
-              text: context.loc().magicModalSave,
-            )
-          ],
-          backgroundColor: Colors.purple,
-          title: Text(context.loc().magicModalTitle +
-              ' ' +
-              uiGenerator.title(context))),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: uiGenerator.build(context),
-      ),
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      init(constraints);
+      return Scaffold(
+        appBar: AppBar(
+            actions: [
+              AppBarButton(
+                icon: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Image.asset('assets/images/magic/wand.png'),
+                ),
+                onPressed: () {
+                  _onSave(context);
+                },
+                text: isTiny ? null : context.loc().magicModalSave,
+              )
+            ],
+            backgroundColor: Colors.purple,
+            title: Text(context.loc().magicModalTitle +
+                ' ' +
+                uiGenerator.title(context))),
+        body: ListView(
+          padding: const EdgeInsets.all(20),
+          children: uiGenerator.build(context),
+        ),
+      );
+    });
   }
 
   void _onSave(BuildContext context) {
