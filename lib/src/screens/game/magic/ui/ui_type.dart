@@ -1,29 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:single_player_app/src/screens/game/magic/ui/additional_event.dart';
+import 'package:single_player_app/src/screens/game/magic/ui/eurythmics.dart';
+import 'package:single_player_app/src/screens/game/magic/ui/keyword.dart';
 import 'package:single_player_app/src/screens/game/magic/ui/marionette.dart';
 import 'package:single_player_app/src/services/magic_service/magic_item.dart';
+
+import 'cancel_magic.dart';
 
 UITypeBase uiTypeFactory(MagicType type) {
   switch (type) {
     case MagicType.marionette:
       return UITypeMarionette();
+
     case MagicType.eurythmics:
-      // TODO: Handle this case.
-      break;
+      return UITypeEurythmics();
+
     case MagicType.keyword:
-      // TODO: Handle this case.
-      break;
+      return UITypeKeyword();
+
     case MagicType.additionalEvent:
-      // TODO: Handle this case.
-      break;
+      return UITypeAdditionalEvent();
+
     case MagicType.cancelMagic:
-      // TODO: Handle this case.
-      break;
+      return UITypeCancelMagic();
   }
-  return UITypeMarionette();
 }
 
 abstract class UITypeBase {
   List<Widget> build(BuildContext context);
 
   MagicItem getMagicItem();
+
+  String title(BuildContext context);
 }

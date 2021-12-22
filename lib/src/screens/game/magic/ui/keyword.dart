@@ -4,8 +4,9 @@ import 'package:single_player_app/src/screens/game/magic/ui/ui_type.dart';
 import 'package:single_player_app/src/services/magic_service/magic_item.dart';
 import 'package:single_player_app/src/tools.dart';
 
-class UITypeMarionette extends UITypeBase {
+class UITypeKeyword extends UITypeBase {
   var fireAfterTurns = 1;
+  var repeatCount = 3;
   var description = '';
 
   @override
@@ -13,7 +14,7 @@ class UITypeMarionette extends UITypeBase {
         Padding(
           padding: const EdgeInsets.only(bottom: 40),
           child: Text(
-            context.loc().magicMarionetteDescription,
+            context.loc().magicKeywordDescription,
             style: const TextStyle(fontSize: 18),
           ),
         ),
@@ -32,18 +33,35 @@ class UITypeMarionette extends UITypeBase {
             ),
           ],
         ),
-        Text(context.loc().magicMarionetteText),
+        Text(context.loc().magicKeywordText),
         TextField(
             maxLines: null,
             keyboardType: TextInputType.multiline,
             onChanged: (value) {
               description = value;
-            })
+            }),
+        Text(context.loc().magicKeywordRepeats),
+        Row(
+          children: [
+            SizedBox(
+              width: 200,
+              child: SpinBox(
+                min: 1,
+                max: 30,
+                value: repeatCount.toDouble(),
+                onChanged: (value) {
+                  repeatCount = value.toInt();
+                },
+              ),
+            ),
+          ],
+        ),
       ];
 
   @override
-  MagicItem getMagicItem() => MagicItem.marionette(description, fireAfterTurns);
+  MagicItem getMagicItem() =>
+      MagicItem.keyword(description, fireAfterTurns, repeatCount);
 
   @override
-  String title(BuildContext context) => context.loc().magicMarionetteTitle;
+  String title(BuildContext context) => context.loc().magicKeywordTitle;
 }

@@ -44,12 +44,15 @@ class MagicItem {
   /// рассказе слово или фразу, заданную Магом
   ///
   /// В механике приложения событие должно удаляться после того как произошло,
-  /// либо модет быть отменено картой {MagicType.cancelMagic} до того как
+  /// либо может быть отменено картой {MagicType.cancelMagic} до того как
   /// случится
-  MagicItem.keyword(this.description, this.fireAfterTurns)
+  MagicItem.keyword(this.description, this.fireAfterTurns, this.repeatCount)
       : type = MagicType.keyword {
     _checkDescriptionFilled();
     _checkTurnsPositive();
+    if (repeatCount < 1) {
+      throw ArgumentError(type, 'repeatCount');
+    }
   }
 
   /// Событийная карточка: Заколдованныйберет ещё одну событийную карточку
@@ -73,6 +76,9 @@ class MagicItem {
 
   /// Через сколько ходов после текущего должнга сработать
   int fireAfterTurns = 0;
+
+  /// Нужно ли по нескольку раз повторять указанное слово или фразу?
+  int repeatCount = 1;
 
   /// Должно ли событие повторяться каждые N ходов (указаны в {fireAfterTurns}
   bool repeat = false;

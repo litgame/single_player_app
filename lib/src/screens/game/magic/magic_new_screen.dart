@@ -24,7 +24,9 @@ class MagicNewScreen extends StatelessWidget {
             )
           ],
           backgroundColor: Colors.purple,
-          title: Text(context.loc().magicModalTitle)),
+          title: Text(context.loc().magicModalTitle +
+              ' ' +
+              uiGenerator.title(context))),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: uiGenerator.build(context),
