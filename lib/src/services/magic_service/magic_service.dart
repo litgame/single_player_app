@@ -34,9 +34,16 @@ class MagicService {
     return _getRandom();
   }
 
-  MagicType _getRandom() {
+  MagicType? _getRandom([int? recursion]) {
+    recursion ??= 0;
     final rand = Random();
     final typeIndex = rand.nextInt(MagicType.values.length);
-    return MagicType.values[typeIndex];
+    MagicType? magic = MagicType.values[typeIndex];
+    if (magic == MagicType.cancelMagic && allMagic.isEmpty) {
+      recursion++;
+      if (recursion > 10) return null;
+      magic = _getRandom(recursion);
+    }
+    return magic;
   }
 }
