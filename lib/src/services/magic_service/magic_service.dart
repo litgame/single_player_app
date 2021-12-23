@@ -21,7 +21,8 @@ class MagicService {
 
   Set<MagicItem> allMagic = {};
 
-  MagicType? hasMagicAtTurn() {
+  /// Можем ли мы добавить новую магию к игре на этом ходе?
+  MagicType? addMagicAtTurn() {
     if (!_useMagic) return null;
     _currentTurn++;
     if (_currentTurn > _magicPlayersCount) {
@@ -32,6 +33,18 @@ class MagicService {
     final rand = Random();
     if (rand.nextDouble() > _magicProbability) return null;
     return _getRandom();
+  }
+
+  /// должна ли какая-то из добавленных ранее магий примениться на этом ходе?
+  List<MagicItem> applyMagicAtTurn() {
+    final magicToFire = <MagicItem>[];
+    for (var item in allMagic) {
+      item.fireAfterTurns--;
+      if (item.fireAfterTurns == 0) {
+        magicToFire.add(item);
+      }
+    }
+    return magicToFire;
   }
 
   MagicType? _getRandom([int? recursion]) {

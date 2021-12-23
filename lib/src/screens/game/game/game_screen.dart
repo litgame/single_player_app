@@ -31,6 +31,7 @@ class _GameScreenState extends State<GameScreen>
   final carouselController = CarouselController();
   final _magicService = MagicService(SettingsController());
   MagicType? _currentPlayerChooseMagic;
+  List<MagicItem> _fireMagic = [];
 
   List<LitCard.Card>? _lastStartGameData;
   Future<LitCard.Card>? _selectedCardFuture;
@@ -72,7 +73,8 @@ class _GameScreenState extends State<GameScreen>
       throw "Game server error: can't get new card!";
     }
 
-    _currentPlayerChooseMagic = _magicService.hasMagicAtTurn();
+    _currentPlayerChooseMagic = _magicService.addMagicAtTurn();
+    _fireMagic = _magicService.applyMagicAtTurn();
 
     return response
         .fromJson()
