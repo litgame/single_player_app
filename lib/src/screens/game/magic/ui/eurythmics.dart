@@ -5,6 +5,8 @@ import 'package:single_player_app/src/services/magic_service/magic_item.dart';
 import 'package:single_player_app/src/tools.dart';
 
 class UITypeEurythmics extends UITypeBase {
+  UITypeEurythmics(MagicType type) : super(type);
+
   var fireAfterTurns = 1;
   var description = '';
 
@@ -40,7 +42,4 @@ class UITypeEurythmics extends UITypeBase {
 
   @override
   MagicItem getMagicItem() => MagicItem.eurythmics(description, fireAfterTurns);
-
-  @override
-  String title(BuildContext context) => context.loc().magicEurythmicsTitle;
 }

@@ -5,6 +5,8 @@ import 'package:single_player_app/src/services/magic_service/magic_item.dart';
 import 'package:single_player_app/src/tools.dart';
 
 class UITypeMarionette extends UITypeBase {
+  UITypeMarionette(MagicType type) : super(type);
+
   var fireAfterTurns = 1;
   var description = '';
 
@@ -43,7 +45,4 @@ class UITypeMarionette extends UITypeBase {
 
   @override
   MagicItem getMagicItem() => MagicItem.marionette(description, fireAfterTurns);
-
-  @override
-  String title(BuildContext context) => context.loc().magicMarionetteTitle;
 }

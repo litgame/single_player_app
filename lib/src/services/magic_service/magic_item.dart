@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+import 'package:single_player_app/src/tools.dart';
+
 enum MagicType {
   marionette,
   eurythmics,
@@ -6,6 +9,27 @@ enum MagicType {
   // myTurn, // ??? Мой ход: ход незамедлительно переходит от Заколдованного к магу с сохранением выпавшей карты
   // nextTurn, // ??? Переход хода: ход Заколдованного заканчивается, начинается ход слудеющего игрока.
   cancelMagic,
+}
+
+extension MagicTypeTranslation on MagicType {
+  String translatedName(BuildContext context) {
+    switch (this) {
+      case MagicType.marionette:
+        return context.loc().magicMarionetteTitle;
+
+      case MagicType.eurythmics:
+        return context.loc().magicEurythmicsTitle;
+
+      case MagicType.keyword:
+        return context.loc().magicKeywordTitle;
+
+      case MagicType.additionalEvent:
+        return context.loc().magicAdditionalEventTitle;
+
+      case MagicType.cancelMagic:
+        return context.loc().magicCancelTitle;
+    }
+  }
 }
 
 class MagicItem {

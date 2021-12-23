@@ -148,9 +148,7 @@ class _GameScreenState extends State<GameScreen>
                       alignment: const Alignment(0.95, -0.8),
                       child: MagicWidget(
                         chosenMagic: _currentPlayerChooseMagic!,
-                        onMagicCreated: (MagicItem item) {
-                          _magicService.allMagic.add(item);
-                        },
+                        magicService: _magicService,
                       ))
                 ],
               );

@@ -4,18 +4,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:single_player_app/src/screens/game/magic/magic_new_screen.dart';
 import 'package:single_player_app/src/services/magic_service/magic_item.dart';
+import 'package:single_player_app/src/services/magic_service/magic_service.dart';
 
 typedef MagicCallback = void Function(MagicItem item);
 
 class MagicWidget extends StatefulWidget {
   const MagicWidget(
-      {Key? key, required this.chosenMagic, required this.onMagicCreated})
+      {Key? key,
+      required this.chosenMagic,
+      required this.magicService,
+      this.onMagicCreated})
       : super(key: key);
 
   final MagicType chosenMagic;
   final int basicSize = 64;
   static const swapDurationMS = Duration(milliseconds: 300);
-  final MagicCallback onMagicCreated;
+  final MagicCallback? onMagicCreated;
+  final MagicService magicService;
 
   @override
   _MagicWidgetState createState() => _MagicWidgetState();
@@ -127,11 +132,18 @@ class _MagicWidgetState extends State<MagicWidget>
           .push(MaterialPageRoute<MagicItem?>(
               fullscreenDialog: true,
               builder: (ctx) => MagicNewScreen(
+                    magicService: widget.magicService,
                     chosenMagic: widget.chosenMagic,
                   )))
           .then((magicItem) {
         if (magicItem != null) {
-          widget.onMagicCreated(magicItem);
+          final callback = widget.onMagicCreated;
+          if (callback != null) {
+            callback(magicItem);
+          }
+          if (magicItem.type != MagicType.cancelMagic) {
+            widget.magicService.allMagic.add(magicItem);
+          }
           setState(() {
             _magicWidget = Container();
           });

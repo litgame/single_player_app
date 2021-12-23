@@ -7,6 +7,8 @@ import 'package:single_player_app/src/tools.dart';
 class UITypeAdditionalEvent extends UITypeBase {
   var fireAfterTurns = 1;
 
+  UITypeAdditionalEvent(MagicType type) : super(type);
+
   @override
   List<Widget> build(BuildContext context) => [
         Padding(
@@ -35,7 +37,4 @@ class UITypeAdditionalEvent extends UITypeBase {
 
   @override
   MagicItem getMagicItem() => MagicItem.additionalEvent(fireAfterTurns);
-
-  @override
-  String title(BuildContext context) => context.loc().magicAdditionalEventTitle;
 }

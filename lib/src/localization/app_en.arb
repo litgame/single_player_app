@@ -54,6 +54,7 @@
   "magicModalSave": "Save",
   "magicModalTurns": "Apply magic after N turns:",
   "magicModalTurnsEurythmics": "Every N turns the word (phrase) should be used:",
+  "magicDescriptionAbstract": "Selected phrase",
   "magicMarionetteTitle": "Marionette",
   "magicKeywordTitle": "Keyword",
   "magicEurythmicsTitle": "Eurythmics",
@@ -73,5 +74,7 @@
   "magicAlertDescriptionMarionette": "Description should be filled. In description you should explain, what event should happen at specified turn",
   "magicAlertDescriptionEurythmics": "Eurythmics phrase (one or multiple words) should be specified",
   "magicAlertDescriptionKeyword": "Keyword should be specified",
-  "magicAlertTurn": "Turn number should be greater than 0. Report a bug, please"
+  "magicAlertTurn": "Turn number should be greater than 0. Report a bug, please",
+  "magicDelete": "Delete magic?",
+  "magicDeleteDescription": "You can delete only one item!"
 }

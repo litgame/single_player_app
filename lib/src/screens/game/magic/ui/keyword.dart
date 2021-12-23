@@ -5,6 +5,8 @@ import 'package:single_player_app/src/services/magic_service/magic_item.dart';
 import 'package:single_player_app/src/tools.dart';
 
 class UITypeKeyword extends UITypeBase {
+  UITypeKeyword(MagicType type) : super(type);
+
   var fireAfterTurns = 1;
   var repeatCount = 3;
   var description = '';
@@ -61,7 +63,4 @@ class UITypeKeyword extends UITypeBase {
   @override
   MagicItem getMagicItem() =>
       MagicItem.keyword(description, fireAfterTurns, repeatCount);
-
-  @override
-  String title(BuildContext context) => context.loc().magicKeywordTitle;
 }
