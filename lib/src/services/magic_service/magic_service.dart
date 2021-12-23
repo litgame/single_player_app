@@ -44,6 +44,9 @@ class MagicService {
         magicToFire.add(item);
       }
     }
+    for (var item in magicToFire) {
+      allMagic.remove(item);
+    }
     return magicToFire;
   }
 
