@@ -78,7 +78,7 @@ class _CancelWidgetState extends State<_CancelWidget> {
         ));
       }
       columnWidgets.add(ListTile(
-        tileColor: const Color.fromRGBO(255, 0, 0, 0.13725490196078433),
+        tileColor: const Color.fromRGBO(255, 0, 0, 0.07),
         title: Text(context.loc().magicDelete),
         subtitle: Text(context.loc().magicDeleteDescription),
         trailing: IconButton(
