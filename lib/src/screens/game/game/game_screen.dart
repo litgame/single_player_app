@@ -4,7 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:litgame_server/models/cards/card.dart' as LitCard;
 import 'package:litgame_server/models/game/game.dart';
 import 'package:single_player_app/src/screens/game/game/select_card_screen.dart';
-import 'package:single_player_app/src/screens/game/magic/magic_widget.dart';
+import 'package:single_player_app/src/screens/game/magic/ui/magic_widget_create.dart';
 import 'package:single_player_app/src/screens/settings/settings_controller.dart';
 import 'package:single_player_app/src/services/game_rest.dart';
 import 'package:single_player_app/src/services/magic_service/magic_item.dart';
@@ -137,9 +137,7 @@ class _GameScreenState extends State<GameScreen>
             final card = snapshot.data as LitCard.Card;
             final cardWidget =
                 CardItem(flip: false, imgUrl: card.imgUrl, title: card.name);
-            // _currentPlayerChooseMagic = MagicType.cancelMagic;
-            //display floating magic box here!
-            if (_currentPlayerChooseMagic == null) {
+            if (_currentPlayerChooseMagic == null && _fireMagic.isEmpty) {
               return cardWidget;
             } else {
               return Stack(
@@ -148,7 +146,7 @@ class _GameScreenState extends State<GameScreen>
                   cardWidget,
                   Align(
                       alignment: const Alignment(0.95, -0.8),
-                      child: MagicWidget(
+                      child: MagicWidgetCreate(
                         chosenMagic: _currentPlayerChooseMagic!,
                         magicService: _magicService,
                       ))

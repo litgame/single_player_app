@@ -1,26 +1,43 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:single_player_app/src/screens/game/magic/magic_new_screen.dart';
 import 'package:single_player_app/src/services/magic_service/magic_item.dart';
 import 'package:single_player_app/src/services/magic_service/magic_service.dart';
 
-typedef MagicCallback = void Function(MagicItem item);
+typedef MagicConfigOpenCallback = MaterialPageRoute<MagicItem?> Function(
+    BuildContext context);
+
+/// return true to keep notification on screen
+/// return false to hide notification
+typedef MagicConfigCloseCallback = bool Function(MagicItem? item);
 
 class MagicWidget extends StatefulWidget {
-  const MagicWidget(
-      {Key? key,
-      required this.chosenMagic,
-      required this.magicService,
-      this.onMagicCreated})
-      : super(key: key);
+  const MagicWidget({
+    Key? key,
+    required this.chosenMagic,
+    required this.magicService,
+    required this.magicNotificationAssetPath,
+    required this.magicExplosionAssetPath,
+    required this.onAlertTap,
+    required this.onConfigFinish,
+  }) : super(key: key);
 
   final MagicType chosenMagic;
   final int basicSize = 64;
   static const swapDurationMS = Duration(milliseconds: 300);
-  final MagicCallback? onMagicCreated;
+
+  /// мы тапнули по ящику, он взорвался с анимсацией, после чего в этом колбэке
+  /// должен открыться нужный роут с диалоговым окном
+  final MagicConfigOpenCallback onAlertTap;
+
+  /// Диалоговое окно роута закрылось, вернуло нам нечто, которое в этой
+  /// функции мы должны обработать
+  final MagicConfigCloseCallback onConfigFinish;
+
   final MagicService magicService;
+
+  final String magicNotificationAssetPath;
+  final List<String> magicExplosionAssetPath;
 
   @override
   _MagicWidgetState createState() => _MagicWidgetState();
@@ -90,7 +107,7 @@ class _MagicWidgetState extends State<MagicWidget>
                     padding:
                         EdgeInsets.all((widget.basicSize * 0.5).toDouble()),
                     child: Image.asset(
-                      'assets/images/magic/magic_box.png',
+                      widget.magicNotificationAssetPath,
                       width: widget.basicSize.toDouble(),
                       height: widget.basicSize.toDouble(),
                     ),
@@ -102,7 +119,8 @@ class _MagicWidgetState extends State<MagicWidget>
 
   Widget _buildOpenedBox(BuildContext context) {
     final random = Random();
-    final imageNumber = random.nextInt(2) + 1;
+    final imageNumber = random.nextInt(widget.magicExplosionAssetPath.length);
+    final assetPath = widget.magicExplosionAssetPath[imageNumber];
 
     return Container(
       decoration: const BoxDecoration(
@@ -115,7 +133,7 @@ class _MagicWidgetState extends State<MagicWidget>
       child: Padding(
         padding: EdgeInsets.all((widget.basicSize / 2).toDouble()),
         child: Image.asset(
-          'assets/images/magic/explosion_$imageNumber.png',
+          assetPath,
           width: widget.basicSize.toDouble(),
           height: widget.basicSize.toDouble(),
         ),
@@ -128,28 +146,16 @@ class _MagicWidgetState extends State<MagicWidget>
       _magicWidget = _buildOpenedBox(context);
     });
     Future.delayed(MagicWidget.swapDurationMS).then((_) {
-      Navigator.of(context)
-          .push(MaterialPageRoute<MagicItem?>(
-              fullscreenDialog: true,
-              builder: (ctx) => MagicNewScreen(
-                    magicService: widget.magicService,
-                    chosenMagic: widget.chosenMagic,
-                  )))
-          .then((magicItem) {
-        if (magicItem != null) {
-          final callback = widget.onMagicCreated;
-          if (callback != null) {
-            callback(magicItem);
-          }
-          if (magicItem.type != MagicType.cancelMagic) {
-            widget.magicService.allMagic.add(magicItem);
-          }
+      Navigator.of(context).push(widget.onAlertTap(context)).then((magicItem) {
+        final keepNotificationOnScreen = widget.onConfigFinish(magicItem);
+
+        if (keepNotificationOnScreen) {
           setState(() {
-            _magicWidget = Container();
+            _magicWidget = _buildAnimatedBox(context);
           });
         } else {
           setState(() {
-            _magicWidget = _buildAnimatedBox(context);
+            _magicWidget = Container();
           });
         }
       });
