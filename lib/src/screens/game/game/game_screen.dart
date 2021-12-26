@@ -5,6 +5,7 @@ import 'package:litgame_server/models/cards/card.dart' as LitCard;
 import 'package:litgame_server/models/game/game.dart';
 import 'package:single_player_app/src/screens/game/game/select_card_screen.dart';
 import 'package:single_player_app/src/screens/game/magic/ui/magic_widget_create.dart';
+import 'package:single_player_app/src/screens/game/magic/ui/magic_widget_fire.dart';
 import 'package:single_player_app/src/screens/settings/settings_controller.dart';
 import 'package:single_player_app/src/services/game_rest.dart';
 import 'package:single_player_app/src/services/magic_service/magic_item.dart';
@@ -140,17 +141,26 @@ class _GameScreenState extends State<GameScreen>
             if (_currentPlayerChooseMagic == null && _fireMagic.isEmpty) {
               return cardWidget;
             } else {
+              final children = <Widget>[cardWidget];
+              if (_currentPlayerChooseMagic != null) {
+                children.add(Align(
+                    alignment: const Alignment(0.95, -0.8),
+                    child: MagicWidgetCreate(
+                      chosenMagic: _currentPlayerChooseMagic!,
+                      magicService: _magicService,
+                    )));
+              }
+              if (_fireMagic.isNotEmpty) {
+                children.add(Align(
+                    alignment: const Alignment(0.95, -0.4),
+                    child: MagicWidgetFire(
+                      chosenMagic: _currentPlayerChooseMagic!,
+                      magicService: _magicService,
+                    )));
+              }
               return Stack(
                 alignment: AlignmentDirectional.center,
-                children: [
-                  cardWidget,
-                  Align(
-                      alignment: const Alignment(0.95, -0.8),
-                      child: MagicWidgetCreate(
-                        chosenMagic: _currentPlayerChooseMagic!,
-                        magicService: _magicService,
-                      ))
-                ],
+                children: children,
               );
             }
           } else {

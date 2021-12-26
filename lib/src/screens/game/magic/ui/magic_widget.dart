@@ -12,18 +12,25 @@ typedef MagicConfigOpenCallback = MaterialPageRoute<MagicItem?> Function(
 typedef MagicConfigCloseCallback = bool Function(MagicItem? item);
 
 class MagicWidget extends StatefulWidget {
-  const MagicWidget({
-    Key? key,
-    required this.chosenMagic,
-    required this.magicService,
-    required this.magicNotificationAssetPath,
-    required this.magicExplosionAssetPath,
-    required this.onAlertTap,
-    required this.onConfigFinish,
-  }) : super(key: key);
+  const MagicWidget(
+      {Key? key,
+      required this.chosenMagic,
+      required this.magicService,
+      required this.magicNotificationAssetPath,
+      required this.magicExplosionAssetPath,
+      required this.onAlertTap,
+      required this.onConfigFinish,
+      int? basicSize,
+      bool? scaleAnimationOn,
+      double? scaleFactor})
+      : scaleAnimationOn = (scaleAnimationOn ?? true),
+        basicSize = (basicSize ?? 64),
+        scaleFactor = (scaleFactor ?? 2),
+        super(key: key);
 
   final MagicType chosenMagic;
-  final int basicSize = 64;
+  final int basicSize;
+  final double scaleFactor;
   static const swapDurationMS = Duration(milliseconds: 300);
 
   /// мы тапнули по ящику, он взорвался с анимсацией, после чего в этом колбэке
@@ -38,6 +45,8 @@ class MagicWidget extends StatefulWidget {
 
   final String magicNotificationAssetPath;
   final List<String> magicExplosionAssetPath;
+
+  final bool scaleAnimationOn;
 
   @override
   _MagicWidgetState createState() => _MagicWidgetState();
@@ -87,49 +96,55 @@ class _MagicWidgetState extends State<MagicWidget>
     );
   }
 
-  Widget _buildAnimatedBox(BuildContext context) => GestureDetector(
-        onTap: _onTap,
-        child: AnimatedBuilder(
-            animation: _controller,
-            builder: (BuildContext context, Widget? child) {
-              return Container(
-                decoration: const BoxDecoration(
-                    gradient: RadialGradient(radius: 0.5, colors: [
-                  Color.fromRGBO(0, 0, 0, 0.9),
-                  Color.fromRGBO(0, 0, 0, 0.8),
-                  Color.fromRGBO(0, 0, 0, 0.4),
-                  Color.fromRGBO(0, 0, 0, 0.05),
-                  Color.fromRGBO(0, 0, 0, 0.0)
-                ])),
-                child: Transform.scale(
-                  scale: _scaleAnimation.value,
-                  child: Padding(
-                    padding:
-                        EdgeInsets.all((widget.basicSize * 0.5).toDouble()),
-                    child: Image.asset(
-                      widget.magicNotificationAssetPath,
-                      width: widget.basicSize.toDouble(),
-                      height: widget.basicSize.toDouble(),
-                    ),
-                  ),
-                ),
-              );
-            }),
+  Widget _buildAnimatedBox(BuildContext context) {
+    Widget image = Padding(
+      padding: EdgeInsets.all((widget.basicSize * 0.5).toDouble()),
+      child: Image.asset(
+        widget.magicNotificationAssetPath,
+        width: widget.basicSize.toDouble(),
+        height: widget.basicSize.toDouble(),
+      ),
+    );
+    const decoration = BoxDecoration(
+        gradient: RadialGradient(radius: 0.5, colors: [
+      Color.fromRGBO(0, 0, 0, 0.9),
+      Color.fromRGBO(0, 0, 0, 0.8),
+      Color.fromRGBO(0, 0, 0, 0.4),
+      Color.fromRGBO(0, 0, 0, 0.05),
+      Color.fromRGBO(0, 0, 0, 0.0)
+    ]));
+
+    if (widget.scaleAnimationOn) {
+      image = Container(
+        decoration: decoration,
+        child: Transform.scale(scale: _scaleAnimation.value, child: image),
       );
+      image = AnimatedBuilder(
+          animation: _controller,
+          builder: (BuildContext context, Widget? child) {
+            return Container(
+              decoration: decoration,
+              child:
+                  Transform.scale(scale: _scaleAnimation.value, child: image),
+            );
+          });
+    } else {
+      image = Container(
+        decoration: decoration,
+        child: image,
+      );
+    }
+
+    return GestureDetector(onTap: _onTap, child: image);
+  }
 
   Widget _buildOpenedBox(BuildContext context) {
     final random = Random();
     final imageNumber = random.nextInt(widget.magicExplosionAssetPath.length);
     final assetPath = widget.magicExplosionAssetPath[imageNumber];
 
-    return Container(
-      decoration: const BoxDecoration(
-          gradient: RadialGradient(radius: 0.5, colors: [
-        Color.fromRGBO(238, 108, 9, 0.9),
-        Color.fromRGBO(238, 108, 9, 0.1),
-        Color.fromRGBO(238, 108, 9, 0.05),
-        Color.fromRGBO(0, 0, 0, 0.0)
-      ])),
+    return Transform.scale(
+      scale: widget.scaleFactor,
       child: Padding(
         padding: EdgeInsets.all((widget.basicSize / 2).toDouble()),
         child: Image.asset(

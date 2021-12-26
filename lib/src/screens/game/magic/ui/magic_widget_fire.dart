@@ -5,8 +5,8 @@ import 'package:single_player_app/src/services/magic_service/magic_service.dart'
 
 import '../magic_new_screen.dart';
 
-class MagicWidgetCreate extends StatelessWidget {
-  const MagicWidgetCreate(
+class MagicWidgetFire extends StatelessWidget {
+  const MagicWidgetFire(
       {Key? key, required this.magicService, required this.chosenMagic})
       : super(key: key);
   final MagicType chosenMagic;
@@ -31,16 +31,14 @@ class MagicWidgetCreate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MagicWidget(
+        scaleAnimationOn: false,
+        scaleFactor: 2,
         chosenMagic: chosenMagic,
         magicService: magicService,
-        magicNotificationAssetPath: 'assets/images/magic/magic_box.png',
+        magicNotificationAssetPath: 'assets/images/magic/magic_sphere.gif',
         magicExplosionAssetPath: const [
           'assets/images/magic/explosion_1.png',
           'assets/images/magic/explosion_2.png',
-          'assets/images/magic/explosion_3.png',
-          'assets/images/magic/explosion_4.png',
-          'assets/images/magic/explosion_5.png',
-          'assets/images/magic/explosion_6.png',
         ],
         onAlertTap: onAlertTap,
         onConfigFinish: onConfigFinish,
