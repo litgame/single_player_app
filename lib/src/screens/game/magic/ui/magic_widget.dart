@@ -62,12 +62,25 @@ class _MagicWidgetState extends State<MagicWidget>
   void initState() {
     super.initState();
     _controller =
-        AnimationController(duration: const Duration(seconds: 1), vsync: this);
-    _scaleAnimation = Tween<double>(begin: 0.9, end: 1.1).animate(
-        CurvedAnimation(
-            parent: _controller,
-            curve: Curves.easeInBack,
-            reverseCurve: Curves.easeInBack))
+        AnimationController(duration: const Duration(seconds: 2), vsync: this);
+    _scaleAnimation = TweenSequence<double>([
+      TweenSequenceItem<double>(
+          weight: 0.25,
+          tween: Tween<double>(begin: 0.8, end: 1.2)
+              .chain(CurveTween(curve: Curves.easeIn))),
+      TweenSequenceItem<double>(
+          weight: 0.25,
+          tween: Tween<double>(begin: 1.2, end: 1.0)
+              .chain(CurveTween(curve: Curves.easeIn))),
+      TweenSequenceItem<double>(
+          weight: 0.25,
+          tween: Tween<double>(begin: 1.0, end: 1.2)
+              .chain(CurveTween(curve: Curves.easeIn))),
+      TweenSequenceItem<double>(
+          weight: 0.25,
+          tween: Tween<double>(begin: 1.2, end: 0.8)
+              .chain(CurveTween(curve: Curves.easeIn))),
+    ]).animate(_controller)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           _controller.reverse();
@@ -114,12 +127,9 @@ class _MagicWidgetState extends State<MagicWidget>
       Color.fromRGBO(0, 0, 0, 0.0)
     ]));
 
+    Widget mutatedImage;
     if (widget.scaleAnimationOn) {
-      image = Container(
-        decoration: decoration,
-        child: Transform.scale(scale: _scaleAnimation.value, child: image),
-      );
-      image = AnimatedBuilder(
+      mutatedImage = AnimatedBuilder(
           animation: _controller,
           builder: (BuildContext context, Widget? child) {
             return Container(
@@ -129,13 +139,13 @@ class _MagicWidgetState extends State<MagicWidget>
             );
           });
     } else {
-      image = Container(
+      mutatedImage = Container(
         decoration: decoration,
         child: image,
       );
     }
 
-    return GestureDetector(onTap: _onTap, child: image);
+    return GestureDetector(onTap: _onTap, child: mutatedImage);
   }
 
   Widget _buildOpenedBox(BuildContext context) {

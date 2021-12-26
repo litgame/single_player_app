@@ -31,7 +31,7 @@ class MagicWidgetFire extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MagicWidget(
-        scaleAnimationOn: false,
+        scaleAnimationOn: true,
         scaleFactor: 2,
         chosenMagic: chosenMagic,
         magicService: magicService,
