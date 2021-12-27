@@ -66,9 +66,12 @@ class UITypeKeyword extends UITypeBase {
 
   @override
   List<Widget> buildViewUI(BuildContext context) => [
-        ViewUIRow(Text(
-          context.loc().magicKeywordViewDescription(repeatCount, description),
-        )),
+        ViewUIRow(
+          Text(
+            context.loc().magicKeywordViewDescription(repeatCount, description),
+          ),
+          isTitle: true,
+        ),
       ];
 
   @override

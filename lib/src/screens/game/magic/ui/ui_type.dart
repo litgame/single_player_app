@@ -47,13 +47,25 @@ abstract class UITypeBase {
 }
 
 class ViewUIRow extends StatelessWidget {
-  const ViewUIRow(this.child, {Key? key}) : super(key: key);
+  const ViewUIRow(this.child, {Key? key, bool isTitle = false})
+      : isTitle = isTitle,
+        super(key: key);
 
   final Widget child;
+  final bool isTitle;
 
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.all(8),
-        child: child,
+  Widget build(BuildContext context) => ListTile(
+        title: child,
+        leading: isTitle
+            ? Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Image.asset(
+                  'assets/images/magic/wand.png',
+                  width: 32,
+                  height: 32,
+                ),
+              )
+            : null,
       );
 }

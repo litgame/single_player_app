@@ -48,9 +48,12 @@ class UITypeMarionette extends UITypeBase {
 
   @override
   List<Widget> buildViewUI(BuildContext context) => [
-        ViewUIRow(Text(
-          context.loc().magicMarionetteViewDescription,
-        )),
+        ViewUIRow(
+          Text(
+            context.loc().magicMarionetteViewDescription,
+          ),
+          isTitle: true,
+        ),
         ViewUIRow(Text(
           description,
         )),
