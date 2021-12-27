@@ -11,7 +11,7 @@ class UITypeCancelMagic extends UITypeBase {
   final MagicService service;
 
   @override
-  List<Widget> build(BuildContext context) {
+  List<Widget> buildCreateUI(BuildContext context) {
     return [
       Padding(
         padding: const EdgeInsets.only(bottom: 40),
@@ -28,6 +28,17 @@ class UITypeCancelMagic extends UITypeBase {
 
   @override
   MagicItem getMagicItem() => MagicItem.cancelMagic();
+
+  @override
+  List<Widget> buildViewUI(BuildContext context) {
+    // Should never happen
+    throw UnimplementedError();
+  }
+
+  @override
+  void fillMagicData(MagicItem magicItem) {
+    // Should never happen
+  }
 }
 
 class _ExpandableItem {

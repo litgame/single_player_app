@@ -79,7 +79,15 @@ class _GameScreenState extends State<GameScreen>
 
     return response
         .fromJson()
-        .then((value) => LitCard.Card.clone()..fromJson(value['card']));
+        .then((value) => LitCard.Card.clone()..fromJson(value['card']))
+        .then((value) {
+      if (_fireMagic.isNotEmpty) {
+        final magicWidget = MagicWidgetFire(
+            magicService: _magicService, firedMagic: _fireMagic);
+        Navigator.of(context).push(magicWidget.onAlertTap(context));
+      }
+      return value;
+    });
   }
 
   void nextUIState() {
@@ -154,7 +162,7 @@ class _GameScreenState extends State<GameScreen>
                 children.add(Align(
                     alignment: const Alignment(0.95, -0.4),
                     child: MagicWidgetFire(
-                      chosenMagic: _currentPlayerChooseMagic!,
+                      firedMagic: _fireMagic!,
                       magicService: _magicService,
                     )));
               }

@@ -39,7 +39,7 @@ class MagicNewScreen extends StatelessWidget with LayoutOrientation {
                 uiGenerator.title(context))),
         body: ListView(
           padding: const EdgeInsets.all(20),
-          children: uiGenerator.build(context),
+          children: uiGenerator.buildCreateUI(context),
         ),
       );
     });

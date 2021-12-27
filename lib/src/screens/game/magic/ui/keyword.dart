@@ -12,7 +12,7 @@ class UITypeKeyword extends UITypeBase {
   var description = '';
 
   @override
-  List<Widget> build(BuildContext context) => [
+  List<Widget> buildCreateUI(BuildContext context) => [
         Padding(
           padding: const EdgeInsets.only(bottom: 40),
           child: Text(
@@ -63,4 +63,17 @@ class UITypeKeyword extends UITypeBase {
   @override
   MagicItem getMagicItem() =>
       MagicItem.keyword(description, fireAfterTurns, repeatCount);
+
+  @override
+  List<Widget> buildViewUI(BuildContext context) => [
+        ViewUIRow(Text(
+          context.loc().magicKeywordViewDescription(repeatCount, description),
+        )),
+      ];
+
+  @override
+  void fillMagicData(MagicItem magicItem) {
+    description = magicItem.description;
+    repeatCount = magicItem.repeatCount;
+  }
 }

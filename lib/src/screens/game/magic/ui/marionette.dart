@@ -11,7 +11,7 @@ class UITypeMarionette extends UITypeBase {
   var description = '';
 
   @override
-  List<Widget> build(BuildContext context) => [
+  List<Widget> buildCreateUI(BuildContext context) => [
         Padding(
           padding: const EdgeInsets.only(bottom: 40),
           child: Text(
@@ -45,4 +45,19 @@ class UITypeMarionette extends UITypeBase {
 
   @override
   MagicItem getMagicItem() => MagicItem.marionette(description, fireAfterTurns);
+
+  @override
+  List<Widget> buildViewUI(BuildContext context) => [
+        ViewUIRow(Text(
+          context.loc().magicMarionetteViewDescription,
+        )),
+        ViewUIRow(Text(
+          description,
+        )),
+      ];
+
+  @override
+  void fillMagicData(MagicItem magicItem) {
+    description = magicItem.description;
+  }
 }

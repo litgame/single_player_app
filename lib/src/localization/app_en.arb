@@ -61,10 +61,33 @@
   "magicCancelTitle": "Cancel magic",
   "magicAdditionalEventTitle": "Additional event",
   "magicMarionetteDescription": "Now you can specify, what events should happen after specified number of turns.",
+  "magicMarionetteViewDescription": "Somebody already decided, what shoult to happen at this turn. Now, try to interweave this event into you story:",
   "magicMarionetteText": "What should to happen at that turn?",
   "magicEurythmicsDescription": "Funny magic. You magic forces all players to use specified word or phrase every N turns. Works till the end of game but can be cancelled by another magic.",
   "magicEurythmicsText": "Word or phrase",
+  "magicEurythmicsViewText": "At this turn you should use the phrase «{phrase}»",
+  "@magicEurythmicsViewText": {
+    "placeholders": {
+      "phrase": {
+        "type": "String",
+        "example": "ololo!"
+      }
+    }
+  },
   "magicKeywordDescription": "Evil magic. Spellbound player must use N times a word or phrase, specified my mage.",
+  "magicKeywordViewDescription": "At this turn you should repeat the phrase «{phrase}» {count} times",
+  "@magicKeywordViewDescription": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      },
+      "phrase": {
+        "type": "String",
+        "example": "ololo!"
+      }
+    }
+  },
   "magicKeywordText": "The word or phrase to be repeated",
   "magicKeywordRepeats": "Count of repeats",
   "magicAdditionalEventDescription": "After N turns target player will be forced to get an additional event",
@@ -76,5 +99,6 @@
   "magicAlertDescriptionKeyword": "Keyword should be specified",
   "magicAlertTurn": "Turn number should be greater than 0. Report a bug, please",
   "magicDelete": "Delete magic?",
-  "magicDeleteDescription": "You can delete only one item!"
+  "magicDeleteDescription": "You can delete only one item!",
+  "magicModalViewTitle": "Magic at you turn:"
 }

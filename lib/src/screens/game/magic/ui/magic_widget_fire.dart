@@ -3,37 +3,30 @@ import 'package:single_player_app/src/screens/game/magic/ui/magic_widget.dart';
 import 'package:single_player_app/src/services/magic_service/magic_item.dart';
 import 'package:single_player_app/src/services/magic_service/magic_service.dart';
 
-import '../magic_new_screen.dart';
+import 'magic_fire_screen.dart';
 
 class MagicWidgetFire extends StatelessWidget {
   const MagicWidgetFire(
-      {Key? key, required this.magicService, required this.chosenMagic})
+      {Key? key, required this.magicService, required this.firedMagic})
       : super(key: key);
-  final MagicType chosenMagic;
+  final List<MagicItem> firedMagic;
   final MagicService magicService;
 
   MaterialPageRoute<MagicItem?> onAlertTap(BuildContext context) =>
       MaterialPageRoute<MagicItem?>(
           fullscreenDialog: true,
-          builder: (ctx) => MagicNewScreen(
+          builder: (ctx) => MagicFireScreen(
                 magicService: magicService,
-                chosenMagic: chosenMagic,
+                firedMagic: firedMagic,
               ));
 
-  bool onConfigFinish(MagicItem? magicItem) {
-    if (magicItem == null) return true;
-
-    if (magicItem.type != MagicType.cancelMagic) {
-      magicService.allMagic.add(magicItem);
-    }
-    return false;
-  }
+  /// Никогда не закрываем окно, чтобы игрок помнил о том, что должен сказать
+  bool onConfigFinish(MagicItem? magicItem) => true;
 
   @override
   Widget build(BuildContext context) => MagicWidget(
         scaleAnimationOn: true,
         scaleFactor: 2,
-        chosenMagic: chosenMagic,
         magicService: magicService,
         magicNotificationAssetPath: 'assets/images/magic/magic_sphere.gif',
         magicExplosionAssetPath: const [

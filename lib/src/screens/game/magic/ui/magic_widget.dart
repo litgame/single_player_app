@@ -14,7 +14,6 @@ typedef MagicConfigCloseCallback = bool Function(MagicItem? item);
 class MagicWidget extends StatefulWidget {
   const MagicWidget(
       {Key? key,
-      required this.chosenMagic,
       required this.magicService,
       required this.magicNotificationAssetPath,
       required this.magicExplosionAssetPath,
@@ -28,7 +27,6 @@ class MagicWidget extends StatefulWidget {
         scaleFactor = (scaleFactor ?? 2),
         super(key: key);
 
-  final MagicType chosenMagic;
   final int basicSize;
   final double scaleFactor;
   static const swapDurationMS = Duration(milliseconds: 300);

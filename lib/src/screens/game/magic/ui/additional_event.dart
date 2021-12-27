@@ -10,7 +10,7 @@ class UITypeAdditionalEvent extends UITypeBase {
   UITypeAdditionalEvent(MagicType type) : super(type);
 
   @override
-  List<Widget> build(BuildContext context) => [
+  List<Widget> buildCreateUI(BuildContext context) => [
         Padding(
           padding: const EdgeInsets.only(bottom: 40),
           child: Text(
@@ -37,4 +37,15 @@ class UITypeAdditionalEvent extends UITypeBase {
 
   @override
   MagicItem getMagicItem() => MagicItem.additionalEvent(fireAfterTurns);
+
+  @override
+  List<Widget> buildViewUI(BuildContext context) {
+    // Should never happen
+    throw UnimplementedError();
+  }
+
+  @override
+  void fillMagicData(MagicItem magicItem) {
+    // Should never happen
+  }
 }

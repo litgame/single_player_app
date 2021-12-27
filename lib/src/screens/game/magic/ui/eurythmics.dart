@@ -11,7 +11,7 @@ class UITypeEurythmics extends UITypeBase {
   var description = '';
 
   @override
-  List<Widget> build(BuildContext context) => [
+  List<Widget> buildCreateUI(BuildContext context) => [
         Padding(
           padding: const EdgeInsets.only(bottom: 40),
           child: Text(
@@ -42,4 +42,16 @@ class UITypeEurythmics extends UITypeBase {
 
   @override
   MagicItem getMagicItem() => MagicItem.eurythmics(description, fireAfterTurns);
+
+  @override
+  List<Widget> buildViewUI(BuildContext context) => [
+        ViewUIRow(Text(
+          context.loc().magicEurythmicsViewText(description),
+        )),
+      ];
+
+  @override
+  void fillMagicData(MagicItem magicItem) {
+    description = magicItem.description;
+  }
 }

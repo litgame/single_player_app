@@ -31,7 +31,6 @@ class MagicWidgetCreate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MagicWidget(
-        chosenMagic: chosenMagic,
         magicService: magicService,
         magicNotificationAssetPath: 'assets/images/magic/magic_box.png',
         magicExplosionAssetPath: const [

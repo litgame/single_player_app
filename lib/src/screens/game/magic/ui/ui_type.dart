@@ -35,9 +35,25 @@ abstract class UITypeBase {
 
   final MagicType type;
 
-  List<Widget> build(BuildContext context);
+  List<Widget> buildCreateUI(BuildContext context);
+
+  List<Widget> buildViewUI(BuildContext context);
 
   MagicItem getMagicItem();
 
+  void fillMagicData(MagicItem magicItem);
+
   String title(BuildContext context) => type.translatedName(context);
+}
+
+class ViewUIRow extends StatelessWidget {
+  const ViewUIRow(this.child, {Key? key}) : super(key: key);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(8),
+        child: child,
+      );
 }
