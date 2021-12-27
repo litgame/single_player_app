@@ -1,9 +1,9 @@
 part of 'game_screen.dart';
 
 class _GameRest with GameService {
-  List<LitCard.Card>? _lastStartGameData;
+  List<lit_card.Card>? _lastStartGameData;
 
-  Future<List<LitCard.Card>> startGame() async {
+  Future<List<lit_card.Card>> startGame() async {
     final response = await gameService.request('PUT', '/api/game/game/start',
         body: {
           'gameId': gameId,
@@ -17,7 +17,7 @@ class _GameRest with GameService {
     }
     _lastStartGameData = await response.fromJson().then((value) =>
         (value['initialCards'] as List)
-            .map((card) => LitCard.Card.clone()..fromJson(card))
+            .map((card) => lit_card.Card.clone()..fromJson(card))
             .toList(growable: false));
 
     return _lastStartGameData!;
@@ -27,7 +27,7 @@ class _GameRest with GameService {
     LitGame.find(gameId)?.stop();
   }
 
-  Future<LitCard.Card> selectCard(LitCard.CardType cardType) async {
+  Future<lit_card.Card> selectCard(lit_card.CardType cardType) async {
     final response = await gameService.request(
         'PUT', '/api/game/game/selectCard',
         body: {
@@ -42,6 +42,6 @@ class _GameRest with GameService {
 
     return response
         .fromJson()
-        .then((value) => LitCard.Card.clone()..fromJson(value['card']));
+        .then((value) => lit_card.Card.clone()..fromJson(value['card']));
   }
 }

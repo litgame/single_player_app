@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:litgame_server/models/cards/card.dart' as LitCard;
+import 'package:litgame_server/models/cards/card.dart' as lit_card;
 import 'package:litgame_server/models/game/game.dart';
 import 'package:single_player_app/src/screens/game/game/select_card_screen.dart';
 import 'package:single_player_app/src/screens/game/magic/ui/magic_widget_create.dart';
@@ -17,6 +17,8 @@ import 'package:single_player_app/src/ui/card_item.dart';
 import '../../../tools.dart';
 
 part 'game_rest.dart';
+part 'master_game_init_screen.dart';
+part 'show_card_screen.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({Key? key}) : super(key: key);
@@ -30,17 +32,16 @@ enum GameUIStage { masterInit, playerCardSelect, playerCardDisplay }
 class _GameScreenState extends State<GameScreen>
     with GameService, LayoutOrientation, NoNetworkModal {
   GameUIStage _currentState = GameUIStage.masterInit;
-  LitCard.CardType? _selectedCartType;
-  final carouselController = CarouselController();
+  lit_card.CardType? _selectedCartType;
   final _magicService = MagicService(SettingsController());
   MagicType? _currentPlayerChooseMagic;
   List<MagicItem> _fireMagic = [];
 
-  Future<LitCard.Card>? _selectedCardFuture;
+  Future<lit_card.Card>? _selectedCardFuture;
   _GameRest rest = _GameRest();
 
   void nextUIState() {
-    if (isCurrentCollectionPlayableOffline) {
+    if (canPlay) {
       GameUIStage next;
       switch (_currentState) {
         case GameUIStage.masterInit:
@@ -79,17 +80,17 @@ class _GameScreenState extends State<GameScreen>
   }
 
   void _onGeneric() {
-    _selectedCartType = LitCard.CardType.generic;
+    _selectedCartType = lit_card.CardType.generic;
     nextUIState();
   }
 
   void _onPerson() {
-    _selectedCartType = LitCard.CardType.person;
+    _selectedCartType = lit_card.CardType.person;
     nextUIState();
   }
 
   void _onPlace() {
-    _selectedCartType = LitCard.CardType.place;
+    _selectedCartType = lit_card.CardType.place;
     nextUIState();
   }
 
@@ -137,7 +138,11 @@ class _GameScreenState extends State<GameScreen>
                 },
                 duration: const Duration(milliseconds: 200),
                 child: _currentState == GameUIStage.masterInit
-                    ? _buildMasterGameInit(context, orientation, isTiny)
+                    ? MasterGameInit(
+                        orientation: orientation,
+                        future: rest.startGame(),
+                        isTiny: isTiny,
+                      )
                     : _buildGameScreen(_currentState)));
       });
 
@@ -153,9 +158,9 @@ class _GameScreenState extends State<GameScreen>
     } else if (nextState == GameUIStage.playerCardDisplay) {
       return FutureBuilder(
         future: _selectedCardFuture,
-        builder: (BuildContext context, AsyncSnapshot<LitCard.Card> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<lit_card.Card> snapshot) {
           if (snapshot.hasData) {
-            final card = snapshot.data as LitCard.Card;
+            final card = snapshot.data as lit_card.Card;
             final cardWidget =
                 CardItem(flip: false, imgUrl: card.imgUrl, title: card.name);
             if (_currentPlayerChooseMagic == null && _fireMagic.isEmpty) {
@@ -228,58 +233,5 @@ class _GameScreenState extends State<GameScreen>
         RouteBuilder.gotoMainMenu(context, reset: true);
       }
     });
-  }
-
-  Widget _buildMasterGameInit(
-      BuildContext context, Orientation orientation, bool isTiny) {
-    return FutureBuilder(
-      future: rest.startGame(),
-      builder:
-          (BuildContext context, AsyncSnapshot<List<LitCard.Card>> snapshot) {
-        if (snapshot.hasData) {
-          var items = <Widget>[];
-          for (var card in snapshot.data!) {
-            items.add(CardItem(
-              imgUrl: card.imgUrl,
-              title: card.name,
-              flip: false,
-            ));
-          }
-
-          if (orientation == Orientation.portrait) {
-            final aspectRatio = MediaQuery.of(context).size.width /
-                MediaQuery.of(context).size.width;
-
-            return Center(
-              child: CarouselSlider(
-                carouselController: carouselController,
-                options: CarouselOptions(
-                    aspectRatio: aspectRatio,
-                    onPageChanged: (int index, reason) {},
-                    viewportFraction: 0.65,
-                    initialPage: 0,
-                    enableInfiniteScroll: false,
-                    enlargeCenterPage: true,
-                    enlargeStrategy: CenterPageEnlargeStrategy.scale,
-                    scrollDirection: Axis.horizontal),
-                items: items,
-              ),
-            );
-          } else {
-            return ListView(
-              scrollDirection: Axis.horizontal,
-              children: items,
-            );
-          }
-        } else {
-          return const Center(
-            child: SpinKitWave(
-              color: Colors.green,
-              size: 50.0,
-            ),
-          );
-        }
-      },
-    );
   }
 }

@@ -39,7 +39,7 @@ mixin GameService {
 
   GameRest get gameService => GameRest();
 
-  bool get isCurrentCollectionPlayableOffline {
+  bool get canPlay {
     final settings = SettingsController();
     if (settings.isNetworkOnline) return true;
     if (settings.playIsImpossible) return false;

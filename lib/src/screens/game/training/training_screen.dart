@@ -33,7 +33,7 @@ class TrainingScreen extends StatelessWidget
   }
 
   void _onGameStart(BuildContext context) {
-    if (training.isCurrentCollectionPlayableOffline) {
+    if (training.canPlay) {
       RouteBuilder.gotoTestFinishGameStart(context);
     } else {
       dlgNoNetwork(context);
