@@ -39,10 +39,11 @@ class UITypeAdditionalEvent extends UITypeBase {
   MagicItem getMagicItem() => MagicItem.additionalEvent(fireAfterTurns);
 
   @override
-  List<Widget> buildViewUI(BuildContext context) {
-    // Should never happen
-    throw UnimplementedError();
-  }
+  List<Widget> buildViewUI(BuildContext context) => [
+        ViewUIRow(Text(
+          context.loc().magicAdditionalEventFire,
+        )),
+      ];
 
   @override
   void fillMagicData(MagicItem magicItem) {

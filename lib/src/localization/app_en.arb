@@ -91,6 +91,7 @@
   "magicKeywordText": "The word or phrase to be repeated",
   "magicKeywordRepeats": "Count of repeats",
   "magicAdditionalEventDescription": "After N turns target player will be forced to get an additional event",
+  "magicAdditionalEventFire": "You have additional event card!",
   "magicCancelDescription": "Now you can cancel one magic, applied to the game",
   "magicAlertTitle": "Magic failed",
   "magicAlertUnknown": "Unknown error, report a bug, please",

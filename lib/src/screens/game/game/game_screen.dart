@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:litgame_server/models/cards/card.dart' as lit_card;
-import 'package:litgame_server/models/game/game.dart';
 import 'package:single_player_app/src/screens/game/game/magic_controller.dart';
 import 'package:single_player_app/src/screens/game/game/select_card_screen.dart';
 import 'package:single_player_app/src/screens/game/magic/ui/magic_widget_create.dart';
@@ -16,7 +15,6 @@ import 'package:single_player_app/src/ui/card_item.dart';
 
 import '../../../tools.dart';
 
-part 'game_rest.dart';
 part 'master_game_init_screen.dart';
 part 'show_card_screen.dart';
 
@@ -39,7 +37,6 @@ class _GameScreenState extends State<GameScreen>
   lit_card.CardType? _selectedCartType;
 
   Future<lit_card.Card>? _selectedCardFuture;
-  _GameRest rest = _GameRest();
   late MagicController magicController;
 
   void onApplyMagic(MagicService service, List<MagicItem> magic) {
@@ -62,7 +59,7 @@ class _GameScreenState extends State<GameScreen>
           if (type == null) {
             throw ArgumentError('CardType not specified!');
           }
-          _selectedCardFuture = rest.selectCard(type).then((card) {
+          _selectedCardFuture = selectCard(type).then((card) {
             magicController.onCardSelect(card);
             return card;
           });
@@ -147,7 +144,7 @@ class _GameScreenState extends State<GameScreen>
       case GameUIStage.masterInit:
         return MasterGameInit(
           orientation: orientation,
-          future: rest.startGame(),
+          future: startGame(),
           isTiny: isTiny,
         );
 
@@ -192,7 +189,7 @@ class _GameScreenState extends State<GameScreen>
               ],
             )).then((finish) {
       if (finish) {
-        rest.stopGame();
+        stopGame();
         RouteBuilder.gotoMainMenu(context, reset: true);
       }
     });
