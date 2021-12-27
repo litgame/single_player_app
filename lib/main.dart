@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:catcher/catcher.dart';
 import 'package:flutter/widgets.dart';
+import 'package:kplayer/kplayer.dart';
 
 import 'src/app.dart';
 import 'src/screens/settings/settings_controller.dart';
@@ -21,6 +22,7 @@ void main() async {
   // HttpOverrides.global = MyHttpOverrides();
   await runZonedGuarded(
     () async {
+      Player.boot();
       WidgetsFlutterBinding.ensureInitialized();
 
       final settingsController = SettingsController(SettingsService());

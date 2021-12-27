@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   catcher
   connectivity_plus_windows
+  dart_vlc
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:kplayer/kplayer.dart';
 import 'package:litgame_server/models/cards/card.dart' as lit_card;
 import 'package:single_player_app/src/screens/game/game/magic_controller.dart';
 import 'package:single_player_app/src/screens/game/game/select_card_screen.dart';
@@ -40,6 +41,7 @@ class _GameScreenState extends State<GameScreen>
   late MagicController magicController;
 
   void onApplyMagic(MagicService service, List<MagicItem> magic) {
+    Player.asset("assets/sounds/magic_happen.mp3").play();
     final magicWidget =
         MagicWidgetFire(magicService: service, firedMagic: magic);
     Navigator.of(context).push(magicWidget.onAlertTap(context));
