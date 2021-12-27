@@ -16,6 +16,8 @@ import 'package:single_player_app/src/ui/card_item.dart';
 
 import '../../../tools.dart';
 
+part 'game_rest.dart';
+
 class GameScreen extends StatefulWidget {
   const GameScreen({Key? key}) : super(key: key);
 
@@ -34,61 +36,8 @@ class _GameScreenState extends State<GameScreen>
   MagicType? _currentPlayerChooseMagic;
   List<MagicItem> _fireMagic = [];
 
-  List<LitCard.Card>? _lastStartGameData;
   Future<LitCard.Card>? _selectedCardFuture;
-
-  Future<List<LitCard.Card>> _restStartGame() async {
-    final response = await gameService.request('PUT', '/api/game/game/start',
-        body: {
-          'gameId': gameId,
-          'triggeredBy': playerId,
-        }.toJson());
-
-    if (response.statusCode != 200) {
-      if (_lastStartGameData != null) return _lastStartGameData!;
-
-      throw "Game server error: can't start game flow!";
-    }
-    _lastStartGameData = await response.fromJson().then((value) =>
-        (value['initialCards'] as List)
-            .map((card) => LitCard.Card.clone()..fromJson(card))
-            .toList(growable: false));
-
-    return _lastStartGameData!;
-  }
-
-  void _restStopGame() async {
-    LitGame.find(gameId)?.stop();
-  }
-
-  Future<LitCard.Card> _restSelectCard() async {
-    final response =
-        await gameService.request('PUT', '/api/game/game/selectCard',
-            body: {
-              'gameId': gameId,
-              'triggeredBy': playerId,
-              'selectCardType': _selectedCartType!.value()
-            }.toJson());
-
-    if (response.statusCode != 200) {
-      throw "Game server error: can't get new card!";
-    }
-
-    _currentPlayerChooseMagic = _magicService.addMagicAtTurn();
-    _fireMagic = _magicService.applyMagicAtTurn();
-
-    return response
-        .fromJson()
-        .then((value) => LitCard.Card.clone()..fromJson(value['card']))
-        .then((value) {
-      if (_fireMagic.isNotEmpty) {
-        final magicWidget = MagicWidgetFire(
-            magicService: _magicService, firedMagic: _fireMagic);
-        Navigator.of(context).push(magicWidget.onAlertTap(context));
-      }
-      return value;
-    });
-  }
+  _GameRest rest = _GameRest();
 
   void nextUIState() {
     if (isCurrentCollectionPlayableOffline) {
@@ -97,10 +46,25 @@ class _GameScreenState extends State<GameScreen>
         case GameUIStage.masterInit:
           next = GameUIStage.playerCardSelect;
           break;
+
         case GameUIStage.playerCardSelect:
           next = GameUIStage.playerCardDisplay;
-          _selectedCardFuture = _restSelectCard();
+          final type = _selectedCartType;
+          if (type == null) {
+            throw ArgumentError('CardType not specified!');
+          }
+          _selectedCardFuture = rest.selectCard(type).then((card) {
+            _currentPlayerChooseMagic = _magicService.addMagicAtTurn();
+            _fireMagic = _magicService.applyMagicAtTurn();
+            if (_fireMagic.isNotEmpty) {
+              final magicWidget = MagicWidgetFire(
+                  magicService: _magicService, firedMagic: _fireMagic);
+              Navigator.of(context).push(magicWidget.onAlertTap(context));
+            }
+            return card;
+          });
           break;
+
         case GameUIStage.playerCardDisplay:
           next = GameUIStage.playerCardSelect;
           break;
@@ -127,63 +91,6 @@ class _GameScreenState extends State<GameScreen>
   void _onPlace() {
     _selectedCartType = LitCard.CardType.place;
     nextUIState();
-  }
-
-  Widget _buildGameScreen(GameUIStage nextState) {
-    if (nextState == GameUIStage.playerCardSelect) {
-      return SelectCardScreen(
-          key: UniqueKey(),
-          orientation: orientation,
-          isTiny: isTiny,
-          onGeneric: _onGeneric,
-          onPerson: _onPerson,
-          onPlace: _onPlace);
-    } else if (nextState == GameUIStage.playerCardDisplay) {
-      return FutureBuilder(
-        future: _selectedCardFuture,
-        builder: (BuildContext context, AsyncSnapshot<LitCard.Card> snapshot) {
-          if (snapshot.hasData) {
-            final card = snapshot.data as LitCard.Card;
-            final cardWidget =
-                CardItem(flip: false, imgUrl: card.imgUrl, title: card.name);
-            if (_currentPlayerChooseMagic == null && _fireMagic.isEmpty) {
-              return cardWidget;
-            } else {
-              final children = <Widget>[cardWidget];
-              if (_currentPlayerChooseMagic != null) {
-                children.add(Align(
-                    alignment: const Alignment(0.95, -0.8),
-                    child: MagicWidgetCreate(
-                      chosenMagic: _currentPlayerChooseMagic!,
-                      magicService: _magicService,
-                    )));
-              }
-              if (_fireMagic.isNotEmpty) {
-                children.add(Align(
-                    alignment: const Alignment(0.95, -0.4),
-                    child: MagicWidgetFire(
-                      firedMagic: _fireMagic!,
-                      magicService: _magicService,
-                    )));
-              }
-              return Stack(
-                alignment: AlignmentDirectional.center,
-                children: children,
-              );
-            }
-          } else {
-            return const Center(
-              child: SpinKitWave(
-                color: Colors.green,
-                size: 50.0,
-              ),
-            );
-          }
-        },
-      );
-    }
-
-    return Container();
   }
 
   @override
@@ -234,6 +141,63 @@ class _GameScreenState extends State<GameScreen>
                     : _buildGameScreen(_currentState)));
       });
 
+  Widget _buildGameScreen(GameUIStage nextState) {
+    if (nextState == GameUIStage.playerCardSelect) {
+      return SelectCardScreen(
+          key: UniqueKey(),
+          orientation: orientation,
+          isTiny: isTiny,
+          onGeneric: _onGeneric,
+          onPerson: _onPerson,
+          onPlace: _onPlace);
+    } else if (nextState == GameUIStage.playerCardDisplay) {
+      return FutureBuilder(
+        future: _selectedCardFuture,
+        builder: (BuildContext context, AsyncSnapshot<LitCard.Card> snapshot) {
+          if (snapshot.hasData) {
+            final card = snapshot.data as LitCard.Card;
+            final cardWidget =
+                CardItem(flip: false, imgUrl: card.imgUrl, title: card.name);
+            if (_currentPlayerChooseMagic == null && _fireMagic.isEmpty) {
+              return cardWidget;
+            } else {
+              final children = <Widget>[cardWidget];
+              if (_currentPlayerChooseMagic != null) {
+                children.add(Align(
+                    alignment: const Alignment(0.95, -0.8),
+                    child: MagicWidgetCreate(
+                      chosenMagic: _currentPlayerChooseMagic!,
+                      magicService: _magicService,
+                    )));
+              }
+              if (_fireMagic.isNotEmpty) {
+                children.add(Align(
+                    alignment: const Alignment(0.95, -0.4),
+                    child: MagicWidgetFire(
+                      firedMagic: _fireMagic,
+                      magicService: _magicService,
+                    )));
+              }
+              return Stack(
+                alignment: AlignmentDirectional.center,
+                children: children,
+              );
+            }
+          } else {
+            return const Center(
+              child: SpinKitWave(
+                color: Colors.green,
+                size: 50.0,
+              ),
+            );
+          }
+        },
+      );
+    }
+
+    return Container();
+  }
+
   void _onGameEndButton() {
     showDialog(
         context: context,
@@ -260,7 +224,7 @@ class _GameScreenState extends State<GameScreen>
               ],
             )).then((finish) {
       if (finish) {
-        _restStopGame();
+        rest.stopGame();
         RouteBuilder.gotoMainMenu(context, reset: true);
       }
     });
@@ -269,7 +233,7 @@ class _GameScreenState extends State<GameScreen>
   Widget _buildMasterGameInit(
       BuildContext context, Orientation orientation, bool isTiny) {
     return FutureBuilder(
-      future: _restStartGame(),
+      future: rest.startGame(),
       builder:
           (BuildContext context, AsyncSnapshot<List<LitCard.Card>> snapshot) {
         if (snapshot.hasData) {
