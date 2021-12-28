@@ -16,8 +16,8 @@ class MagicController {
   MagicUICallback onApplyMagic;
 
   void onCardSelect(lit_card.Card card) {
-    _currentPlayerChooseMagic = service.addMagicAtTurn();
     _fireMagic = service.applyMagicAtTurn();
+    _currentPlayerChooseMagic = service.addMagicAtTurn();
     if (shouldFireMagic) {
       onApplyMagic(service, _fireMagic);
     }

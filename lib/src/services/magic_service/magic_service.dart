@@ -45,7 +45,11 @@ class MagicService {
       }
     }
     for (var item in magicToFire) {
-      allMagic.remove(item);
+      if (item.type != MagicType.eurythmics) {
+        allMagic.remove(item);
+      } else {
+        item.fireAfterTurns = item.fireAfterTurnsOriginal;
+      }
     }
     return magicToFire;
   }

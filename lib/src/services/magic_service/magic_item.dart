@@ -60,6 +60,7 @@ class MagicItem {
   MagicItem.eurythmics(this.description, this.fireAfterTurns)
       : type = MagicType.eurythmics,
         repeat = true {
+    fireAfterTurnsOriginal = fireAfterTurns;
     _checkDescriptionFilled();
     _checkTurnsPositive();
   }
@@ -100,6 +101,7 @@ class MagicItem {
 
   /// Через сколько ходов после текущего должнга сработать
   int fireAfterTurns = 0;
+  int fireAfterTurnsOriginal = 0;
 
   /// Нужно ли по нескольку раз повторять указанное слово или фразу?
   int repeatCount = 1;
