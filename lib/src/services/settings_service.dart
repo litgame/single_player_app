@@ -27,6 +27,35 @@ class SettingsService {
   Future<void> updateWithMagic(bool useMagic) =>
       _prefs().then((value) => value.setBool('withMagic', useMagic));
 
+  Future<bool> vibrationOn() async =>
+      (await _prefs()).getBool('vibrationOn') ?? false;
+
+  Future<void> updateVibration(bool vibrationOn) =>
+      _prefs().then((value) => value.setBool('vibrationOn', vibrationOn));
+
+  Future<bool> soundOn() async => (await _prefs()).getBool('soundOn') ?? false;
+
+  Future<void> updateSound(bool soundOn) =>
+      _prefs().then((value) => value.setBool('soundOn', soundOn));
+
+  Future<double> lastMagicProbability() async =>
+      (await _prefs()).getDouble('magicProbability') ?? 0.3;
+
+  Future<void> setLastMagicProbability(double probability) => _prefs()
+      .then((value) => value.setDouble('magicProbability', probability));
+
+  Future<int> lastMagicCycles() async =>
+      (await _prefs()).getInt('magicCycles') ?? 5;
+
+  Future<void> setLastMagicCycles(int cycles) =>
+      _prefs().then((value) => value.setInt('magicCycles', cycles));
+
+  Future<int> lastMagicPlayers() async =>
+      (await _prefs()).getInt('magicPlayers') ?? 3;
+
+  Future<void> setLastMagicPlayers(int cycles) =>
+      _prefs().then((value) => value.setInt('magicPlayers', cycles));
+
   Future<String> collection() async =>
       _prefs().then((value) => value.getString('collection') ?? 'default');
 

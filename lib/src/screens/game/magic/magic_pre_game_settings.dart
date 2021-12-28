@@ -9,6 +9,7 @@ class MagicPreGameSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settings = SettingsController();
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.purple,
@@ -23,9 +24,9 @@ class MagicPreGameSettings extends StatelessWidget {
                 width: 200,
                 child: SpinBox(
                   min: 2,
-                  value: 4,
+                  value: settings.magicPlayersCount.toDouble(),
                   onChanged: (value) {
-                    SettingsController().magicPlayersCount = value.toInt();
+                    settings.magicPlayersCount = value.toInt();
                   },
                 ),
               ),
@@ -38,9 +39,9 @@ class MagicPreGameSettings extends StatelessWidget {
                 width: 200,
                 child: SpinBox(
                   min: 1,
-                  value: 5,
+                  value: settings.magicStartFromCycle.toDouble(),
                   onChanged: (value) {
-                    SettingsController().magicStartFromCycle = value.toInt();
+                    settings.magicStartFromCycle = value.toInt();
                   },
                 ),
               ),
@@ -54,9 +55,9 @@ class MagicPreGameSettings extends StatelessWidget {
                 child: SpinBox(
                   min: 0,
                   max: 100,
-                  value: 30,
+                  value: settings.magicProbability * 100,
                   onChanged: (value) {
-                    SettingsController().magicProbability = value / 100;
+                    settings.magicProbability = value / 100;
                   },
                 ),
               ),
@@ -64,6 +65,7 @@ class MagicPreGameSettings extends StatelessWidget {
           ),
           MenuButton(
             onPressed: () {
+              SettingsController().saveLastMagicSettings();
               Navigator.of(context)
                   .restorablePushNamed('/game/training/process');
             },

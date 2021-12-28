@@ -63,9 +63,9 @@ class SettingsController with ChangeNotifier {
   bool _showDocTrainingScreen = true;
   bool _withMagic = false;
 
-  int magicPlayersCount = 2;
+  int magicPlayersCount = 3;
   int magicStartFromCycle = 5;
-  double magicProbability = 0.5;
+  double magicProbability = 0.3;
 
   List<String> _offlineCollections = [];
 
@@ -104,9 +104,20 @@ class SettingsController with ChangeNotifier {
     _showDocGameScreen = await _settingsService.showDocGameScreen();
     _showDocTrainingScreen = await _settingsService.showDocTrainingScreen();
     _withMagic = await _settingsService.withMagic();
+
+    magicPlayersCount = await _settingsService.lastMagicPlayers();
+    magicStartFromCycle = await _settingsService.lastMagicCycles();
+    magicProbability = await _settingsService.lastMagicProbability();
+
     await dotenv.load(fileName: ".env");
     GameRest();
     notifyListeners();
+  }
+
+  void saveLastMagicSettings() {
+    _settingsService.setLastMagicCycles(magicStartFromCycle);
+    _settingsService.setLastMagicPlayers(magicPlayersCount);
+    _settingsService.setLastMagicProbability(magicProbability);
   }
 
   Future<void> updateThemeMode(ThemeMode? newThemeMode) async {
