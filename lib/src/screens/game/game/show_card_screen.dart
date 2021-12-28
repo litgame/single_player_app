@@ -24,7 +24,7 @@ class ShowCardScreen extends StatelessWidget
             final children = <Widget>[cardWidget];
             if (magicController.shouldSelectMagic) {
               children.add(Align(
-                  alignment: const Alignment(1.2, -0.95),
+                  alignment: const Alignment(1, -0.95),
                   child: MagicWidgetCreate(
                       chosenMagic: magicController.chosenMagicType,
                       magicService: magicController.service)));
@@ -32,9 +32,8 @@ class ShowCardScreen extends StatelessWidget
 
             if (magicController.shouldFireMagic) {
               children.add(Align(
-                  alignment: const Alignment(-1.2, -0.95),
+                  alignment: const Alignment(-1, -0.95),
                   child: MagicWidgetFire(
-                    key: ValueKey<double>(Random().nextDouble()),
                     firedMagic: magicController.fireMagic,
                     magicService: magicController.service,
                   )));
