@@ -34,6 +34,7 @@ class ShowCardScreen extends StatelessWidget
               children.add(Align(
                   alignment: const Alignment(-1.2, -0.95),
                   child: MagicWidgetFire(
+                    key: ValueKey<double>(Random().nextDouble()),
                     firedMagic: magicController.fireMagic,
                     magicService: magicController.service,
                   )));
