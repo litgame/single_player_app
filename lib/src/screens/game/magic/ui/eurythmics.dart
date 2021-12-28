@@ -45,11 +45,13 @@ class UITypeEurythmics extends UITypeBase {
 
   @override
   List<Widget> buildViewUI(BuildContext context) => [
-        ViewUIRow(
-          Text(
-            context.loc().magicEurythmicsViewText(description),
+        Card(
+          child: ViewUIRow(
+            Text(
+              context.loc().magicEurythmicsViewText(description),
+            ),
+            isTitle: true,
           ),
-          isTitle: true,
         ),
       ];
 

@@ -40,11 +40,13 @@ class UITypeAdditionalEvent extends UITypeBase {
 
   @override
   List<Widget> buildViewUI(BuildContext context) => [
-        ViewUIRow(
-          Text(
-            context.loc().magicAdditionalEventFire,
+        Card(
+          child: ViewUIRow(
+            Text(
+              context.loc().magicAdditionalEventFire,
+            ),
+            isTitle: true,
           ),
-          isTitle: true,
         ),
       ];
 
