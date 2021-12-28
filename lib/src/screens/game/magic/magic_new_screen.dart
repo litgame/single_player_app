@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:single_player_app/src/screens/game/magic/ui/ui_type.dart';
 import 'package:single_player_app/src/services/magic_service/magic_item.dart';
 import 'package:single_player_app/src/services/magic_service/magic_service.dart';
@@ -39,7 +40,19 @@ class MagicNewScreen extends StatelessWidget with LayoutOrientation {
                 uiGenerator.title(context))),
         body: ListView(
           padding: const EdgeInsets.all(20),
-          children: uiGenerator.buildCreateUI(context),
+          children: uiGenerator.buildCreateUI(context)
+            ..insert(
+                0,
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Text(
+                    uiGenerator.title(context),
+                    style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline),
+                  ),
+                )),
         ),
       );
     });
