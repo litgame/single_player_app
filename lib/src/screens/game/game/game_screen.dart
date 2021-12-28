@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:kplayer/kplayer.dart';
 import 'package:litgame_server/models/cards/card.dart' as lit_card;
 import 'package:single_player_app/src/screens/game/game/magic_controller.dart';
@@ -42,6 +43,8 @@ class _GameScreenState extends State<GameScreen>
 
   void onApplyMagic(MagicService service, List<MagicItem> magic) {
     Player.asset("assets/sounds/magic_happen.mp3").play();
+    Vibrate.vibrateWithPauses(
+        [const Duration(milliseconds: 150), const Duration(milliseconds: 300)]);
     final magicWidget =
         MagicWidgetFire(magicService: service, firedMagic: magic);
     Navigator.of(context).push(magicWidget.onAlertTap(context));
