@@ -22,7 +22,7 @@ class MagicFireScreen extends StatelessWidget with LayoutOrientation {
         final uiGen = uiTypeFactory(magic.type, magicService);
         uiGen.fillMagicData(magic);
         children.addAll(uiGen.buildViewUI(context));
-        children.add(const Divider());
+        // children.add(const Divider());
       }
 
       return Scaffold(
