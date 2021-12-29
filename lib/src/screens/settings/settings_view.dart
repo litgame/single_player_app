@@ -59,10 +59,20 @@ class SettingsView extends StatelessWidget {
               Text(context.loc().settingsCollectionTitle,
                   textAlign: TextAlign.left),
               CollectionWidget(settings: controller),
+              const Divider(),
               CheckboxListTile(
                   title: Text(context.loc().settingsWithMagic),
                   value: controller.withMagic,
                   onChanged: controller.updateWithMagic),
+              CheckboxListTile(
+                  title: Text(context.loc().settingsVibrationOn),
+                  value: controller.vibrationOn,
+                  onChanged: controller.updateVibrationOn),
+              CheckboxListTile(
+                  title: Text(context.loc().settingsSoundOn),
+                  value: controller.soundOn,
+                  onChanged: controller.updateSoundOn),
+              const Divider(),
               CheckboxListTile(
                   title: Text(context.loc().gameTitleDocAllShow),
                   value: controller.showDocAllScreen,

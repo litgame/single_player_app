@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:single_player_app/src/screens/settings/settings_controller.dart';
 import 'package:single_player_app/src/services/magic_service/magic_item.dart';
 import 'package:single_player_app/src/services/magic_service/magic_service.dart';
 
@@ -166,7 +167,9 @@ class _MagicWidgetState extends State<MagicWidget>
   }
 
   void _onTap() {
-    Vibrate.feedback(FeedbackType.heavy);
+    if (SettingsController().vibrationOn) {
+      Vibrate.feedback(FeedbackType.heavy);
+    }
     setState(() {
       _magicWidget = _buildOpenedBox(context);
     });

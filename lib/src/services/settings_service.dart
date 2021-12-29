@@ -28,12 +28,12 @@ class SettingsService {
       _prefs().then((value) => value.setBool('withMagic', useMagic));
 
   Future<bool> vibrationOn() async =>
-      (await _prefs()).getBool('vibrationOn') ?? false;
+      (await _prefs()).getBool('vibrationOn') ?? true;
 
   Future<void> updateVibration(bool vibrationOn) =>
       _prefs().then((value) => value.setBool('vibrationOn', vibrationOn));
 
-  Future<bool> soundOn() async => (await _prefs()).getBool('soundOn') ?? false;
+  Future<bool> soundOn() async => (await _prefs()).getBool('soundOn') ?? true;
 
   Future<void> updateSound(bool soundOn) =>
       _prefs().then((value) => value.setBool('soundOn', soundOn));

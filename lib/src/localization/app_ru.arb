@@ -8,6 +8,8 @@
   "settingsCollectionTitle": "Коллекция карт для игры",
   "settingsCollectionNone": "Не выбрана",
   "settingsWithMagic": "Использовать карты магии",
+  "settingsVibrationOn": "Включить вибрацию",
+  "settingsSoundOn": "Включить звук",
   "scDownload": "Скачать",
   "scDownloadProgress": "Скачиваем...",
   "scDownloadFinished": "Скачано!",

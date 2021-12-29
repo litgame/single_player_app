@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -10,6 +8,7 @@ import 'package:single_player_app/src/screens/game/game/magic_controller.dart';
 import 'package:single_player_app/src/screens/game/game/select_card_screen.dart';
 import 'package:single_player_app/src/screens/game/magic/ui/magic_widget_create.dart';
 import 'package:single_player_app/src/screens/game/magic/ui/magic_widget_fire.dart';
+import 'package:single_player_app/src/screens/settings/settings_controller.dart';
 import 'package:single_player_app/src/services/game_rest.dart';
 import 'package:single_player_app/src/services/magic_service/magic_item.dart';
 import 'package:single_player_app/src/services/magic_service/magic_service.dart';
@@ -44,9 +43,15 @@ class _GameScreenState extends State<GameScreen>
   late MagicController magicController;
 
   void onApplyMagic(MagicService service, List<MagicItem> magic) {
-    Player.asset("assets/sounds/magic_happen.mp3").play();
-    Vibrate.vibrateWithPauses(
-        [const Duration(milliseconds: 150), const Duration(milliseconds: 300)]);
+    if (SettingsController().soundOn) {
+      Player.asset("assets/sounds/magic_happen.mp3").play();
+    }
+    if (SettingsController().vibrationOn) {
+      Vibrate.vibrateWithPauses([
+        const Duration(milliseconds: 150),
+        const Duration(milliseconds: 300)
+      ]);
+    }
     final magicWidget =
         MagicWidgetFire(magicService: service, firedMagic: magic);
     Navigator.of(context).push(magicWidget.onAlertTap(context));

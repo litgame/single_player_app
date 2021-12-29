@@ -62,6 +62,8 @@ class SettingsController with ChangeNotifier {
   bool _showDocGameScreen = true;
   bool _showDocTrainingScreen = true;
   bool _withMagic = false;
+  bool _vibrationOn = true;
+  bool _soundOn = true;
 
   int magicPlayersCount = 3;
   int magicStartFromCycle = 5;
@@ -89,6 +91,8 @@ class SettingsController with ChangeNotifier {
   bool get showDocTrainingScreen => _showDocTrainingScreen;
 
   bool get withMagic => _withMagic;
+  bool get vibrationOn => _vibrationOn;
+  bool get soundOn => _soundOn;
 
   Future<void> loadSettings() async {
     _themeMode = await _settingsService.themeMode();
@@ -104,6 +108,8 @@ class SettingsController with ChangeNotifier {
     _showDocGameScreen = await _settingsService.showDocGameScreen();
     _showDocTrainingScreen = await _settingsService.showDocTrainingScreen();
     _withMagic = await _settingsService.withMagic();
+    _vibrationOn = await _settingsService.vibrationOn();
+    _soundOn = await _settingsService.soundOn();
 
     magicPlayersCount = await _settingsService.lastMagicPlayers();
     magicStartFromCycle = await _settingsService.lastMagicCycles();
@@ -134,6 +140,22 @@ class SettingsController with ChangeNotifier {
     _withMagic = withMagic;
     notifyListeners();
     await _settingsService.updateWithMagic(_withMagic);
+  }
+
+  Future<void> updateSoundOn(bool? soundOn) async {
+    if (soundOn == null) return;
+    if (soundOn == _soundOn) return;
+    _soundOn = soundOn;
+    notifyListeners();
+    await _settingsService.updateSound(_soundOn);
+  }
+
+  Future<void> updateVibrationOn(bool? vibrationOn) async {
+    if (vibrationOn == null) return;
+    if (vibrationOn == _vibrationOn) return;
+    _vibrationOn = vibrationOn;
+    notifyListeners();
+    await _settingsService.updateSound(_vibrationOn);
   }
 
   Future<void> updateDefaultCollection(String? newCollection,
