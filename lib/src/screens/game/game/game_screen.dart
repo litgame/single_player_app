@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -19,6 +20,8 @@ import 'package:single_player_app/src/ui/card_item.dart';
 import '../../../tools.dart';
 
 part 'master_game_init_screen.dart';
+part 'restorable/displayed_cards.dart';
+part 'restorable/game_ui_stage.dart';
 part 'show_card_screen.dart';
 
 class GameScreen extends StatefulWidget {
@@ -30,13 +33,27 @@ class GameScreen extends StatefulWidget {
 
 enum GameUIStage { masterInit, playerCardSelect, playerCardDisplay }
 
+extension GameUIStageFromString on GameUIStage {
+  GameUIStage fromString(String name) {
+    switch (name) {
+      case 'masterInit':
+        return GameUIStage.masterInit;
+      case 'playerCardSelect':
+        return GameUIStage.playerCardSelect;
+      case 'playerCardDisplay':
+        return GameUIStage.playerCardDisplay;
+    }
+    throw ArgumentError('No such state: $name');
+  }
+}
+
 class _GameScreenState extends State<GameScreen>
-    with GameService, LayoutOrientation, NoNetworkModal {
+    with GameService, LayoutOrientation, NoNetworkModal, RestorationMixin {
   _GameScreenState() {
     magicController = MagicController(onApplyMagic);
   }
 
-  GameUIStage _currentState = GameUIStage.masterInit;
+  final _currentStateRestorable = RestorableGameUIStage();
   lit_card.CardType? _selectedCartType;
 
   Future<lit_card.Card>? _selectedCardFuture;
@@ -60,7 +77,7 @@ class _GameScreenState extends State<GameScreen>
   void nextUIState() {
     if (canPlay) {
       GameUIStage next;
-      switch (_currentState) {
+      switch (_currentStateRestorable.value) {
         case GameUIStage.masterInit:
           next = GameUIStage.playerCardSelect;
           break;
@@ -83,7 +100,7 @@ class _GameScreenState extends State<GameScreen>
       }
 
       setState(() {
-        _currentState = next;
+        _currentStateRestorable.value = next;
       });
     } else {
       dlgNoNetwork(context);
@@ -110,7 +127,7 @@ class _GameScreenState extends State<GameScreen>
       LayoutBuilder(builder: (context, constraints) {
         init(constraints);
         final actions = <Widget>[];
-        if (_currentState != GameUIStage.playerCardSelect) {
+        if (_currentStateRestorable.value != GameUIStage.playerCardSelect) {
           final text = isTiny ? null : context.loc().gameNextTurn;
           actions.add(AppBarButton(
             text: text,
@@ -152,7 +169,7 @@ class _GameScreenState extends State<GameScreen>
       });
 
   Widget _buildGameScreen() {
-    switch (_currentState) {
+    switch (_currentStateRestorable.value) {
       case GameUIStage.masterInit:
         return MasterGameInit(
           orientation: orientation,
@@ -205,5 +222,13 @@ class _GameScreenState extends State<GameScreen>
         RouteBuilder.gotoMainMenu(context, reset: true);
       }
     });
+  }
+
+  @override
+  String? get restorationId => 'game';
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    registerForRestoration(_currentStateRestorable, 'ui_state');
   }
 }
