@@ -1,6 +1,6 @@
 part of '../game_screen.dart';
 
-class RestorableGameUIStage extends RestorableValue<GameUIStage> {
+class _RestorableGameUIStage extends RestorableValue<GameUIStage> {
   @override
   GameUIStage createDefaultValue() => GameUIStage.masterInit;
 

@@ -24,6 +24,7 @@ import '../../../tools.dart';
 part 'master_game_init_screen.dart';
 part 'restorable/displayed_cards.dart';
 part 'restorable/game_ui_stage.dart';
+part 'restorable/magic.dart';
 part 'show_card_screen.dart';
 
 class GameScreen extends StatefulWidget {
@@ -55,9 +56,9 @@ class _GameScreenState extends State<GameScreen>
     magicController = MagicController(onApplyMagic);
   }
 
-  final _currentStateRestorable = RestorableGameUIStage();
-  final _masterInitCardsRestorable = RestorableDisplayedCards();
-  final _selectedCardsRestorable = RestorableDisplayedCards();
+  final _currentStateRestorable = _RestorableGameUIStage();
+  final _masterInitCardsRestorable = _RestorableDisplayedCards();
+  final _selectedCardsRestorable = _RestorableDisplayedCards();
   Future<List<lit_card.Card>>? _initGameRestorable;
 
   lit_card.CardType? _selectedCartType;

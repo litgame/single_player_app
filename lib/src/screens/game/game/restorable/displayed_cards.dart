@@ -1,12 +1,12 @@
 part of '../game_screen.dart';
 
-class RestorableDisplayedCards extends RestorableValue<List<lit_card.Card>> {
+class _RestorableDisplayedCards extends RestorableValue<List<lit_card.Card>> {
   @override
   List<lit_card.Card> createDefaultValue() => <lit_card.Card>[];
 
   @override
   void didUpdateValue(List<lit_card.Card>? oldValue) {
-    Function eq = const ListEquality(ListCardEquality()).equals;
+    Function eq = const ListEquality(_ListCardEquality()).equals;
     if (oldValue == null || !eq(oldValue, value)) {
       notifyListeners();
     }
@@ -31,8 +31,8 @@ class RestorableDisplayedCards extends RestorableValue<List<lit_card.Card>> {
   Object toPrimitives() => value.map((e) => e.name + '|' + e.imgUrl).toList();
 }
 
-class ListCardEquality implements Equality<lit_card.Card> {
-  const ListCardEquality();
+class _ListCardEquality implements Equality<lit_card.Card> {
+  const _ListCardEquality();
 
   @override
   bool equals(lit_card.Card e1, lit_card.Card e2) => e1.imgUrl == e2.imgUrl;
