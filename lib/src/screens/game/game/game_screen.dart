@@ -5,10 +5,12 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:kplayer/kplayer.dart';
 import 'package:litgame_server/models/cards/card.dart' as lit_card;
+import 'package:litgame_server/models/game/game.dart';
 import 'package:single_player_app/src/screens/game/game/magic_controller.dart';
 import 'package:single_player_app/src/screens/game/game/select_card_screen.dart';
 import 'package:single_player_app/src/screens/game/magic/ui/magic_widget_create.dart';
 import 'package:single_player_app/src/screens/game/magic/ui/magic_widget_fire.dart';
+import 'package:single_player_app/src/screens/game/training/training_controller.dart';
 import 'package:single_player_app/src/screens/settings/settings_controller.dart';
 import 'package:single_player_app/src/services/game_rest.dart';
 import 'package:single_player_app/src/services/magic_service/magic_item.dart';
@@ -54,6 +56,10 @@ class _GameScreenState extends State<GameScreen>
   }
 
   final _currentStateRestorable = RestorableGameUIStage();
+  final _masterInitCardsRestorable = RestorableDisplayedCards();
+  final _selectedCardsRestorable = RestorableDisplayedCards();
+  Future<List<lit_card.Card>>? _initGameRestorable;
+
   lit_card.CardType? _selectedCartType;
 
   Future<lit_card.Card>? _selectedCardFuture;
@@ -90,6 +96,7 @@ class _GameScreenState extends State<GameScreen>
           }
           _selectedCardFuture = selectCard(type).then((card) {
             magicController.onCardSelect(card);
+            _selectedCardsRestorable.value = [card];
             return card;
           });
           break;
@@ -169,27 +176,47 @@ class _GameScreenState extends State<GameScreen>
       });
 
   Widget _buildGameScreen() {
-    switch (_currentStateRestorable.value) {
-      case GameUIStage.masterInit:
-        return MasterGameInit(
-          orientation: orientation,
-          future: startGame(),
-          isTiny: isTiny,
-        );
+    return FutureBuilder(
+        future: _restoreGame(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            switch (_currentStateRestorable.value) {
+              case GameUIStage.masterInit:
+                _initGameRestorable ??= startGame();
+                _initGameRestorable?.then((List<lit_card.Card> cards) {
+                  _masterInitCardsRestorable.value = cards;
+                });
+                return MasterGameInit(
+                  orientation: orientation,
+                  future: _initGameRestorable!,
+                  isTiny: isTiny,
+                );
 
-      case GameUIStage.playerCardSelect:
-        return SelectCardScreen(
-            key: UniqueKey(),
-            orientation: orientation,
-            isTiny: isTiny,
-            onGeneric: _onGeneric,
-            onPerson: _onPerson,
-            onPlace: _onPlace);
+              case GameUIStage.playerCardSelect:
+                _masterInitCardsRestorable.value = [];
+                _selectedCardsRestorable.value = [];
+                return SelectCardScreen(
+                    key: UniqueKey(),
+                    orientation: orientation,
+                    isTiny: isTiny,
+                    onGeneric: _onGeneric,
+                    onPerson: _onPerson,
+                    onPlace: _onPlace);
 
-      case GameUIStage.playerCardDisplay:
-        return ShowCardScreen(
-            magicController: magicController, future: _selectedCardFuture);
-    }
+              case GameUIStage.playerCardDisplay:
+                return ShowCardScreen(
+                    magicController: magicController,
+                    future: _selectedCardFuture);
+            }
+          } else {
+            return const Center(
+              child: SpinKitWave(
+                color: Colors.green,
+                size: 35.0,
+              ),
+            );
+          }
+        });
   }
 
   void _onGameEndButton() {
@@ -230,5 +257,38 @@ class _GameScreenState extends State<GameScreen>
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
     registerForRestoration(_currentStateRestorable, 'ui_state');
+    registerForRestoration(_masterInitCardsRestorable, 'master_init_cards');
+    registerForRestoration(_selectedCardsRestorable, 'selected_cards');
+  }
+
+  Future _restoreGame() async {
+    final game = LitGame.find(gameId);
+    if (game != null) return true;
+    final settings = SettingsController();
+    final trainingController = TrainingController();
+    Future trainingStarted;
+    if (settings.isCurrentCollectionOffline) {
+      trainingStarted = settings.getCurrentOfflineCollectionCards().then(
+          (offlineCards) => trainingController.startTraining(
+              settings.collectionName, offlineCards));
+    } else {
+      trainingStarted =
+          trainingController.startTraining(settings.collectionName);
+    }
+
+    return trainingStarted.then((value) => startGame()).then((value) {
+      switch (_currentStateRestorable.value) {
+        case GameUIStage.masterInit:
+          _initGameRestorable = Future.value(_masterInitCardsRestorable.value);
+          break;
+        case GameUIStage.playerCardSelect:
+          // TODO: Handle this case.
+          break;
+        case GameUIStage.playerCardDisplay:
+          _selectedCardFuture =
+              Future.value(_selectedCardsRestorable.value.first);
+          break;
+      }
+    });
   }
 }
