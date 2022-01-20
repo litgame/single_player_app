@@ -11,7 +11,7 @@ enum MagicType {
   cancelMagic,
 }
 
-extension MagicTypeTranslation on MagicType {
+extension MagicTypeExtension on MagicType {
   String translatedName(BuildContext context) {
     switch (this) {
       case MagicType.marionette:
@@ -29,6 +29,22 @@ extension MagicTypeTranslation on MagicType {
       case MagicType.cancelMagic:
         return context.loc().magicCancelTitle;
     }
+  }
+
+  MagicType fromName(String name) {
+    switch (name) {
+      case 'marionette':
+        return MagicType.marionette;
+      case 'eurythmics':
+        return MagicType.eurythmics;
+      case 'keyword':
+        return MagicType.keyword;
+      case 'additionalEvent':
+        return MagicType.additionalEvent;
+      case 'cancelMagic':
+        return MagicType.cancelMagic;
+    }
+    throw ArgumentError('Invalid name: $name');
   }
 }
 
@@ -121,6 +137,50 @@ class MagicItem {
   void _checkDescriptionFilled() {
     if (description.isEmpty) {
       throw ArgumentError(type, 'description');
+    }
+  }
+
+  Map<String, dynamic> toJson() => {
+        'type': type.name,
+        'fireAfterTurns': fireAfterTurns,
+        'fireAfterTurnsOriginal': fireAfterTurnsOriginal,
+        'repeatCount': repeatCount,
+        'repeat': repeat,
+        'description': description,
+      };
+
+  factory MagicItem.fromJson(Map<String, dynamic> json) {
+    final strType = json['type'];
+    if (strType == null) throw ArgumentError('Invalid json format');
+    final type = MagicType.marionette.fromName(strType);
+    final description = json['description'];
+    final fireAfterTurns = json['fireAfterTurns'];
+
+    if (description == null || fireAfterTurns == null) {
+      throw ArgumentError('Invalid json format');
+    }
+    switch (type) {
+      case MagicType.marionette:
+        return MagicItem.marionette(description, fireAfterTurns);
+
+      case MagicType.eurythmics:
+        final fireAfterTurnsOriginal = json['fireAfterTurnsOriginal'];
+        if (fireAfterTurnsOriginal == null) {
+          throw ArgumentError('Invalid json format');
+        }
+        return MagicItem.eurythmics(description, fireAfterTurns)
+          ..fireAfterTurnsOriginal = fireAfterTurnsOriginal;
+
+      case MagicType.keyword:
+        final repeatCount = json['repeatCount'];
+        if (repeatCount == null) throw ArgumentError('Invalid json format');
+        return MagicItem.keyword(description, fireAfterTurns, repeatCount);
+
+      case MagicType.additionalEvent:
+        return MagicItem.additionalEvent(fireAfterTurns);
+
+      case MagicType.cancelMagic:
+        return MagicItem.cancelMagic();
     }
   }
 }

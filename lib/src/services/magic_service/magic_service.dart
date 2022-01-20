@@ -66,4 +66,29 @@ class MagicService {
     }
     return magic;
   }
+
+  Map<String, dynamic> toJson() => {
+        '_currentCycle': _currentCycle,
+        '_currentTurn': _currentTurn,
+        'allMagic': allMagic.map((e) => e.toJson()).toList()
+      };
+
+  factory MagicService.fromJson(
+      Map<String, dynamic> json, SettingsController settingsController) {
+    final service = MagicService(settingsController);
+    final currentCycle = json['_currentCycle'];
+    if (currentCycle != null) {
+      service._currentCycle = currentCycle;
+    }
+    final currentTurn = json['_currentTurn'];
+    if (currentTurn != null) {
+      service._currentTurn = currentTurn;
+    }
+    final allMagic = json['allMagic'];
+    if (allMagic != null) {
+      allMagic as List;
+      service.allMagic = allMagic.map((e) => MagicItem.fromJson(e)).toSet();
+    }
+    return service;
+  }
 }
