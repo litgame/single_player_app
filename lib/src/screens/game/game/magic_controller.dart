@@ -18,6 +18,7 @@ class MagicController extends ChangeNotifier {
   MagicUICallback onApplyMagic;
 
   void onCardSelect(lit_card.Card card) {
+    _additionalEventCards = [];
     _fireMagic = service.applyMagicAtTurn();
     _currentPlayerChooseMagic = service.addMagicAtTurn();
     if (shouldFireMagic) {
@@ -33,6 +34,17 @@ class MagicController extends ChangeNotifier {
   bool get shouldSelectMagic => _currentPlayerChooseMagic != null;
 
   bool get noMagic => !shouldFireMagic && !shouldSelectMagic;
+
+  List<lit_card.Card> _additionalEventCards = [];
+
+  void cacheAdditionalEventCards(List<lit_card.Card> cards) {
+    if (_additionalEventCards.isEmpty) {
+      _additionalEventCards = cards;
+      notifyListeners();
+    }
+  }
+
+  List<lit_card.Card> get cachedAdditionalCards => _additionalEventCards;
 
   void markMagicChosen() {
     _currentPlayerChooseMagic = null;
@@ -50,6 +62,8 @@ class MagicController extends ChangeNotifier {
   Map<String, dynamic> toJson() => {
         '_currentPlayerChooseMagic': _currentPlayerChooseMagic?.name,
         '_fireMagic': _fireMagic.map((e) => e.toJson()).toList(),
+        '_additionalEventCards':
+            _additionalEventCards.map((e) => e.toJson()).toList(),
         'service': service.toJson()
       };
 
@@ -58,17 +72,28 @@ class MagicController extends ChangeNotifier {
     final serviceJson = json['service'];
     if (serviceJson == null) throw ArgumentError('Invalid JSON');
     final service = MagicService.fromJson(serviceJson, SettingsController());
+
     final controller = MagicController(onApplyMagic, service);
+
     final chooseMagicJson = json['_currentPlayerChooseMagic'];
     MagicType? chooseMagic;
     if (chooseMagicJson != null) {
       chooseMagic = MagicType.marionette.fromName(chooseMagicJson);
     }
+    controller._currentPlayerChooseMagic = chooseMagic;
+
     var fireMagicJson = json['_fireMagic'] ?? [];
     fireMagicJson as List;
     final fireMagic = fireMagicJson.map((e) => MagicItem.fromJson(e)).toList();
-    controller._currentPlayerChooseMagic = chooseMagic;
     controller._fireMagic = fireMagic;
+
+    var additionalCardsJson = json['_additionalEventCards'] ?? [];
+    additionalCardsJson as List;
+    final additionalCards = additionalCardsJson
+        .map((e) => lit_card.Card.clone()..fromJson(e))
+        .toList();
+    controller._additionalEventCards = additionalCards;
+
     return controller;
   }
 }

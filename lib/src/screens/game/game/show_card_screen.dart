@@ -59,10 +59,17 @@ class ShowCardScreen extends StatelessWidget
 
     var showSingleCard = true;
     final futures = <Future<lit_card.Card>>[];
-    for (var magic in magicController.fireMagic) {
-      if (magic.type == MagicType.additionalEvent) {
-        futures.add(selectCard(lit_card.CardType.generic));
+    if (magicController.cachedAdditionalCards.isNotEmpty) {
+      for (var card in magicController.cachedAdditionalCards) {
+        futures.add(Future.value(card));
         showSingleCard = false;
+      }
+    } else {
+      for (var magic in magicController.fireMagic) {
+        if (magic.type == MagicType.additionalEvent) {
+          futures.add(selectCard(lit_card.CardType.generic));
+          showSingleCard = false;
+        }
       }
     }
     if (showSingleCard) {
@@ -73,7 +80,10 @@ class ShowCardScreen extends StatelessWidget
       builder: (BuildContext context, BoxConstraints constraints) {
         init(constraints);
         return FutureBuilder(
-            future: Future.wait<lit_card.Card>(futures),
+            future: Future.wait<lit_card.Card>(futures)
+              ..then((value) {
+                magicController.cacheAdditionalEventCards(value);
+              }),
             builder: (BuildContext context,
                 AsyncSnapshot<List<lit_card.Card>> snapshot) {
               final items = <Widget>[];
