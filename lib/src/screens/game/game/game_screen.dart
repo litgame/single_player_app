@@ -264,9 +264,7 @@ class _GameScreenState extends State<GameScreen>
     registerForRestoration(_currentStateRestorable, 'ui_state');
     registerForRestoration(_masterInitCardsRestorable, 'master_init_cards');
     registerForRestoration(_selectedCardsRestorable, 'selected_cards');
-    if (SettingsController().withMagic) {
-      registerForRestoration(restorableMagicController, 'magic_controller');
-    }
+    registerForRestoration(restorableMagicController, 'magic_controller');
   }
 
   Future _restoreGame() async {
