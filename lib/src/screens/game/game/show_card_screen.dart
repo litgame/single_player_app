@@ -27,7 +27,7 @@ class ShowCardScreen extends StatelessWidget
                   alignment: const Alignment(1, -0.95),
                   child: MagicWidgetCreate(
                       chosenMagic: magicController.chosenMagicType,
-                      magicService: magicController.service)));
+                      magicController: magicController)));
             }
 
             if (magicController.shouldFireMagic) {

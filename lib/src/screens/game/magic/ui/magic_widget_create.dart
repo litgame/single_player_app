@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:single_player_app/src/screens/game/game/magic_controller.dart';
 import 'package:single_player_app/src/screens/game/magic/ui/magic_widget.dart';
 import 'package:single_player_app/src/services/magic_service/magic_item.dart';
-import 'package:single_player_app/src/services/magic_service/magic_service.dart';
 
 import '../magic_new_screen.dart';
 
 class MagicWidgetCreate extends StatelessWidget {
   const MagicWidgetCreate(
-      {Key? key, required this.magicService, required this.chosenMagic})
+      {Key? key, required this.magicController, required this.chosenMagic})
       : super(key: key);
   final MagicType chosenMagic;
-  final MagicService magicService;
+  final MagicController magicController;
 
   MaterialPageRoute<MagicItem?> onAlertTap(BuildContext context) =>
       MaterialPageRoute<MagicItem?>(
           fullscreenDialog: true,
           builder: (ctx) => MagicNewScreen(
-                magicService: magicService,
+                magicService: magicController.service,
                 chosenMagic: chosenMagic,
               ));
 
@@ -24,14 +24,15 @@ class MagicWidgetCreate extends StatelessWidget {
     if (magicItem == null) return true;
 
     if (magicItem.type != MagicType.cancelMagic) {
-      magicService.allMagic.add(magicItem);
+      magicController.service.allMagic.add(magicItem);
     }
+    magicController.markMagicChosen();
     return false;
   }
 
   @override
   Widget build(BuildContext context) => MagicWidget(
-        magicService: magicService,
+        magicService: magicController.service,
         magicNotificationAssetPath: 'assets/images/magic/magic_box.png',
         magicExplosionAssetPath: const [
           'assets/images/magic/explosion_1.png',

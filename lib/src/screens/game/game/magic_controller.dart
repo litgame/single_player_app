@@ -34,6 +34,11 @@ class MagicController extends ChangeNotifier {
 
   bool get noMagic => !shouldFireMagic && !shouldSelectMagic;
 
+  void markMagicChosen() {
+    _currentPlayerChooseMagic = null;
+    notifyListeners();
+  }
+
   MagicType get chosenMagicType {
     if (_currentPlayerChooseMagic == null) {
       throw 'No magic was chosen!';
