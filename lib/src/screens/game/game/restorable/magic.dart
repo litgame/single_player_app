@@ -1,29 +1,41 @@
 part of '../game_screen.dart';
 
 class _RestorableMagic extends RestorableValue<MagicController> {
+  _RestorableMagic(this.onApplyMagic);
+
+  MagicUICallback onApplyMagic;
+
   @override
-  MagicController createDefaultValue() => MagicController((_, __) {});
+  MagicController createDefaultValue() => MagicController(onApplyMagic);
 
   @override
   void didUpdateValue(MagicController? oldValue) {
-    if (oldValue == null ||
-        oldValue.fireMagic.length != value.fireMagic.length ||
-        oldValue.chosenMagicType != value.chosenMagicType ||
-        oldValue.service.allMagic != value.service.allMagic) {
-      notifyListeners();
-    }
+    notifyListeners();
   }
 
   @override
   MagicController fromPrimitives(Object? data) {
     try {
       if (data != null) {
-        return MagicController.fromJson(jsonDecode(data as String), (_, __) {});
+        return MagicController.fromJson(
+            jsonDecode(data as String), onApplyMagic);
       }
     } catch (_) {
       return createDefaultValue();
     }
     return createDefaultValue();
+  }
+
+  @override
+  void initWithValue(MagicController value) {
+    super.initWithValue(value);
+    value.addListener(notifyListeners);
+  }
+
+  @override
+  void dispose() {
+    value.removeListener(notifyListeners);
+    super.dispose();
   }
 
   @override

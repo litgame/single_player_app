@@ -55,12 +55,14 @@ extension GameUIStageFromString on GameUIStage {
 class _GameScreenState extends State<GameScreen>
     with GameService, LayoutOrientation, NoNetworkModal, RestorationMixin {
   _GameScreenState() {
-    magicController = MagicController(onApplyMagic);
+    restorableMagicController = _RestorableMagic(onApplyMagic);
   }
 
   final _currentStateRestorable = _RestorableGameUIStage();
   final _masterInitCardsRestorable = _RestorableDisplayedCards();
   final _selectedCardsRestorable = _RestorableDisplayedCards();
+  late _RestorableMagic restorableMagicController;
+
   Future<List<lit_card.Card>>? _initGameRestorable;
 
   lit_card.CardType? _selectedCartType;
@@ -98,7 +100,7 @@ class _GameScreenState extends State<GameScreen>
             throw ArgumentError('CardType not specified!');
           }
           _selectedCardFuture = selectCard(type).then((card) {
-            magicController.onCardSelect(card);
+            restorableMagicController.value.onCardSelect(card);
             _selectedCardsRestorable.value = [card];
             return card;
           });
@@ -208,7 +210,7 @@ class _GameScreenState extends State<GameScreen>
 
               case GameUIStage.playerCardDisplay:
                 return ShowCardScreen(
-                    magicController: magicController,
+                    magicController: restorableMagicController.value,
                     future: _selectedCardFuture);
             }
           } else {
@@ -262,6 +264,9 @@ class _GameScreenState extends State<GameScreen>
     registerForRestoration(_currentStateRestorable, 'ui_state');
     registerForRestoration(_masterInitCardsRestorable, 'master_init_cards');
     registerForRestoration(_selectedCardsRestorable, 'selected_cards');
+    if (SettingsController().withMagic) {
+      registerForRestoration(restorableMagicController, 'magic_controller');
+    }
   }
 
   Future _restoreGame() async {

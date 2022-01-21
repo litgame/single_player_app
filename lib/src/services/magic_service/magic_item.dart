@@ -61,10 +61,13 @@ class MagicItem {
   ///
   /// В настольной версии этой карте больше соответствует карта "предсказание",
   /// но в мобильном приложении приходится планировать появление событий заранее.
-  MagicItem.marionette(this.description, this.fireAfterTurns)
+  MagicItem.marionette(this.description, this.fireAfterTurns,
+      {bool fromJson = false})
       : type = MagicType.marionette {
     _checkDescriptionFilled();
-    _checkTurnsPositive();
+    if (!fromJson) {
+      _checkTurnsPositive();
+    }
   }
 
   /// Ритмика (N): каждые N ходов, начиная с Заколдованного, игрок должен
@@ -73,12 +76,15 @@ class MagicItem {
   /// В механике приложения игрок в свой ход настраивает, как и что должно
   /// происходить, после чего событие постоянно влияет на игру, пока его не
   /// отменят картой {MagicType.cancelMagic}
-  MagicItem.eurythmics(this.description, this.fireAfterTurns)
+  MagicItem.eurythmics(this.description, this.fireAfterTurns,
+      {bool fromJson = false})
       : type = MagicType.eurythmics,
         repeat = true {
     fireAfterTurnsOriginal = fireAfterTurns;
     _checkDescriptionFilled();
-    _checkTurnsPositive();
+    if (!fromJson) {
+      _checkTurnsPositive();
+    }
   }
 
   /// Ключевое слово (N): Заколдованный должен N раз использоватьв своём
@@ -87,10 +93,13 @@ class MagicItem {
   /// В механике приложения событие должно удаляться после того как произошло,
   /// либо может быть отменено картой {MagicType.cancelMagic} до того как
   /// случится
-  MagicItem.keyword(this.description, this.fireAfterTurns, this.repeatCount)
+  MagicItem.keyword(this.description, this.fireAfterTurns, this.repeatCount,
+      {bool fromJson = false})
       : type = MagicType.keyword {
     _checkDescriptionFilled();
-    _checkTurnsPositive();
+    if (!fromJson) {
+      _checkTurnsPositive();
+    }
     if (repeatCount < 1) {
       throw ArgumentError(type, 'repeatCount');
     }
@@ -101,9 +110,11 @@ class MagicItem {
   ///
   /// В механике игры событие удаляется после того как произошло, либо есть
   /// возможность отменить его картой {MagicType.cancelMagic}
-  MagicItem.additionalEvent(this.fireAfterTurns)
+  MagicItem.additionalEvent(this.fireAfterTurns, {bool fromJson = false})
       : type = MagicType.additionalEvent {
-    _checkTurnsPositive();
+    if (!fromJson) {
+      _checkTurnsPositive();
+    }
   }
 
   /// Отмена магии: отмена любой магии, применённой в лбой момент клюбому игроку
@@ -161,23 +172,25 @@ class MagicItem {
     }
     switch (type) {
       case MagicType.marionette:
-        return MagicItem.marionette(description, fireAfterTurns);
+        return MagicItem.marionette(description, fireAfterTurns,
+            fromJson: true);
 
       case MagicType.eurythmics:
         final fireAfterTurnsOriginal = json['fireAfterTurnsOriginal'];
         if (fireAfterTurnsOriginal == null) {
           throw ArgumentError('Invalid json format');
         }
-        return MagicItem.eurythmics(description, fireAfterTurns)
+        return MagicItem.eurythmics(description, fireAfterTurns, fromJson: true)
           ..fireAfterTurnsOriginal = fireAfterTurnsOriginal;
 
       case MagicType.keyword:
         final repeatCount = json['repeatCount'];
         if (repeatCount == null) throw ArgumentError('Invalid json format');
-        return MagicItem.keyword(description, fireAfterTurns, repeatCount);
+        return MagicItem.keyword(description, fireAfterTurns, repeatCount,
+            fromJson: true);
 
       case MagicType.additionalEvent:
-        return MagicItem.additionalEvent(fireAfterTurns);
+        return MagicItem.additionalEvent(fireAfterTurns, fromJson: true);
 
       case MagicType.cancelMagic:
         return MagicItem.cancelMagic();

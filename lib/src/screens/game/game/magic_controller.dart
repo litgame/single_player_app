@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:litgame_server/models/cards/card.dart' as lit_card;
 import 'package:single_player_app/src/screens/settings/settings_controller.dart';
 import 'package:single_player_app/src/services/magic_service/magic_item.dart';
@@ -6,7 +7,7 @@ import 'package:single_player_app/src/services/magic_service/magic_service.dart'
 typedef MagicUICallback = void Function(
     MagicService service, List<MagicItem> magic);
 
-class MagicController {
+class MagicController extends ChangeNotifier {
   MagicController(this.onApplyMagic, [MagicService? magicService])
       : service = magicService ?? MagicService(SettingsController());
 
@@ -22,6 +23,7 @@ class MagicController {
     if (shouldFireMagic) {
       onApplyMagic(service, _fireMagic);
     }
+    notifyListeners();
   }
 
   List<MagicItem> get fireMagic => _fireMagic.toList(growable: false);
