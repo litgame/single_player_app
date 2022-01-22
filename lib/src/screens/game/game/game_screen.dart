@@ -64,6 +64,7 @@ class _GameScreenState extends State<GameScreen>
   late _RestorableMagic restorableMagicController;
 
   Future<List<lit_card.Card>>? _initGameRestorable;
+  bool _restorationFinished = true;
 
   lit_card.CardType? _selectedCartType;
 
@@ -181,6 +182,14 @@ class _GameScreenState extends State<GameScreen>
       });
 
   Widget _buildGameScreen() {
+    if (!_restorationFinished) {
+      return const Center(
+        child: SpinKitWave(
+          color: Colors.green,
+          size: 35.0,
+        ),
+      );
+    }
     return FutureBuilder(
         future: _restoreGame(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -268,8 +277,12 @@ class _GameScreenState extends State<GameScreen>
   }
 
   Future _restoreGame() async {
+    _restorationFinished = false;
     final game = LitGame.find(gameId);
-    if (game != null) return true;
+    if (game != null) {
+      _restorationFinished = true;
+      return true;
+    }
     final settings = SettingsController();
     final trainingController = TrainingController();
     Future trainingStarted;
@@ -295,6 +308,9 @@ class _GameScreenState extends State<GameScreen>
               Future.value(_selectedCardsRestorable.value.first);
           break;
       }
+      setState(() {
+        _restorationFinished = true;
+      });
     });
   }
 }
