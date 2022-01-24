@@ -31,7 +31,6 @@
 
   <title>single_player_app</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
   <!-- This script installs service_worker.js to provide PWA functionality to
@@ -100,7 +99,15 @@
       // Service workers not supported. Just drop the <script> tag.
       loadMainDartJs();
     }
+
+
   </script>
-  <img src="icons/Icon-192.png" class="center" />
+  <img src="icons/Icon-192.png" class="center" style="
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);">
 </body>
 </html>
