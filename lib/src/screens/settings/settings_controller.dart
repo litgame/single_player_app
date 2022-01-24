@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Card;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:litgame_server/models/cards/card.dart';
@@ -115,7 +116,11 @@ class SettingsController with ChangeNotifier {
     magicStartFromCycle = await _settingsService.lastMagicCycles();
     magicProbability = await _settingsService.lastMagicProbability();
 
-    await dotenv.load(fileName: ".env");
+    if (kIsWeb) {
+      await dotenv.load(fileName: ".env");
+    } else {
+      await dotenv.load(fileName: "web_dotenv.txt");
+    }
     GameRest();
     notifyListeners();
   }
