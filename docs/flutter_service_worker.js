@@ -3,7 +3,7 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "assets/AssetManifest.json": "6e329ca2fb84b520157e97bd44ed12c8",
+  "assets/AssetManifest.json": "bb9360040de901dda2d0bd44b6d420dd",
 "assets/assets/images/2.0x/logo.png": "72acae0afde4758faf06a11a42b7df4e",
 "assets/assets/images/3.0x/logo.png": "e3a968497103b62ef473d9dbb4020e35",
 "assets/assets/images/bg_pattern.png": "6d5493796900b6510e6d78323ee71d77",
@@ -19,6 +19,7 @@ const RESOURCES = {
 "assets/assets/images/magic/magic_sphere.gif": "13265f5fcfa1b81cc77ca8c5280315bc",
 "assets/assets/images/magic/wand.png": "ad46bf6687cbd5f224acf95fa6c55f4d",
 "assets/assets/sounds/magic_happen.mp3": "73405318a708cb37af056c7105d1f1a2",
+"assets/docs/assets/docs/assets/docs/assets/docs/assets/dotenv": "632282c2ac972532c6de8b638d160b51",
 "assets/docs/assets/docs/assets/docs/assets/dotenv": "632282c2ac972532c6de8b638d160b51",
 "assets/docs/assets/docs/assets/dotenv": "632282c2ac972532c6de8b638d160b51",
 "assets/docs/assets/dotenv": "632282c2ac972532c6de8b638d160b51",
@@ -34,8 +35,8 @@ const RESOURCES = {
 "icons/Icon-512.png": "93d480fe2c74ab81b853b1467d594227",
 "icons/Icon-maskable-192.png": "6e3917cc6ec5fd335bfffae5d72d3137",
 "icons/Icon-maskable-512.png": "93d480fe2c74ab81b853b1467d594227",
-"index.html": "e47b34976aaa9daa14741e6ab7a64891",
-"/": "e47b34976aaa9daa14741e6ab7a64891",
+"index.html": "afd033f9279fd568513cb2b4d6ee7d2b",
+"/": "afd033f9279fd568513cb2b4d6ee7d2b",
 "main.dart.js": "a1a66bb7172aa1638ca1fe127963fdb3",
 "manifest.json": "072a3528e5a1d2b440480b217c3ad778",
 "version.json": "fa08cbf5039ad4136c2ab32fec77e81f"
