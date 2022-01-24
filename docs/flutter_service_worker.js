@@ -3,7 +3,7 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "assets/AssetManifest.json": "87ba99975d2e18749154a2c55b202355",
+  "assets/AssetManifest.json": "c47da6e4b6ec74733d9b5b3219a3fc92",
 "assets/assets/images/2.0x/logo.png": "72acae0afde4758faf06a11a42b7df4e",
 "assets/assets/images/3.0x/logo.png": "e3a968497103b62ef473d9dbb4020e35",
 "assets/assets/images/bg_pattern.png": "6d5493796900b6510e6d78323ee71d77",
@@ -19,10 +19,11 @@ const RESOURCES = {
 "assets/assets/images/magic/magic_sphere.gif": "13265f5fcfa1b81cc77ca8c5280315bc",
 "assets/assets/images/magic/wand.png": "ad46bf6687cbd5f224acf95fa6c55f4d",
 "assets/assets/sounds/magic_happen.mp3": "73405318a708cb37af056c7105d1f1a2",
+"assets/docs/assets/dotenv": "632282c2ac972532c6de8b638d160b51",
 "assets/dotenv": "632282c2ac972532c6de8b638d160b51",
 "assets/FontManifest.json": "dc3d03800ccca4601324923c0b1d6d57",
 "assets/fonts/MaterialIcons-Regular.otf": "4e6447691c9509f7acdbf8a931a85ca1",
-"assets/NOTICES": "8842334374ac49bc3cf6030bc8999c4a",
+"assets/NOTICES": "66a4b7e6052a76b05fb360206eef90cd",
 "assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "6d342eb68f170c97609e9da345464e5e",
 "assets/packages/fluttertoast/assets/toastify.css": "a85675050054f179444bc5ad70ffc635",
 "assets/packages/fluttertoast/assets/toastify.js": "e7006a0a033d834ef9414d48db3be6fc",
@@ -31,9 +32,9 @@ const RESOURCES = {
 "icons/Icon-512.png": "93d480fe2c74ab81b853b1467d594227",
 "icons/Icon-maskable-192.png": "6e3917cc6ec5fd335bfffae5d72d3137",
 "icons/Icon-maskable-512.png": "93d480fe2c74ab81b853b1467d594227",
-"index.html": "b2af4f9a87d8bf3827fc44b397be62ff",
-"/": "b2af4f9a87d8bf3827fc44b397be62ff",
-"main.dart.js": "f84f0805a6bc6b51778c15e2fb14bf8b",
+"index.html": "820d08c640bf02f5aee99a7a0c9c92e5",
+"/": "820d08c640bf02f5aee99a7a0c9c92e5",
+"main.dart.js": "a1a66bb7172aa1638ca1fe127963fdb3",
 "manifest.json": "072a3528e5a1d2b440480b217c3ad778",
 "version.json": "fa08cbf5039ad4136c2ab32fec77e81f"
 };

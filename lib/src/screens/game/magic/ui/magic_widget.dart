@@ -1,10 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:single_player_app/src/screens/settings/settings_controller.dart';
 import 'package:single_player_app/src/services/magic_service/magic_item.dart';
 import 'package:single_player_app/src/services/magic_service/magic_service.dart';
+import 'package:vibration/vibration.dart';
 
 typedef MagicConfigOpenCallback = MaterialPageRoute<MagicItem?> Function(
     BuildContext context);
@@ -168,7 +168,7 @@ class _MagicWidgetState extends State<MagicWidget>
 
   void _onTap() {
     if (SettingsController().vibrationOn) {
-      Vibrate.feedback(FeedbackType.heavy);
+      Vibration.vibrate(duration: 100, amplitude: 128);
     }
     setState(() {
       _magicWidget = _buildOpenedBox(context);

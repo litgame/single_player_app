@@ -4,7 +4,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:kplayer/kplayer.dart';
 import 'package:litgame_server/models/cards/card.dart' as lit_card;
 import 'package:litgame_server/models/game/game.dart';
@@ -20,6 +19,7 @@ import 'package:single_player_app/src/services/magic_service/magic_service.dart'
 import 'package:single_player_app/src/services/route_builder.dart';
 import 'package:single_player_app/src/ui/app_bar_button.dart';
 import 'package:single_player_app/src/ui/card_item.dart';
+import 'package:vibration/vibration.dart';
 
 import '../../../tools.dart';
 
@@ -76,10 +76,7 @@ class _GameScreenState extends State<GameScreen>
       Player.asset("assets/sounds/magic_happen.mp3").play();
     }
     if (SettingsController().vibrationOn) {
-      Vibrate.vibrateWithPauses([
-        const Duration(milliseconds: 150),
-        const Duration(milliseconds: 300)
-      ]);
+      Vibration.vibrate(pattern: [800, 200, 300], amplitude: 255);
     }
     final magicWidget =
         MagicWidgetFire(magicService: service, firedMagic: magic);
