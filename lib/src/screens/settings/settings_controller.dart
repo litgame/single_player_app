@@ -116,11 +116,7 @@ class SettingsController with ChangeNotifier {
     magicStartFromCycle = await _settingsService.lastMagicCycles();
     magicProbability = await _settingsService.lastMagicProbability();
 
-    if (kIsWeb) {
-      await dotenv.load(fileName: ".env");
-    } else {
-      await dotenv.load(fileName: "web_dotenv.txt");
-    }
+    await dotenv.load(fileName: "dotenv");
     GameRest();
     notifyListeners();
   }

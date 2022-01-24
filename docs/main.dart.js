@@ -89291,7 +89291,7 @@ s=13
 return A.o(p.A3(),$async$fM)
 case 13:q.cy=b
 s=14
-return A.o($.a5b().A6(0,".env"),$async$fM)
+return A.o($.a5b().A6(0,"dotenv"),$async$fM)
 case 14:A.iN()
 q.aj()
 return A.u(null,r)}})

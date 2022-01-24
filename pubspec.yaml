@@ -60,7 +60,7 @@ flutter:
   generate: true
 
   assets:
-    - .env
+    - dotenv
     # Add assets from the images directory to the application.
     - assets/images/
     - assets/sounds/
