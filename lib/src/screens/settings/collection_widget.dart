@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Card;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:litgame_server/models/cards/card.dart';
@@ -240,7 +241,7 @@ class _CollectionWidgetState extends State<CollectionWidget> {
             Padding(
               padding: const EdgeInsets.only(left: 40),
               child: Builder(builder: (context) {
-                if (notSelectedCollection) {
+                if (notSelectedCollection || kIsWeb) {
                   return Container();
                 }
                 if (widget.settings.networkState == ConnectivityResult.none) {

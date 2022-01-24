@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'dart:io';
+
+// import 'dart:io';
 
 import 'package:catcher/catcher.dart';
 import 'package:flutter/widgets.dart';
@@ -9,14 +10,14 @@ import 'src/app.dart';
 import 'src/screens/settings/settings_controller.dart';
 import 'src/services/settings_service.dart';
 
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
-  }
-}
+// class MyHttpOverrides extends HttpOverrides {
+//   @override
+//   HttpClient createHttpClient(SecurityContext? context) {
+//     return super.createHttpClient(context)
+//       ..badCertificateCallback =
+//           (X509Certificate cert, String host, int port) => true;
+//   }
+// }
 
 void main() async {
   // HttpOverrides.global = MyHttpOverrides();

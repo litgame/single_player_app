@@ -17,7 +17,7 @@ class GameRest extends ServerlessService {
     _instance ??= GameRest._(LitGameRestService.manual(
         dotenv.get('PARSESERVER_URL'),
         dotenv.get('PARSESERVER_APP_KEY'),
-        dotenv.get('PARSESERVER_MASTER_KEY'),
+        null, // dotenv.get('PARSESERVER_MASTER_KEY'),
         dotenv.get('PARSESERVER_REST_KEY')));
     return _instance as GameRest;
   }

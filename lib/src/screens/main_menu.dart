@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:single_player_app/src/screens/settings/settings_controller.dart';
@@ -37,16 +38,18 @@ class MainMenu extends StatelessWidget with NoNetworkModal {
                   color: Colors.blue,
                   onPressed: () => RouteBuilder.gotoSettings(context),
                   text: context.loc().mainSettings),
-              MenuButton(
-                  color: Colors.red,
-                  onPressed: () {
-                    if (Platform.isAndroid || Platform.isIOS) {
-                      SystemNavigator.pop();
-                    } else {
-                      exit(0);
-                    }
-                  },
-                  text: context.loc().mainExit),
+              kIsWeb
+                  ? Container()
+                  : MenuButton(
+                      color: Colors.red,
+                      onPressed: () {
+                        if (Platform.isAndroid || Platform.isIOS) {
+                          SystemNavigator.pop();
+                        } else {
+                          exit(0);
+                        }
+                      },
+                      text: context.loc().mainExit),
             ],
           ),
         ),

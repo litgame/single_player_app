@@ -20,7 +20,7 @@ class _ImageDownloader {
       collectionName,
       savePath,
       port.sendPort,
-      masterKey: dotenv.get('PARSESERVER_MASTER_KEY'),
+      // masterKey: dotenv.get('PARSESERVER_MASTER_KEY'),
       url: dotenv.get('PARSESERVER_URL'),
       appKey: dotenv.get('PARSESERVER_APP_KEY'),
       restKey: dotenv.get('PARSESERVER_REST_KEY'),
@@ -95,7 +95,7 @@ class _DownloadTask {
     this.port, {
     required this.url,
     required this.appKey,
-    required this.masterKey,
+    this.masterKey,
     required this.restKey,
   });
 
@@ -105,7 +105,7 @@ class _DownloadTask {
 
   String url;
   String appKey;
-  String masterKey;
+  String? masterKey;
   String restKey;
 }
 
