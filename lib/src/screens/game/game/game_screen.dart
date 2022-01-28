@@ -69,11 +69,19 @@ class _GameScreenState extends State<GameScreen>
   lit_card.CardType? _selectedCartType;
 
   Future<lit_card.Card>? _selectedCardFuture;
-  late MagicController magicController;
+
+  late PlayerController _musicController;
+
+  @override
+  void initState() {
+    if (SettingsController().soundOn) {
+      _musicController = Player.asset("assets/sounds/magic_happen.mp3");
+    }
+  }
 
   void onApplyMagic(MagicService service, List<MagicItem> magic) {
     if (SettingsController().soundOn) {
-      Player.asset("assets/sounds/magic_happen.mp3").play();
+      _musicController.play();
     }
     if (SettingsController().vibrationOn) {
       Vibration.vibrate(pattern: [0, 500, 200, 100], amplitude: 255);
