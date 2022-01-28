@@ -22,7 +22,7 @@ class SettingsService {
   }
 
   Future<bool> withMagic() async =>
-      (await _prefs()).getBool('withMagic') ?? false;
+      (await _prefs()).getBool('withMagic') ?? true;
 
   Future<void> updateWithMagic(bool useMagic) =>
       _prefs().then((value) => value.setBool('withMagic', useMagic));
