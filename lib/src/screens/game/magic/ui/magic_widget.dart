@@ -168,7 +168,7 @@ class _MagicWidgetState extends State<MagicWidget>
 
   void _onTap() {
     if (SettingsController().vibrationOn) {
-      Vibration.vibrate(duration: 100, amplitude: 128);
+      Vibration.vibrate(duration: 100, amplitude: 255);
     }
     setState(() {
       _magicWidget = _buildOpenedBox(context);

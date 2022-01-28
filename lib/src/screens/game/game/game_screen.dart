@@ -76,7 +76,7 @@ class _GameScreenState extends State<GameScreen>
       Player.asset("assets/sounds/magic_happen.mp3").play();
     }
     if (SettingsController().vibrationOn) {
-      Vibration.vibrate(pattern: [800, 200, 300], amplitude: 255);
+      Vibration.vibrate(pattern: [0, 500, 200, 100], amplitude: 255);
     }
     final magicWidget =
         MagicWidgetFire(magicService: service, firedMagic: magic);
