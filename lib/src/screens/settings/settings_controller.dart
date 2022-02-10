@@ -7,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:litgame_server/models/cards/card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:single_player_app/src/services/game_rest.dart';
+import 'package:vibration/vibration.dart';
 
 import '../../services/settings_service.dart';
 
@@ -109,7 +110,14 @@ class SettingsController with ChangeNotifier {
     _showDocGameScreen = await _settingsService.showDocGameScreen();
     _showDocTrainingScreen = await _settingsService.showDocTrainingScreen();
     _withMagic = await _settingsService.withMagic();
-    _vibrationOn = await _settingsService.vibrationOn();
+
+    _vibrationOn = false;
+    try {
+      bool? hasVibro = await Vibration.hasVibrator();
+      if (hasVibro == true) {
+        _vibrationOn = await _settingsService.vibrationOn();
+      }
+    } catch (_) {}
     _soundOn = await _settingsService.soundOn();
 
     magicPlayersCount = await _settingsService.lastMagicPlayers();
