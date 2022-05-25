@@ -1,4 +1,5 @@
 {
+  "@@locale": "en",
   "appTitle": "Litgame",
   "@appTitle": {
     "description": "The title of the application"
@@ -19,9 +20,9 @@
   "scDownload": "Download",
   "scDownloadProgress": "Downloading...",
   "scDownloadFinished": "Stored offline!",
+  "scDelete": "Delete",
   "scNoNetwork": "No network",
   "scNoNetworkNewGame": "To play game you need to enable network or download cards offline",
-  "scDelete": "Delete",
   "mainTitle": "Litgame",
   "mainStart": "Start new game",
   "mainSettings": "Settings",
@@ -103,5 +104,8 @@
   "magicAlertTurn": "Turn number should be greater than 0. Report a bug, please",
   "magicDelete": "Delete magic?",
   "magicDeleteDescription": "You can delete only one item!",
-  "magicModalViewTitle": "Magic at you turn:"
+  "magicModalViewTitle": "Magic at you turn:",
+  "docAllScreen": "__The essence and task of the game__ is to compose an arbitrary story on a specific topic together with friends. And, of course, enjoy both the process and the result :-) \n\n__ Rules of the game: __ \n - Players take turns. Each player draws a card from one of the three decks to choose from on his turn and tells his part of the story, guided by the card that fell to him.\n - During the player's turn, no one has the right to correct or interrupt him, he is completely free to interpret the meaning of the card and compose his part of the story, although he must rely on common sense, the plot told earlier and general agreements.\n - Before starting the game, it is recommended to jointly decide which genre, style and universe the narrative will relate to. \n\n__ Types of cards.__ There are three types of cards in the game: \n- Location - assumes that the action of the plot should be transferred to the place indicated on the map (literally or figuratively)\n - The character - the player who drew this card must introduce the character (literally or figuratively) indicated on the map into the narrative.\n - General - these cards set the theme for all other events/phenomena that should occur in the game world during the course of the player who drew them. \n\nBUT don't take it too seriously! Remember - it's just a game ;-)",
+  "docGameScreen": "Let's start the gameplay itself!\n\nNow each player will need to choose a card from one of the three decks on his turn. Then tell your part of the story, focusing on what is indicated on the map.\n\nAt the end of the story, you need to press the green button in the upper right corner and pass the phone to the next player. \n\nThe gamemaster starts first, and he will be shown three cards at once on his first turn, from which you need to collect the plot of the story, and then pass the move to the next player.",
+  "docTrainingScreen": "A little warm-up!\n\nNow each of the players will be given a random card from the deck, and you will need to tell something about it that is related to the world / topic you are going to play on.\n\nThis will allow you to warm up your brains a little, recall forgotten facts and \"pump up\" less prepared comrades for the game.\n\nAfter you tell your associations on the map, swipe it and pass the phone to the next player.\n\nTo complete the warm-up, press the green button in the upper right corner."
 }
