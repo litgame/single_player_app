@@ -73,10 +73,11 @@ class SelectCardScreen extends StatelessWidget {
 
   Widget _buildCardsMenu(BuildContext context) {
     final settings = SettingsController();
+    final isDefault = settings.isDefaultCollection;
     BgType? bgTypeGeneric;
     BgType? bgTypePerson;
     BgType? bgTypePlace;
-    if (settings.isDefaultCollection) {
+    if (isDefault) {
       bgTypeGeneric = BgType.simple;
       bgTypePerson = BgType.simple;
       bgTypePlace = BgType.simple;
@@ -87,12 +88,12 @@ class SelectCardScreen extends StatelessWidget {
     }
     return Row(
       children: [
-        _buildCardBlock(
-            context, context.loc().cardTypeGeneric, onGeneric, bgTypeGeneric),
-        _buildCardBlock(
-            context, context.loc().cardTypePerson, onPerson, bgTypePerson),
-        _buildCardBlock(
-            context, context.loc().cardTypePlace, onPlace, bgTypePlace),
+        _buildCardBlock(context, isDefault ? context.loc().cardTypeGeneric : '',
+            onGeneric, bgTypeGeneric),
+        _buildCardBlock(context, isDefault ? context.loc().cardTypePerson : '',
+            onPerson, bgTypePerson),
+        _buildCardBlock(context, isDefault ? context.loc().cardTypePlace : '',
+            onPlace, bgTypePlace),
       ],
     );
   }
