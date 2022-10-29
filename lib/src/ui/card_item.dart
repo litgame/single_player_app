@@ -4,6 +4,7 @@ import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:litgame_server/models/cards/card.dart' as lit_card;
+import 'package:single_player_app/src/screens/settings/settings_controller.dart';
 import 'package:single_player_app/src/services/image_service/image_service.dart';
 
 enum BgType {
@@ -101,11 +102,30 @@ class CardItemState extends State<CardItem> {
             case ConnectionState.none:
             case ConnectionState.active:
             case ConnectionState.waiting:
-              return const Center(
-                child: SpinKitWave(
+              final stack = <Widget>[
+                const SpinKitWave(
                   color: Colors.green,
                   size: 35.0,
-                ),
+                )
+              ];
+              if (SettingsController().isDefaultCollection) {
+                stack.insert(
+                    0,
+                    Image.asset(
+                      BgType.simple.type,
+                      repeat: ImageRepeat.repeat,
+                    ));
+              } else {
+                stack.insert(
+                    0,
+                    Image.asset(
+                      BgType.darkNoText.type,
+                    ));
+              }
+              return Stack(
+                alignment: AlignmentDirectional.center,
+                children: stack,
+                fit: StackFit.expand,
               );
             case ConnectionState.done:
               if (snapshot.hasError) {
