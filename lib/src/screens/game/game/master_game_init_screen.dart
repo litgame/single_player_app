@@ -18,13 +18,24 @@ class MasterGameInit extends StatelessWidget {
         builder: (BuildContext context,
             AsyncSnapshot<List<lit_card.Card>> snapshot) {
           if (snapshot.hasData) {
+            final settings = SettingsController();
             var items = <Widget>[];
             for (var card in snapshot.data!) {
-              items.add(CardItem(
-                imgUrl: card.imgUrl,
-                title: card.name,
-                flip: false,
-              ));
+              if (settings.isDefaultCollection) {
+                items.add(CardItem(
+                  imgUrl: card.imgUrl,
+                  title: card.name,
+                  flip: false,
+                ));
+              } else {
+                BgType bgType = BgType.fromLitType(card.cardType);
+                items.add(CardItem(
+                  imgUrl: card.imgUrl,
+                  title: card.name,
+                  flip: false,
+                  bgType: bgType,
+                ));
+              }
             }
 
             if (orientation == Orientation.portrait) {

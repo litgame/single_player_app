@@ -54,6 +54,8 @@ class TrainingScreen extends StatelessWidget
       builder: (BuildContext context, BoxConstraints constraints) {
         init(constraints);
         final text = isTiny ? null : context.loc().gameTitleTrainingFinish;
+        final bgType =
+            settings.isDefaultCollection ? BgType.simple : BgType.darkNoText;
         return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.purple,
@@ -82,14 +84,17 @@ class TrainingScreen extends StatelessWidget
                         //add the first 3 cards (widgets)
                         items: [
                           CardItem(
+                            bgType: bgType,
                             onFlipDone: onFlipDone,
                             key: training.cardKeys[0],
                           ),
                           CardItem(
+                            bgType: bgType,
                             key: training.cardKeys[1],
                             onFlipDone: onFlipDone,
                           ),
                           CardItem(
+                            bgType: bgType,
                             key: training.cardKeys[2],
                             onFlipDone: onFlipDone,
                           )
@@ -99,6 +104,7 @@ class TrainingScreen extends StatelessWidget
                           training.cardSectionController.appendItem(CardItem(
                             key: widget.key,
                             empty: true,
+                            bgType: bgType,
                             onFlipDone: onFlipDone,
                           ));
                           training.nextCard();

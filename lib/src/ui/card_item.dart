@@ -3,7 +3,31 @@ import 'dart:async';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:litgame_server/models/cards/card.dart' as lit_card;
 import 'package:single_player_app/src/services/image_service/image_service.dart';
+
+enum BgType {
+  simple('assets/images/bg_pattern.png'),
+  darkNoText('assets/images/bg/notext.jpg'),
+  darkGeneric('assets/images/bg/generic.jpg'),
+  darkPlace('assets/images/bg/places.jpg'),
+  darkPerson('assets/images/bg/roles.jpg');
+
+  const BgType(this.type);
+
+  static BgType fromLitType(lit_card.CardType cardType) {
+    switch (cardType) {
+      case lit_card.CardType.generic:
+        return BgType.darkGeneric;
+      case lit_card.CardType.person:
+        return BgType.darkPerson;
+      case lit_card.CardType.place:
+        return BgType.darkPlace;
+    }
+  }
+
+  final String type;
+}
 
 class CardItem extends StatefulWidget {
   const CardItem(
@@ -12,6 +36,7 @@ class CardItem extends StatefulWidget {
       this.title = '',
       this.onFlipDone,
       this.empty,
+      this.bgType = BgType.simple,
       this.flip = true})
       : super(key: key);
 
@@ -19,6 +44,7 @@ class CardItem extends StatefulWidget {
   final String title;
   final bool? empty;
   final bool flip;
+  final BgType? bgType;
   final BoolCallback? onFlipDone;
 
   @override
@@ -29,8 +55,6 @@ class CardItemState extends State<CardItem> {
   CardItemState([this.imgUrl = '', this.title = '']) {
     imageLoadingFinishedStream.stream.listen(_onImageLoaded);
   }
-
-  static const bgCardImage = 'assets/images/bg_pattern.png';
 
   final flipCardKey = GlobalKey<FlipCardState>();
 
@@ -96,11 +120,7 @@ class CardItemState extends State<CardItem> {
       if (title.isNotEmpty) {
         return Stack(
           children: [
-            Image.asset(
-              bgCardImage,
-              repeat: ImageRepeat.repeat,
-              height: MediaQuery.of(context).size.height,
-            ),
+            _buildFrontImage(context, MediaQuery.of(context).size.height),
             Center(
               child: DecoratedBox(
                 decoration: BoxDecoration(
@@ -126,10 +146,7 @@ class CardItemState extends State<CardItem> {
           ],
         );
       } else {
-        return Image.asset(
-          bgCardImage,
-          repeat: ImageRepeat.repeat,
-        );
+        return _buildFrontImage(context);
       }
     }
   }
@@ -144,6 +161,35 @@ class CardItemState extends State<CardItem> {
               color: Colors.black, width: 1, style: BorderStyle.solid),
           borderRadius: BorderRadius.all(Radius.circular(16))),
       child: child);
+
+  Widget _buildFrontImage(BuildContext context, [double? height]) {
+    final bgCardImage = widget.bgType!.type;
+    if (widget.bgType == BgType.simple) {
+      if (height != null) {
+        return Image.asset(
+          bgCardImage,
+          repeat: ImageRepeat.repeat,
+          height: height,
+        );
+      }
+      return Image.asset(
+        bgCardImage,
+        repeat: ImageRepeat.repeat,
+      );
+    } else {
+      if (height != null) {
+        return Image.asset(
+          bgCardImage,
+          fit: BoxFit.fill,
+          height: height,
+        );
+      }
+      return Image.asset(
+        bgCardImage,
+        fit: BoxFit.fill,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -176,10 +222,7 @@ class CardItemState extends State<CardItem> {
                         alignment: Alignment.center,
                         fit: StackFit.expand,
                         children: [
-                          Image.asset(
-                            bgCardImage,
-                            repeat: ImageRepeat.repeat,
-                          ),
+                          _buildFrontImage(context),
                           const SpinKitWave(
                             color: Colors.green,
                             size: 55.0,
@@ -187,10 +230,7 @@ class CardItemState extends State<CardItem> {
                         ]),
                   );
                 } else {
-                  return Image.asset(
-                    bgCardImage,
-                    repeat: ImageRepeat.repeat,
-                  );
+                  return _buildFrontImage(context);
                 }
               }))),
         ),

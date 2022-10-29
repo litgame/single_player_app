@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kplayer/kplayer.dart';
 import 'package:litgame_server/models/cards/card.dart' as lit_card;
+import 'package:litgame_server/models/cards/card.dart';
 import 'package:litgame_server/models/game/game.dart';
 import 'package:single_player_app/src/screens/game/game/magic_controller.dart';
 import 'package:single_player_app/src/screens/game/game/select_card_screen.dart';

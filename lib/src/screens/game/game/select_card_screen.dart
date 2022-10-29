@@ -4,6 +4,7 @@ import 'package:single_player_app/src/ui/menu_button.dart';
 import 'package:swipeable_card_stack/swipeable_card_stack.dart';
 
 import '../../../tools.dart';
+import '../../settings/settings_controller.dart';
 
 class SelectCardScreen extends StatelessWidget {
   const SelectCardScreen(
@@ -50,7 +51,8 @@ class SelectCardScreen extends StatelessWidget {
       );
 
   Widget _buildCardBlock(
-          BuildContext context, String title, VoidCallback callback) =>
+          BuildContext context, String title, VoidCallback callback,
+          [BgType? bgType]) =>
       SwipeableCardsSection(
         context: context,
         items: List<Widget>.filled(
@@ -59,6 +61,7 @@ class SelectCardScreen extends StatelessWidget {
               flip: false,
               imgUrl: '',
               title: title,
+              bgType: bgType,
             )),
         onCardSwiped: (dir, index, Widget widget) {
           callback();
@@ -68,11 +71,29 @@ class SelectCardScreen extends StatelessWidget {
         enableSwipeDown: true,
       );
 
-  Widget _buildCardsMenu(BuildContext context) => Row(
-        children: [
-          _buildCardBlock(context, context.loc().cardTypeGeneric, onGeneric),
-          _buildCardBlock(context, context.loc().cardTypePerson, onPerson),
-          _buildCardBlock(context, context.loc().cardTypePlace, onPlace),
-        ],
-      );
+  Widget _buildCardsMenu(BuildContext context) {
+    final settings = SettingsController();
+    BgType? bgTypeGeneric;
+    BgType? bgTypePerson;
+    BgType? bgTypePlace;
+    if (settings.isDefaultCollection) {
+      bgTypeGeneric = BgType.simple;
+      bgTypePerson = BgType.simple;
+      bgTypePlace = BgType.simple;
+    } else {
+      bgTypeGeneric = BgType.darkGeneric;
+      bgTypePerson = BgType.darkPerson;
+      bgTypePlace = BgType.darkPlace;
+    }
+    return Row(
+      children: [
+        _buildCardBlock(
+            context, context.loc().cardTypeGeneric, onGeneric, bgTypeGeneric),
+        _buildCardBlock(
+            context, context.loc().cardTypePerson, onPerson, bgTypePerson),
+        _buildCardBlock(
+            context, context.loc().cardTypePlace, onPlace, bgTypePlace),
+      ],
+    );
+  }
 }

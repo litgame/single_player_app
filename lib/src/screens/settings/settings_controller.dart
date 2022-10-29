@@ -84,6 +84,8 @@ class SettingsController with ChangeNotifier {
   bool get isCurrentCollectionOffline =>
       offlineCollections.contains(collectionName);
 
+  bool get isDefaultCollection => collectionName == 'default';
+
   ThemeMode get themeMode => _themeMode;
 
   bool get showDocAllScreen => _showDocAllScreen;

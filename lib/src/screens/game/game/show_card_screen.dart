@@ -54,8 +54,19 @@ class ShowCardScreen extends StatelessWidget
       );
 
   Widget _buildCardWidget(BuildContext context, lit_card.Card card) {
-    final selectedCardWidget =
-        CardItem(flip: false, imgUrl: card.imgUrl, title: card.name);
+    final settings = SettingsController();
+    CardItem? selectedCardWidget;
+    if (settings.isDefaultCollection) {
+      selectedCardWidget =
+          CardItem(flip: false, imgUrl: card.imgUrl, title: card.name);
+    } else {
+      selectedCardWidget = CardItem(
+        flip: false,
+        imgUrl: card.imgUrl,
+        title: card.name,
+        bgType: BgType.fromLitType(card.cardType),
+      );
+    }
 
     var showSingleCard = true;
     final futures = <Future<lit_card.Card>>[];
@@ -88,12 +99,21 @@ class ShowCardScreen extends StatelessWidget
                 AsyncSnapshot<List<lit_card.Card>> snapshot) {
               final items = <Widget>[];
 
-              items.add(selectedCardWidget);
+              items.add(selectedCardWidget!);
               if (snapshot.hasData) {
                 final magicCards = snapshot.data as List<lit_card.Card>;
                 for (var card in magicCards) {
-                  items.add(CardItem(
-                      flip: false, imgUrl: card.imgUrl, title: card.name));
+                  if (settings.isDefaultCollection) {
+                    items.add(CardItem(
+                        flip: false, imgUrl: card.imgUrl, title: card.name));
+                  } else {
+                    items.add(CardItem(
+                      flip: false,
+                      imgUrl: card.imgUrl,
+                      title: card.name,
+                      bgType: BgType.fromLitType(card.cardType),
+                    ));
+                  }
                 }
               } else {
                 items.add(const Center(
